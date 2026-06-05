@@ -10,7 +10,251 @@
 <title>UnrugGuard — Powered by Unrugpad</title>
 <link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/main.css">
+<style>
+:root {
+  --navy:    #05071a;
+  --dark:    #080b22;
+  --card:    #0d1133;
+  --purple:  #7722cc;
+  --purple2: #9933ff;
+  --pink:    #e060ff;
+  --magenta: #cc44ff;
+  --lavender:#b388ff;
+  --white:   #f0eeff;
+  --muted:   #6655aa;
+  --green:   #00e676;
+  --red:     #ff1744;
+  --orange:  #ff9100;
+  --border:  rgba(180,80,255,0.18);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* ── TICKER ── */
+.ticker-bar{background:rgba(13,17,51,0.97);border-bottom:1px solid var(--border);padding:8px 0;overflow:hidden;position:sticky;top:0;z-index:100}
+.ticker-track{display:flex;gap:50px;animation:tickerScroll 20s linear infinite;white-space:nowrap;width:max-content}
+@keyframes tickerScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker-item{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:12px;text-decoration:none;padding:2px 10px;border-radius:20px;border:1px solid transparent;transition:border-color .3s}
+.ticker-item:hover{border-color:var(--border)}
+.ticker-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.ticker-dot.sol{background:#9945ff;box-shadow:0 0 5px #9945ff}
+.ticker-dot.bsc{background:#f0b90b;box-shadow:0 0 5px #f0b90b}
+.ticker-name{color:var(--lavender);font-weight:700}
+.ticker-price{color:var(--white)}
+.ticker-change.up{color:var(--green)}
+.ticker-change.down{color:var(--red)}
+
+/* ── HEADER ── */
+.app-header{text-align:center;padding:24px 20px 16px;position:relative}
+.logo-mark{position:relative;width:90px;height:90px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center}
+.glow-ring{position:absolute;width:90px;height:90px;border-radius:50%;animation:pulseGlow 3s ease-in-out infinite}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 20px 5px rgba(220,80,255,.4),0 0 40px 10px rgba(150,50,220,.2)}50%{box-shadow:0 0 30px 10px rgba(220,80,255,.7),0 0 60px 20px rgba(150,50,220,.4)}}
+.hex-svg{position:relative;z-index:2;width:80px;height:80px;filter:drop-shadow(0 0 8px rgba(200,80,255,.8))}
+.shield-inner{position:absolute;z-index:3;width:34px;height:40px;top:50%;left:50%;transform:translate(-50%,-50%);filter:drop-shadow(0 0 5px rgba(255,160,255,.9));animation:shieldPulse 3s ease-in-out infinite}
+@keyframes shieldPulse{0%,100%{filter:drop-shadow(0 0 5px rgba(255,160,255,.9))}50%{filter:drop-shadow(0 0 12px rgba(255,200,255,1))}}
+.orbit-wrap{position:absolute;width:88px;height:88px;animation:orbit 4s linear infinite;z-index:4}
+@keyframes orbit{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.orbit-dot{position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:8px;height:8px;border-radius:50%;background:radial-gradient(circle,#ff80ff,#cc44ff);box-shadow:0 0 8px 2px rgba(220,80,255,.9)}
+.app-name{font-family:'Exo 2',sans-serif;font-weight:900;font-size:30px;letter-spacing:-.5px;background:linear-gradient(135deg,#e060ff 0%,#9933ff 50%,#ff80ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.powered-by{font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-top:3px}
+.powered-by span{color:var(--lavender);font-weight:700}
+.status-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 5px var(--green);animation:blink 2s ease-in-out infinite}
+.status-dot.offline{background:var(--red);box-shadow:0 0 5px var(--red)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.status-label{font-size:11px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
+.status-sep{color:var(--muted);font-size:10px}
+
+/* ── NAV ── */
+.nav-tabs{display:flex;background:var(--dark);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;position:sticky;top:39px;z-index:99}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{flex:1;min-width:60px;padding:10px 6px;text-align:center;font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .3s;display:flex;flex-direction:column;align-items:center;gap:2px}
+.nav-tab span{font-size:9px}
+.nav-tab.active{color:var(--pink);border-bottom-color:var(--pink)}
+.nav-tab:hover{color:var(--lavender)}
+
+/* ── SCREENS ── */
+.screen{display:none;padding:18px 14px 40px;animation:fadeUp .4s ease}
+.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── HOME ── */
+.battery-warning{background:rgba(255,145,0,.1);border:1px solid var(--orange);border-radius:12px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--orange)}
+.battery-warning.hidden{display:none}
+.sos-wrapper{display:flex;flex-direction:column;align-items:center;gap:24px;padding:8px 0 26px}
+.sos-btn{width:190px;height:190px;border-radius:50%;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 40% 35%,#ff4466,#cc0022);box-shadow:0 0 0 12px rgba(255,23,68,.12),0 0 0 24px rgba(255,23,68,.07),0 0 40px 10px rgba(255,23,68,.4),0 8px 30px rgba(0,0,0,.5);animation:sosPulse 2.5s ease-in-out infinite;transition:transform .15s;-webkit-appearance:none}
+.sos-btn:active{transform:scale(.93)}
+@keyframes sosPulse{0%,100%{box-shadow:0 0 0 12px rgba(255,23,68,.12),0 0 0 24px rgba(255,23,68,.07),0 0 40px 10px rgba(255,23,68,.4),0 8px 30px rgba(0,0,0,.5)}50%{box-shadow:0 0 0 18px rgba(255,23,68,.18),0 0 0 36px rgba(255,23,68,.09),0 0 60px 15px rgba(255,23,68,.6),0 8px 30px rgba(0,0,0,.5)}}
+.sos-label{font-family:'Exo 2',sans-serif;font-weight:900;font-size:50px;color:#fff;letter-spacing:2px;line-height:1;text-shadow:0 2px 10px rgba(0,0,0,.4)}
+.sos-sub{font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:3px;color:rgba(255,255,255,.7);text-transform:uppercase;margin-top:4px}
+.trigger-badge{display:flex;align-items:center;gap:8px;background:rgba(13,17,51,.8);border:1px solid var(--border);border-radius:30px;padding:8px 16px;font-size:12px;letter-spacing:1px;color:var(--lavender)}
+.section-title{font-family:'Exo 2',sans-serif;font-weight:700;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.emergency-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
+.emergency-card{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:12px 10px;display:flex;flex-direction:column;gap:3px;text-decoration:none;transition:border-color .3s,transform .2s}
+.emergency-card:active{transform:scale(.96)}
+.emergency-card:hover{border-color:var(--purple2)}
+.ec-icon{font-size:20px}
+.ec-name{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-weight:600}
+.ec-num{font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--white);font-weight:700}
+.ec-note{font-size:10px;color:var(--muted)}
+
+/* ── CONTACTS ── */
+.contact-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px}
+.contact-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.contact-num-badge{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-family:'Exo 2',sans-serif;font-size:12px;font-weight:700;color:#fff}
+.contact-label{font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+.input-group{margin-bottom:8px}
+.input-label{font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;display:block}
+.app-input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:9px;padding:9px 12px;color:var(--white);font-family:'Rajdhani',sans-serif;font-size:14px;outline:none;transition:border-color .3s}
+.app-input:focus{border-color:var(--purple2)}
+.app-input::placeholder{color:var(--muted)}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.toggle-label{font-size:13px;color:var(--lavender);display:flex;align-items:center;gap:5px}
+.toggle{position:relative;width:40px;height:22px}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;cursor:pointer;inset:0;background:rgba(255,255,255,.1);border-radius:22px;transition:.3s;border:1px solid var(--border)}
+.toggle-slider::before{content:'';position:absolute;width:16px;height:16px;left:3px;top:2px;background:#fff;border-radius:50%;transition:.3s}
+.toggle input:checked+.toggle-slider{background:linear-gradient(90deg,var(--purple),var(--pink));border-color:var(--purple2)}
+.toggle input:checked+.toggle-slider::before{transform:translateX(18px)}
+.safe-word-display{background:rgba(119,34,204,.1);border:1px solid rgba(119,34,204,.3);border-radius:9px;padding:9px 12px;font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--lavender);letter-spacing:2px;text-align:center;margin-top:5px}
+
+/* ── SETTINGS ── */
+.trigger-options{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.trigger-option{background:var(--card);border:1.5px solid var(--border);border-radius:13px;padding:14px;cursor:pointer;transition:all .3s;display:flex;align-items:center;gap:12px}
+.trigger-option.selected{border-color:var(--pink);background:rgba(224,96,255,.08)}
+.trigger-option-icon{font-size:24px;flex-shrink:0}
+.trigger-option-title{font-size:15px;font-weight:700;color:var(--white)}
+.trigger-option-desc{font-size:11px;color:var(--muted);margin-top:1px}
+.trigger-radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--muted);margin-left:auto;flex-shrink:0;transition:.3s;display:flex;align-items:center;justify-content:center}
+.trigger-option.selected .trigger-radio{border-color:var(--pink);background:var(--pink)}
+.trigger-option.selected .trigger-radio::after{content:'';width:7px;height:7px;border-radius:50%;background:#fff}
+.settings-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .2s}
+.settings-row:last-child{border-bottom:none}
+.settings-row:hover{background:rgba(255,255,255,.02)}
+.settings-row-left{display:flex;align-items:center;gap:10px}
+.settings-icon{font-size:18px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:rgba(119,34,204,.15);border-radius:9px;border:1px solid var(--border)}
+.settings-row-title{font-size:14px;font-weight:600;color:var(--white)}
+.settings-row-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.settings-arrow{color:var(--muted);font-size:16px}
+
+/* ── GUIDE ── */
+.guide-hero{background:linear-gradient(135deg,rgba(119,34,204,.2),rgba(224,96,255,.08));border:1px solid rgba(224,96,255,.25);border-radius:16px;padding:20px 16px;text-align:center;margin-bottom:20px}
+.guide-hero-icon{font-size:40px;margin-bottom:8px}
+.guide-hero-title{font-family:'Exo 2',sans-serif;font-weight:900;font-size:20px;background:linear-gradient(135deg,#e060ff,#9933ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:5px}
+.guide-hero-sub{font-size:12px;color:var(--muted);line-height:1.6}
+.guide-step{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 14px;margin-bottom:12px;position:relative;overflow:hidden}
+.guide-step::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--pink),var(--purple))}
+.guide-step-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.guide-step-num{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-family:'Exo 2',sans-serif;font-weight:900;font-size:12px;color:#fff;flex-shrink:0}
+.guide-step-icon{font-size:20px}
+.guide-step-title{font-family:'Exo 2',sans-serif;font-weight:700;font-size:15px;color:var(--white)}
+.guide-step-body{font-size:12px;color:rgba(240,238,255,.75);line-height:1.7;padding-left:38px}
+.guide-step-body strong{color:var(--lavender)}
+.tip{display:block;margin-top:8px;background:rgba(119,34,204,.1);border:1px solid rgba(119,34,204,.2);border-radius:7px;padding:7px 9px;font-size:11px;color:var(--lavender)}
+.warning{display:block;margin-top:8px;background:rgba(255,145,0,.08);border:1px solid rgba(255,145,0,.25);border-radius:7px;padding:7px 9px;font-size:11px;color:var(--orange)}
+
+/* ── GUARD NETWORK ── */
+.gn-profile-card{background:linear-gradient(135deg,rgba(119,34,204,.2),rgba(224,96,255,.08));border:1px solid rgba(224,96,255,.25);border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.gn-avatar{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-family:'Exo 2',sans-serif;font-weight:900;font-size:22px;color:#fff;flex-shrink:0}
+.gn-name{font-family:'Exo 2',sans-serif;font-weight:700;font-size:18px;color:var(--white)}
+.gn-id{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--lavender);margin-top:2px}
+.gn-share-btn{margin-left:auto;background:rgba(119,34,204,.15);border:1px solid var(--border);border-radius:20px;padding:7px 14px;font-size:11px;letter-spacing:1px;color:var(--lavender);cursor:pointer;white-space:nowrap;transition:.3s}
+.gn-share-btn:hover{border-color:var(--purple2);color:var(--white)}
+.map-placeholder{background:var(--card);border:1px solid var(--border);border-radius:14px;height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;margin-bottom:18px;position:relative;overflow:hidden}
+.map-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(119,34,204,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(119,34,204,.07) 1px,transparent 1px);background-size:28px 28px}
+.map-icon{font-size:36px;position:relative;z-index:1}
+.map-label{font-size:12px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;position:relative;z-index:1;text-align:center;padding:0 20px}
+.network-contact{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.nc-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;font-family:'Exo 2',sans-serif;color:#fff;flex-shrink:0}
+.nc-name{font-size:14px;font-weight:700}
+.nc-status{font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-top:2px}
+.nc-status.pending{color:var(--orange)}
+.nc-status.approved{color:var(--green)}
+.nc-status.incoming{color:var(--pink)}
+.nc-action{margin-left:auto;background:rgba(119,34,204,.15);border:1px solid var(--border);border-radius:18px;padding:5px 12px;font-size:10px;letter-spacing:1px;color:var(--lavender);cursor:pointer;transition:.3s;white-space:nowrap}
+.nc-action:hover{border-color:var(--purple2)}
+.nc-action.approve{background:rgba(0,230,118,.1);border-color:var(--green);color:var(--green)}
+.nc-action.decline{background:rgba(255,23,68,.08);border-color:var(--red);color:var(--red)}
+.map-pin{position:absolute;z-index:2;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;transform:translate(-50%,-100%)}
+.pin-dot{width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 8px rgba(220,80,255,.8)}
+.pin-label{font-size:9px;font-family:'Share Tech Mono',monospace;color:var(--lavender);background:rgba(13,17,51,.9);padding:1px 5px;border-radius:4px;white-space:nowrap}
+
+/* ── BUTTONS ── */
+.btn-primary{width:100%;padding:14px;border:none;border-radius:13px;background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:14px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:opacity .2s,transform .15s;box-shadow:0 4px 18px rgba(119,34,204,.35)}
+.btn-primary:active{opacity:.85;transform:scale(.98)}
+.btn-outline{width:100%;padding:12px;border:1.5px solid var(--border);border-radius:13px;background:transparent;color:var(--lavender);font-family:'Exo 2',sans-serif;font-weight:600;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:border-color .3s;margin-top:8px}
+.btn-outline:hover{border-color:var(--purple2);color:var(--white)}
+
+/* ── COMMUNITY ── */
+.community-section{margin:18px 14px}
+.community-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px 18px}
+.community-title{font-family:'Exo 2',sans-serif;font-weight:700;font-size:19px;color:var(--pink);margin-bottom:10px}
+.community-text{font-size:13px;line-height:1.6;color:rgba(240,238,255,.8);margin-bottom:18px}
+.community-text strong{color:var(--white)}
+.community-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-whatsapp{display:flex;align-items:center;justify-content:center;gap:7px;padding:13px 8px;background:#25D366;border-radius:13px;color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;text-decoration:none;transition:opacity .2s}
+.btn-telegram{display:flex;align-items:center;justify-content:center;gap:7px;padding:13px 8px;background:#0088cc;border-radius:13px;color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;text-decoration:none;transition:opacity .2s}
+.btn-whatsapp:active,.btn-telegram:active{opacity:.85}
+
+/* ── DONATION ── */
+.donation-section{margin:0 14px 18px}
+.donation-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px 18px;text-align:center}
+.donation-icon{font-size:32px;margin-bottom:8px}
+.donation-title{font-family:'Exo 2',sans-serif;font-weight:700;font-size:17px;color:var(--pink);margin-bottom:7px}
+.donation-text{font-size:12px;line-height:1.6;color:rgba(240,238,255,.7);margin-bottom:16px}
+.wallet-label{font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:7px}
+.wallet-address{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:11px;padding:10px 12px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--lavender);word-break:break-all;text-align:left;margin-bottom:5px;text-decoration:none;display:block;transition:border-color .3s}
+.wallet-address:hover{border-color:var(--purple2)}
+.wallet-network{font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:12px}
+.btn-copy{width:100%;padding:12px;border:1.5px solid var(--purple2);border-radius:11px;background:rgba(119,34,204,.1);color:var(--lavender);font-family:'Exo 2',sans-serif;font-weight:700;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .3s}
+.btn-copy:hover{background:rgba(119,34,204,.25);color:var(--white)}
+.btn-copy.copied{background:rgba(0,230,118,.1);border-color:var(--green);color:var(--green)}
+
+/* ── FOOTER ── */
+.app-footer{text-align:center;padding:18px;border-top:1px solid var(--border);margin-top:8px}
+.footer-powered{font-size:9px;letter-spacing:4px;color:var(--muted);text-transform:uppercase}
+.footer-brand{font-family:'Exo 2',sans-serif;font-weight:900;font-size:15px;background:linear-gradient(135deg,var(--pink),var(--purple2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px;margin-top:3px}
+
+/* ── SOS OVERLAY ── */
+.sos-overlay{display:none;position:fixed;inset:0;background:rgba(180,0,30,.97);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:18px;animation:overlayIn .3s ease}
+.sos-overlay.active{display:flex}
+@keyframes overlayIn{from{opacity:0}to{opacity:1}}
+.sos-overlay-rings{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.ring{position:absolute;border-radius:50%;border:2px solid rgba(255,255,255,.15);animation:expandRing 2s ease-out infinite}
+.ring.r1{width:200px;height:200px;animation-delay:0s}
+.ring.r2{width:300px;height:300px;animation-delay:.6s}
+.ring.r3{width:400px;height:400px;animation-delay:1.2s}
+@keyframes expandRing{0%{transform:scale(.5);opacity:.8}100%{transform:scale(1.5);opacity:0}}
+.overlay-icon{font-size:72px;animation:shake .5s ease infinite alternate;position:relative;z-index:1}
+@keyframes shake{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}
+.overlay-title{font-family:'Exo 2',sans-serif;font-weight:900;font-size:30px;color:#fff;letter-spacing:2px;position:relative;z-index:1}
+.overlay-sub{font-size:13px;color:rgba(255,255,255,.8);letter-spacing:1px;text-align:center;padding:0 28px;position:relative;z-index:1;line-height:1.6}
+.overlay-close{margin-top:16px;padding:13px 36px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.4);border-radius:30px;color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;cursor:pointer;position:relative;z-index:1}
+
+/* ── FAKE CALL ── */
+.fakecall-overlay{display:none;position:fixed;inset:0;background:#0a0a0a;z-index:998;flex-direction:column;align-items:center;justify-content:space-between;padding:60px 30px 80px;animation:overlayIn .3s ease}
+.fakecall-overlay.active{display:flex}
+.fc-top{text-align:center}
+.fc-caller{font-family:'Exo 2',sans-serif;font-weight:700;font-size:30px;color:#fff;margin-bottom:8px}
+.fc-status{font-size:14px;color:rgba(255,255,255,.6);letter-spacing:2px}
+.fc-avatar{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,#444,#222);display:flex;align-items:center;justify-content:center;font-family:'Exo 2',sans-serif;font-weight:900;font-size:48px;color:#fff;border:3px solid rgba(255,255,255,.2);animation:fcPulse 1.5s ease-in-out infinite;box-shadow:0 0 30px rgba(0,230,118,.3)}
+@keyframes fcPulse{0%,100%{box-shadow:0 0 30px rgba(0,230,118,.3)}50%{box-shadow:0 0 50px rgba(0,230,118,.6)}}
+.fc-bottom{display:flex;gap:60px;align-items:center}
+.fc-decline{width:64px;height:64px;border-radius:50%;background:#ff1744;border:none;color:#fff;font-size:26px;cursor:pointer;box-shadow:0 4px 20px rgba(255,23,68,.4)}
+.fc-accept{width:64px;height:64px;border-radius:50%;background:#00e676;border:none;color:#222;font-size:26px;cursor:pointer;box-shadow:0 4px 20px rgba(0,230,118,.4)}
+
+/* ── MISC ── */
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:2px 0 18px}
+.info-box{background:rgba(119,34,204,.08);border:1px solid rgba(119,34,204,.2);border-radius:11px;padding:11px 13px;font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.info-box strong{color:var(--lavender)}
+.phase-banner{background:linear-gradient(135deg,rgba(119,34,204,.15),rgba(224,96,255,.08));border:1px solid rgba(224,96,255,.2);border-radius:13px;padding:14px;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.phase-icon{font-size:26px}
+.phase-title{font-size:13px;font-weight:700;color:var(--pink)}
+.phase-desc{font-size:11px;color:var(--muted);margin-top:1px}
+
+</style>
 </head>
 <body>
 
@@ -354,9 +598,937 @@
 <!-- Hidden contact picker -->
 <input type="file" id="contactFilePicker" accept=".vcf" style="display:none" onchange="parseVCF(event)">
 
-<script src="js/emergency-numbers.js"></script>
-<script src="js/app.js"></script>
-<script src="js/network.js"></script>
+
+
+
+<script>
+// Global Emergency Numbers Database
+const EMERGENCY_NUMBERS = {
+  NG: { name:'Nigeria', flag:'🇳🇬', numbers:[
+    {icon:'🚨',name:'National',num:'112',note:'Police · Fire · Ambulance'},
+    {icon:'🚔',name:'Police',num:'122',note:'Nigeria Police Force'},
+    {icon:'🏙️',name:'Lagos',num:'767',note:'LASEMA · Lagos only'},
+    {icon:'🚗',name:'Road Safety',num:'122',note:'FRSC · Accidents'},
+  ]},
+  US: { name:'United States', flag:'🇺🇸', numbers:[
+    {icon:'🚨',name:'Emergency',num:'911',note:'Police · Fire · Ambulance'},
+    {icon:'🧠',name:'Crisis Line',num:'988',note:'Mental health · Suicide'},
+    {icon:'☠️',name:'Poison Control',num:'1-800-222-1222',note:'Poison emergency'},
+    {icon:'🏥',name:'Non-Emergency',num:'311',note:'Non-urgent police'},
+  ]},
+  GB: { name:'United Kingdom', flag:'🇬🇧', numbers:[
+    {icon:'🚨',name:'Emergency',num:'999',note:'Police · Fire · Ambulance'},
+    {icon:'🌍',name:'Int\'l Emergency',num:'112',note:'Works on any phone'},
+    {icon:'🚔',name:'Non-Emergency',num:'101',note:'Police non-urgent'},
+    {icon:'🏥',name:'NHS',num:'111',note:'Medical advice'},
+  ]},
+  GH: { name:'Ghana', flag:'🇬🇭', numbers:[
+    {icon:'🚨',name:'National',num:'112',note:'All emergencies'},
+    {icon:'🚔',name:'Police',num:'191',note:'Ghana Police Service'},
+    {icon:'🚒',name:'Fire',num:'192',note:'Ghana Fire Service'},
+    {icon:'🚑',name:'Ambulance',num:'193',note:'National Ambulance'},
+  ]},
+  ZA: { name:'South Africa', flag:'🇿🇦', numbers:[
+    {icon:'🚨',name:'National',num:'112',note:'All emergencies (mobile)'},
+    {icon:'🚔',name:'Police',num:'10111',note:'SAPS emergency'},
+    {icon:'🚑',name:'Ambulance',num:'10177',note:'Medical emergency'},
+    {icon:'🚒',name:'Fire',num:'10177',note:'Fire & rescue'},
+  ]},
+  KE: { name:'Kenya', flag:'🇰🇪', numbers:[
+    {icon:'🚨',name:'National',num:'112',note:'All emergencies'},
+    {icon:'🚔',name:'Police',num:'999',note:'Kenya Police'},
+    {icon:'🚑',name:'Ambulance',num:'1199',note:'Emergency medical'},
+    {icon:'🚒',name:'Fire',num:'999',note:'Fire brigade'},
+  ]},
+  CA: { name:'Canada', flag:'🇨🇦', numbers:[
+    {icon:'🚨',name:'Emergency',num:'911',note:'Police · Fire · Ambulance'},
+    {icon:'🧠',name:'Crisis Line',num:'988',note:'Suicide & crisis'},
+    {icon:'🚔',name:'Non-Emergency',num:'311',note:'Non-urgent police'},
+    {icon:'🌍',name:'Int\'l',num:'112',note:'Works on any phone'},
+  ]},
+  AU: { name:'Australia', flag:'🇦🇺', numbers:[
+    {icon:'🚨',name:'Emergency',num:'000',note:'Police · Fire · Ambulance'},
+    {icon:'🌍',name:'Int\'l',num:'112',note:'Works on any phone'},
+    {icon:'🧠',name:'Lifeline',num:'13-11-14',note:'Crisis support'},
+    {icon:'🚔',name:'Non-Emergency',num:'131-444',note:'Police non-urgent'},
+  ]},
+  IN: { name:'India', flag:'🇮🇳', numbers:[
+    {icon:'🚨',name:'National',num:'112',note:'All emergencies'},
+    {icon:'🚔',name:'Police',num:'100',note:'Police'},
+    {icon:'🚑',name:'Ambulance',num:'108',note:'Medical emergency'},
+    {icon:'🚒',name:'Fire',num:'101',note:'Fire brigade'},
+  ]},
+  DE: { name:'Germany', flag:'🇩🇪', numbers:[
+    {icon:'🚨',name:'Emergency',num:'112',note:'Fire · Ambulance · EU wide'},
+    {icon:'🚔',name:'Police',num:'110',note:'German Police'},
+    {icon:'🧠',name:'Crisis',num:'0800-111-0111',note:'Telefonseelsorge'},
+    {icon:'🚑',name:'Poison',num:'030-19240',note:'Berlin poison control'},
+  ]},
+  FR: { name:'France', flag:'🇫🇷', numbers:[
+    {icon:'🚨',name:'All Emergency',num:'112',note:'EU emergency number'},
+    {icon:'🚔',name:'Police',num:'17',note:'Police Nationale'},
+    {icon:'🚒',name:'Fire',num:'18',note:'Pompiers'},
+    {icon:'🚑',name:'SAMU',num:'15',note:'Medical emergency'},
+  ]},
+  ZW: { name:'Zimbabwe', flag:'🇿🇼', numbers:[
+    {icon:'🚨',name:'National',num:'112',note:'All emergencies (mobile)'},
+    {icon:'🚔',name:'Police',num:'995',note:'Zimbabwe Republic Police'},
+    {icon:'🚑',name:'Ambulance',num:'994',note:'Emergency medical'},
+    {icon:'🚒',name:'Fire',num:'993',note:'Fire brigade'},
+  ]},
+  DEFAULT: { name:'Global', flag:'🌍', numbers:[
+    {icon:'🚨',name:'Int\'l Emergency',num:'112',note:'Works in 200+ countries'},
+    {icon:'📞',name:'Local Emergency',num:'911 / 999',note:'US, UK, Canada, Australia'},
+    {icon:'🚔',name:'Local Police',num:'Check locally',note:'Varies by country'},
+    {icon:'🚑',name:'Local Ambulance',num:'Check locally',note:'Varies by country'},
+  ]},
+};
+
+// Detect country from browser/SIM
+async function detectCountry() {
+  // Try timezone first (works offline)
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const tzMap = {
+    'Africa/Lagos':'NG','Africa/Accra':'GH','Africa/Nairobi':'KE',
+    'Africa/Johannesburg':'ZA','Africa/Harare':'ZW',
+    'America/New_York':'US','America/Los_Angeles':'US','America/Chicago':'US',
+    'America/Toronto':'CA','America/Vancouver':'CA',
+    'Europe/London':'GB','Europe/Paris':'FR','Europe/Berlin':'DE',
+    'Australia/Sydney':'AU','Australia/Melbourne':'AU',
+    'Asia/Kolkata':'IN','Asia/Calcutta':'IN',
+  };
+  for (const [zone, code] of Object.entries(tzMap)) {
+    if (tz.startsWith(zone.split('/')[0]) && tz === zone) return code;
+    if (tz.includes(zone.split('/')[1])) return code;
+  }
+
+  // Try IP geolocation if online
+  if (navigator.onLine) {
+    try {
+      const r = await fetch('https://ipapi.co/json/');
+      const d = await r.json();
+      if (d.country_code) return d.country_code;
+    } catch(e) {}
+  }
+  return 'DEFAULT';
+}
+
+async function loadEmergencyNumbers() {
+  const code = await detectCountry();
+  const data = EMERGENCY_NUMBERS[code] || EMERGENCY_NUMBERS['DEFAULT'];
+  localStorage.setItem('countryCode', code);
+  localStorage.setItem('countryName', data.name);
+
+  // Update country label
+  const lbl = document.getElementById('countryLabel');
+  if (lbl) lbl.textContent = data.flag + ' ' + data.name;
+
+  // Update title
+  const title = document.getElementById('emergencyTitle');
+  if (title) title.textContent = data.flag + ' ' + data.name + ' Emergency Numbers';
+
+  // Build grid
+  const grid = document.getElementById('emergencyGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  data.numbers.forEach(n => {
+    grid.innerHTML += `
+      <a class="emergency-card" href="tel:${n.num}">
+        <span class="ec-icon">${n.icon}</span>
+        <span class="ec-name">${n.name}</span>
+        <span class="ec-num">${n.num}</span>
+        <span class="ec-note">${n.note}</span>
+      </a>`;
+  });
+}
+
+// ══════════════════════════════════
+//  UNRUGGUARD — MAIN APP LOGIC
+// ══════════════════════════════════
+
+// ── SCREEN NAVIGATION ──
+function showScreen(name, tab) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  tab.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded', () => {
+  loadEmergencyNumbers();
+  updateStatus();
+  checkBattery();
+  fetchPrices();
+  setInterval(fetchPrices, 60000);
+  restoreFormValues();
+  loadTrigger();
+  buildContacts();
+  initShake();
+  initNetwork();
+});
+
+window.addEventListener('online',  updateStatus);
+window.addEventListener('offline', updateStatus);
+
+// ── STATUS ──
+function updateStatus() {
+  const dot = document.getElementById('statusDot');
+  const lbl = document.getElementById('statusLabel');
+  if (navigator.onLine) {
+    dot.className = 'status-dot';
+    lbl.textContent = 'Online';
+  } else {
+    dot.className = 'status-dot offline';
+    lbl.textContent = 'Offline';
+  }
+}
+
+// ── BATTERY ──
+async function checkBattery() {
+  try {
+    const b = await navigator.getBattery();
+    const warn = document.getElementById('batteryWarn');
+    const check = () => {
+      if (b.level <= 0.15 && !b.charging) warn.classList.remove('hidden');
+      else warn.classList.add('hidden');
+    };
+    check();
+    b.addEventListener('levelchange', check);
+    b.addEventListener('chargingchange', check);
+  } catch(e) {}
+}
+
+// ── TOKEN PRICES ──
+async function fetchPrices() {
+  try {
+    const [r1, r2] = await Promise.all([
+      fetch('https://api.dexscreener.com/latest/dex/tokens/JuLhhMjaWyWKCWEPetMV5hucpCmR212MzrRLWWZEgem'),
+      fetch('https://api.dexscreener.com/latest/dex/tokens/0x591DF09AF60366298FE31C4590a9230585D34FBd')
+    ]);
+    const [d1, d2] = await Promise.all([r1.json(), r2.json()]);
+
+    function set(pIds, cIds, pair) {
+      if (!pair) return;
+      const price  = parseFloat(pair.priceUsd);
+      const change = parseFloat(pair.priceChange?.h24 || 0);
+      const pStr   = price < 0.000001 ? '$'+price.toExponential(2) : price < 0.01 ? '$'+price.toFixed(6) : '$'+price.toFixed(4);
+      const cStr   = (change >= 0 ? '▲' : '▼') + Math.abs(change).toFixed(2) + '%';
+      const cls    = change >= 0 ? 'ticker-change up' : 'ticker-change down';
+      pIds.forEach(id => { const el=document.getElementById(id); if(el) el.textContent=pStr; });
+      cIds.forEach(id => { const el=document.getElementById(id); if(el) { el.textContent=cStr; el.className=cls; } });
+    }
+
+    const upad = d1.pairs?.find(p=>p.chainId==='solana') || d1.pairs?.[0];
+    const bnc  = d2.pairs?.find(p=>p.chainId==='bsc')    || d2.pairs?.[0];
+    set(['p1','p3'],['c1','c3'], upad);
+    set(['p2','p4'],['c2','c4'], bnc);
+  } catch(e) {}
+}
+
+// ── CONTACTS ──
+const NUM_CONTACTS = 5;
+
+function buildContacts() {
+  const list  = document.getElementById('contactsList');
+  const saved = JSON.parse(localStorage.getItem('contacts') || '[]');
+  list.innerHTML = '';
+  for (let i = 0; i < NUM_CONTACTS; i++) {
+    const c = saved[i] || {};
+    list.innerHTML += `
+    <div class="contact-card">
+      <div class="contact-header">
+        <div class="contact-num-badge">${i+1}</div>
+        <div class="contact-label">Contact ${i+1}</div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Full Name</label>
+        <input class="app-input" type="text" placeholder="e.g. Mum" id="cname${i}" value="${c.name||''}">
+      </div>
+      <div class="input-group">
+        <label class="input-label">Phone Number (with country code)</label>
+        <input class="app-input" type="tel" placeholder="+234XXXXXXXXXX" id="cphone${i}" value="${c.phone||''}">
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-label">💬 WhatsApp available</span>
+        <label class="toggle">
+          <input type="checkbox" id="cwa${i}" ${c.whatsapp?'checked':''}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>`;
+  }
+}
+
+function saveContacts() {
+  const contacts = [];
+  for (let i = 0; i < NUM_CONTACTS; i++) {
+    contacts.push({
+      name:     document.getElementById('cname'+i)?.value  || '',
+      phone:    document.getElementById('cphone'+i)?.value || '',
+      whatsapp: document.getElementById('cwa'+i)?.checked  || false,
+    });
+  }
+  localStorage.setItem('contacts', JSON.stringify(contacts));
+  showToast('✅ Contacts saved!');
+}
+
+// ── IMPORT CONTACTS FROM PHONE ──
+function importContacts() {
+  // Try native contact picker first (Chrome Android)
+  if ('contacts' in navigator && 'select' in navigator.contacts) {
+    navigator.contacts.select(['name','tel'], {multiple:false})
+      .then(results => {
+        if (!results || !results.length) return;
+        const contact = results[0];
+        const name    = contact.name?.[0] || '';
+        const phone   = contact.tel?.[0]  || '';
+        fillNextEmptyContact(name, phone);
+        showToast('✅ Contact imported!');
+      })
+      .catch(() => fallbackVCF());
+  } else {
+    fallbackVCF();
+  }
+}
+
+function fallbackVCF() {
+  showToast('💡 Select a .vcf file or enter manually below');
+  document.getElementById('contactFilePicker').click();
+}
+
+function parseVCF(event) {
+  const file   = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const text  = e.target.result;
+    const names = text.match(/FN:(.+)/g)?.map(l=>l.replace('FN:','').trim()) || [];
+    const tels  = text.match(/TEL[^:]*:(.+)/g)?.map(l=>l.split(':')[1].trim()) || [];
+    if (names[0] && tels[0]) {
+      fillNextEmptyContact(names[0], tels[0]);
+      showToast('✅ Contact imported from VCF!');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function fillNextEmptyContact(name, phone) {
+  for (let i = 0; i < NUM_CONTACTS; i++) {
+    const nameEl  = document.getElementById('cname'+i);
+    const phoneEl = document.getElementById('cphone'+i);
+    if (nameEl && !nameEl.value) {
+      nameEl.value  = name;
+      phoneEl.value = phone;
+      // Switch to contacts tab
+      showScreen('contacts', document.querySelectorAll('.nav-tab')[1]);
+      return;
+    }
+  }
+  showToast('⚠️ All 5 contact slots are filled');
+}
+
+// ── RESTORE FORM VALUES ──
+function restoreFormValues() {
+  const un = localStorage.getItem('userName');
+  const cm = localStorage.getItem('customMsg');
+  const sw = localStorage.getItem('safeWord');
+  const fc = localStorage.getItem('fakeCaller');
+  if (un) { const el=document.getElementById('userName');      if(el) el.value=un; }
+  if (cm) { const el=document.getElementById('customMsg');     if(el) el.value=cm; }
+  if (sw) {
+    const el=document.getElementById('safeWord');
+    const disp=document.getElementById('safeWordDisplay');
+    if(el) el.value=sw;
+    if(disp) disp.textContent=sw;
+  }
+  if (fc) { const el=document.getElementById('fakeCallerName'); if(el) el.value=fc; }
+}
+
+function saveUserName()   { localStorage.setItem('userName',   document.getElementById('userName')?.value   || ''); }
+function saveMsg()        { localStorage.setItem('customMsg',  document.getElementById('customMsg')?.value  || ''); }
+function saveSafeWord()   {
+  const w = document.getElementById('safeWord')?.value || '';
+  localStorage.setItem('safeWord', w);
+  const disp = document.getElementById('safeWordDisplay');
+  if (disp) disp.textContent = w || '—';
+}
+function saveFakeCaller() { localStorage.setItem('fakeCaller', document.getElementById('fakeCallerName')?.value || ''); }
+
+// ── TRIGGER ──
+function selectTrigger(type) {
+  localStorage.setItem('trigger', type);
+  loadTrigger();
+}
+
+function loadTrigger() {
+  const type = localStorage.getItem('trigger') || 'shake';
+  document.querySelectorAll('.trigger-option').forEach(o => o.classList.remove('selected'));
+  const el = document.getElementById('trig-'+type);
+  if (el) el.classList.add('selected');
+  const fc = document.getElementById('fakeCallSection');
+  if (fc) fc.style.display = type === 'fakecall' ? 'block' : 'none';
+  const icons = {shake:'📳', silent:'🔕', fakecall:'📞'};
+  const texts = {shake:'Shake to Send active', silent:'Silent SOS active', fakecall:'Fake Call active'};
+  const ti = document.getElementById('triggerIcon');
+  const tt = document.getElementById('triggerText');
+  if (ti) ti.textContent = icons[type] || '📳';
+  if (tt) tt.textContent = texts[type] || '';
+}
+
+// ── SHAKE TO SEND ──
+let shakeCount    = 0;
+let lastShakeTime = 0;
+let lastX=0, lastY=0, lastZ=0;
+
+function initShake() {
+  if (!window.DeviceMotionEvent) return;
+
+  const requestPermission = DeviceMotionEvent.requestPermission;
+  if (typeof requestPermission === 'function') {
+    // iOS 13+
+    document.getElementById('sosBtn').addEventListener('click', () => {
+      requestPermission().then(state => {
+        if (state === 'granted') listenShake();
+      });
+    }, {once:true});
+  } else {
+    listenShake();
+  }
+}
+
+function listenShake() {
+  window.addEventListener('devicemotion', e => {
+    const trigger = localStorage.getItem('trigger') || 'shake';
+    if (trigger !== 'shake') return;
+
+    const acc = e.accelerationIncludingGravity;
+    if (!acc) return;
+    const dx  = Math.abs(acc.x - lastX);
+    const dy  = Math.abs(acc.y - lastY);
+    const dz  = Math.abs(acc.z - lastZ);
+    lastX=acc.x; lastY=acc.y; lastZ=acc.z;
+
+    if (dx+dy+dz > 25) {
+      const now = Date.now();
+      if (now - lastShakeTime < 1500) {
+        shakeCount++;
+      } else {
+        shakeCount = 1;
+      }
+      lastShakeTime = now;
+      if (shakeCount >= 3) {
+        shakeCount = 0;
+        fireSOS();
+      }
+    }
+  });
+}
+
+// ── SOS FIRE ──
+function fireSOS() {
+  const contacts = JSON.parse(localStorage.getItem('contacts') || '[]').filter(c => c.phone);
+  if (!contacts.length) {
+    showToast('⚠️ Add at least one contact first!');
+    showScreen('contacts', document.querySelectorAll('.nav-tab')[1]);
+    return;
+  }
+
+  const trigger = localStorage.getItem('trigger') || 'shake';
+
+  if (trigger === 'fakecall') {
+    // Fire SMS silently first, then show fake call
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        pos => { sendAlerts(contacts, `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`); showFakeCall(); },
+        ()  => { sendAlerts(contacts, 'Location unavailable'); showFakeCall(); },
+        {timeout:5000}
+      );
+    } else {
+      sendAlerts(contacts, 'Location unavailable');
+      showFakeCall();
+    }
+    return;
+  }
+
+  // Normal SOS
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      pos => { sendAlerts(contacts, `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`); showSOSOverlay(); },
+      ()  => { sendAlerts(contacts, 'Location unavailable'); showSOSOverlay(); },
+      {timeout:5000}
+    );
+  } else {
+    sendAlerts(contacts, 'Location unavailable');
+    showSOSOverlay();
+  }
+}
+
+function sendAlerts(contacts, location) {
+  const name      = localStorage.getItem('userName') || 'Me';
+  const customMsg = localStorage.getItem('customMsg') || '';
+  let msg = customMsg
+    ? customMsg.replace('[GPS]', location).replace('[Your name]', name)
+    : `EMERGENCY! I need help. My location: ${location} — ${name}`;
+
+  contacts.forEach(c => {
+    if (!c.phone) return;
+    const smsLink = `sms:${c.phone}?body=${encodeURIComponent(msg)}`;
+    window.open(smsLink, '_blank');
+  });
+
+  // Also update GuardNetwork location if online
+  if (navigator.onLine) updateNetworkLocation(location);
+}
+
+// ── SOS OVERLAY ──
+function showSOSOverlay() {
+  document.getElementById('sosOverlay').classList.add('active');
+  if ('vibrate' in navigator) navigator.vibrate([500,200,500,200,500]);
+}
+
+function closeSOS() {
+  document.getElementById('sosOverlay').classList.remove('active');
+}
+
+// ── FAKE CALL ──
+function showFakeCall() {
+  const name   = localStorage.getItem('fakeCaller') || 'Mum';
+  const fcName = document.getElementById('fcCallerName');
+  const fcAva  = document.getElementById('fcAvatar');
+  if (fcName) fcName.textContent = name;
+  if (fcAva)  fcAva.textContent  = name.charAt(0).toUpperCase();
+  document.getElementById('fakeCallOverlay').classList.add('active');
+  if ('vibrate' in navigator) navigator.vibrate([1000,500,1000,500,1000,500,1000]);
+}
+
+function endFakeCall() {
+  document.getElementById('fakeCallOverlay').classList.remove('active');
+  navigator.vibrate && navigator.vibrate(0);
+  showSOSOverlay();
+}
+
+// ── COPY WALLET ──
+function copyWallet() {
+  const addr = '0x1b423817bab7058c295c9209453929d605c65f9f';
+  navigator.clipboard?.writeText(addr).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = '✅ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent='📋 Copy Wallet Address'; btn.classList.remove('copied'); }, 2500);
+  }).catch(() => {
+    prompt('Copy this wallet address:', addr);
+  });
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  const existing = document.getElementById('toast');
+  if (existing) existing.remove();
+  const t = document.createElement('div');
+  t.id = 'toast';
+  t.textContent = msg;
+  t.style.cssText = `
+    position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+    background:rgba(13,17,51,0.97);border:1px solid rgba(180,80,255,0.3);
+    color:#f0eeff;padding:10px 20px;border-radius:30px;font-family:'Rajdhani',sans-serif;
+    font-size:13px;letter-spacing:1px;z-index:9999;white-space:nowrap;
+    box-shadow:0 4px 20px rgba(0,0,0,0.4);animation:fadeUp .3s ease;
+  `;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
+// ══════════════════════════════════
+//  UNRUGGUARD — GUARD NETWORK
+//  Phase 2: Live location sharing
+//  Backend: Supabase (free tier)
+// ══════════════════════════════════
+
+// ── SUPABASE CONFIG ──
+// Replace these with your actual Supabase project values after setup
+const SUPABASE_URL = 'https://hremkmaztfgozsizxprp.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_lJtfuayvPv_x2wSmSPI8fw_MFlDvOtT';
+
+// ── HELPERS ──
+async function sbFetch(endpoint, method='GET', body=null) {
+  const opts = {
+    method,
+    headers: {
+      'Content-Type':  'application/json',
+      'apikey':        SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Prefer':        method === 'POST' ? 'return=representation' : '',
+    }
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(SUPABASE_URL + '/rest/v1/' + endpoint, opts);
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+
+// ── ID GENERATION ──
+function generateGuardID(username) {
+  const clean  = username.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 12);
+  const suffix = Math.floor(1000 + Math.random() * 9000);
+  return `UG-${clean}-${suffix}`;
+}
+
+// ── INIT NETWORK ──
+function initNetwork() {
+  const savedID = localStorage.getItem('guardID');
+  if (savedID) {
+    showNetworkDashboard();
+    loadGuardContacts();
+  } else {
+    showNetworkSetup();
+  }
+}
+
+function showNetworkSetup() {
+  const setup = document.getElementById('networkSetup');
+  const dash  = document.getElementById('networkDashboard');
+  if (setup) setup.style.display = 'block';
+  if (dash)  dash.style.display  = 'none';
+}
+
+function showNetworkDashboard() {
+  const setup = document.getElementById('networkSetup');
+  const dash  = document.getElementById('networkDashboard');
+  if (setup) setup.style.display = 'none';
+  if (dash)  dash.style.display  = 'block';
+
+  const id   = localStorage.getItem('guardID')   || '';
+  const name = localStorage.getItem('guardName') || '';
+  const idEl   = document.getElementById('gnIdDisplay');
+  const nameEl = document.getElementById('gnNameDisplay');
+  const avaEl  = document.getElementById('gnAvatarDisplay');
+  if (idEl)   idEl.textContent   = id;
+  if (nameEl) nameEl.textContent = name;
+  if (avaEl)  avaEl.textContent  = name.charAt(0).toUpperCase();
+}
+
+// ── CREATE GUARD ID ──
+async function createGuardID() {
+  const input = document.getElementById('gnUsername');
+  if (!input || !input.value.trim()) {
+    showToast('⚠️ Enter your name or username first'); return;
+  }
+  const username = input.value.trim().toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 12);
+  if (!username) { showToast('⚠️ Letters and numbers only'); return; }
+
+  const guardID = generateGuardID(username);
+  localStorage.setItem('guardID',   guardID);
+  localStorage.setItem('guardName', username);
+
+  // Register in Supabase if online
+  if (navigator.onLine && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+    try {
+      await sbFetch('guard_users', 'POST', {
+        guard_id:   guardID,
+        username:   username,
+        created_at: new Date().toISOString(),
+        last_seen:  new Date().toISOString(),
+        lat:        null,
+        lng:        null,
+      });
+    } catch(e) {
+      // Saved locally anyway — will sync when online
+      console.warn('Supabase offline, saved locally:', e.message);
+    }
+  }
+
+  showNetworkDashboard();
+  showToast('✅ Your GuardNetwork ID: ' + guardID);
+}
+
+// ── SHARE GUARD ID ──
+function shareGuardID() {
+  const id   = localStorage.getItem('guardID')   || '';
+  const name = localStorage.getItem('guardName') || '';
+  const text = `My UnrugGuard ID is: ${id}\nAdd me on GuardNetwork to share live locations.\nDownload UnrugGuard — Powered by Unrugpad`;
+
+  if (navigator.share) {
+    navigator.share({ title: 'My UnrugGuard ID', text }).catch(() => {
+      navigator.clipboard?.writeText(id);
+      showToast('📋 ID copied: ' + id);
+    });
+  } else {
+    navigator.clipboard?.writeText(id).then(() => showToast('📋 ID copied: ' + id));
+  }
+}
+
+// ── SEND GUARD REQUEST ──
+async function sendGuardRequest() {
+  const input    = document.getElementById('addGuardId');
+  const targetID = input?.value?.trim().toUpperCase();
+  const myID     = localStorage.getItem('guardID');
+  const myName   = localStorage.getItem('guardName');
+
+  if (!targetID || !targetID.startsWith('UG-')) {
+    showToast('⚠️ Enter a valid UnrugGuard ID (e.g. UG-ROSE-4431)'); return;
+  }
+  if (targetID === myID) {
+    showToast('⚠️ You cannot add yourself'); return;
+  }
+
+  // Save request locally
+  const requests = JSON.parse(localStorage.getItem('guardRequests') || '[]');
+  if (requests.find(r => r.to === targetID)) {
+    showToast('⚠️ Request already sent to ' + targetID); return;
+  }
+  requests.push({ to: targetID, from: myID, fromName: myName, status: 'pending', ts: Date.now() });
+  localStorage.setItem('guardRequests', JSON.stringify(requests));
+
+  // Push to Supabase if online
+  if (navigator.onLine && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+    try {
+      await sbFetch('guard_connections', 'POST', {
+        from_id:    myID,
+        from_name:  myName,
+        to_id:      targetID,
+        status:     'pending',
+        created_at: new Date().toISOString(),
+      });
+      showToast('✅ Request sent to ' + targetID);
+    } catch(e) {
+      showToast('📶 Saved — will sync when online');
+    }
+  } else {
+    showToast('📶 Saved locally — will sync when online');
+  }
+
+  if (input) input.value = '';
+  loadGuardContacts();
+}
+
+// ── LOAD GUARD CONTACTS ──
+async function loadGuardContacts() {
+  const myID = localStorage.getItem('guardID');
+  if (!myID) return;
+
+  const list = document.getElementById('guardContactsList');
+  if (!list) return;
+
+  // Load from local storage first (offline support)
+  const localConnections = JSON.parse(localStorage.getItem('guardConnections') || '[]');
+  const localRequests    = JSON.parse(localStorage.getItem('guardRequests')    || '[]');
+
+  // Fetch from Supabase if online
+  if (navigator.onLine && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+    try {
+      // Connections where I am from or to
+      const sent     = await sbFetch(`guard_connections?from_id=eq.${myID}&select=*`);
+      const received = await sbFetch(`guard_connections?to_id=eq.${myID}&select=*`);
+
+      // Save to local
+      localStorage.setItem('guardConnections', JSON.stringify([...sent, ...received]));
+      renderGuardContacts([...sent, ...received], myID, list);
+      checkIncomingRequests(received, myID);
+    } catch(e) {
+      renderGuardContacts(localConnections, myID, list);
+    }
+  } else {
+    renderGuardContacts(localConnections, myID, list);
+  }
+}
+
+function renderGuardContacts(connections, myID, list) {
+  if (!connections.length) {
+    list.innerHTML = `
+      <div class="info-box" style="text-align:center">
+        <strong>No connections yet</strong><br>
+        Share your GuardNetwork ID with trusted contacts to connect.
+      </div>`;
+    return;
+  }
+  list.innerHTML = '';
+  connections.forEach(c => {
+    const isFrom   = c.from_id === myID;
+    const otherID  = isFrom ? c.to_id   : c.from_id;
+    const otherName= isFrom ? (c.to_name || otherID) : c.from_name;
+    const status   = c.status;
+    const initial  = (otherName || 'U').charAt(0).toUpperCase();
+
+    let statusHTML = '';
+    let actionHTML = '';
+
+    if (status === 'pending' && isFrom) {
+      statusHTML = '<div class="nc-status pending">⏳ Awaiting Approval</div>';
+      actionHTML = `<div class="nc-action" onclick="cancelGuardRequest('${c.id}')">Cancel</div>`;
+    } else if (status === 'pending' && !isFrom) {
+      statusHTML = '<div class="nc-status incoming">📩 Wants to connect</div>';
+      actionHTML = `
+        <div class="nc-action approve" onclick="approveGuardRequest('${c.id}','${otherID}')">Approve</div>
+        <div class="nc-action decline" style="margin-top:4px" onclick="declineGuardRequest('${c.id}')">Decline</div>`;
+    } else if (status === 'approved') {
+      const loc    = c.lat && c.lng ? `https://maps.google.com/?q=${c.lat},${c.lng}` : null;
+      statusHTML = '<div class="nc-status approved">✓ Connected</div>';
+      actionHTML = loc
+        ? `<a class="nc-action" href="${loc}" target="_blank">📍 View</a>`
+        : `<div class="nc-action" onclick="pingContact('${otherID}')">📍 Ping</div>`;
+    }
+
+    list.innerHTML += `
+      <div class="network-contact" id="nc-${c.id}">
+        <div class="nc-avatar">${initial}</div>
+        <div>
+          <div class="nc-name">${otherName}</div>
+          ${statusHTML}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;margin-left:auto">${actionHTML}</div>
+      </div>`;
+  });
+
+  updateMapPins(connections.filter(c=>c.status==='approved' && c.lat && c.lng), myID);
+}
+
+// ── APPROVE / DECLINE / CANCEL ──
+async function approveGuardRequest(connId, fromID) {
+  if (navigator.onLine && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+    try {
+      await sbFetch(`guard_connections?id=eq.${connId}`, 'PATCH', { status: 'approved' });
+      showToast('✅ Connection approved!');
+    } catch(e) { showToast('📶 Will sync when online'); }
+  }
+  // Update locally
+  updateLocalConnection(connId, 'approved');
+  loadGuardContacts();
+}
+
+async function declineGuardRequest(connId) {
+  if (navigator.onLine && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+    try {
+      await sbFetch(`guard_connections?id=eq.${connId}`, 'DELETE');
+    } catch(e) {}
+  }
+  removeLocalConnection(connId);
+  loadGuardContacts();
+}
+
+async function cancelGuardRequest(connId) {
+  if (navigator.onLine && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+    try {
+      await sbFetch(`guard_connections?id=eq.${connId}`, 'DELETE');
+    } catch(e) {}
+  }
+  removeLocalConnection(connId);
+  loadGuardContacts();
+}
+
+function updateLocalConnection(id, status) {
+  const conns = JSON.parse(localStorage.getItem('guardConnections') || '[]');
+  const idx   = conns.findIndex(c => c.id === id);
+  if (idx !== -1) { conns[idx].status = status; localStorage.setItem('guardConnections', JSON.stringify(conns)); }
+}
+
+function removeLocalConnection(id) {
+  const conns = JSON.parse(localStorage.getItem('guardConnections') || '[]').filter(c => c.id !== id);
+  localStorage.setItem('guardConnections', JSON.stringify(conns));
+}
+
+// ── UPDATE MY LOCATION IN NETWORK ──
+async function updateNetworkLocation(locationStr) {
+  const myID = localStorage.getItem('guardID');
+  if (!myID || !navigator.onLine || SUPABASE_URL === 'YOUR_SUPABASE_URL') return;
+
+  // Parse lat/lng from Google Maps link
+  const match = locationStr.match(/q=([-\d.]+),([-\d.]+)/);
+  if (!match) return;
+  const lat = parseFloat(match[1]);
+  const lng = parseFloat(match[2]);
+
+  try {
+    await sbFetch(`guard_users?guard_id=eq.${myID}`, 'PATCH', {
+      lat, lng,
+      last_seen: new Date().toISOString(),
+    });
+  } catch(e) {}
+}
+
+// ── REFRESH NETWORK ──
+function refreshNetwork() {
+  if (!navigator.onLine) { showToast('📶 No internet connection'); return; }
+  showToast('🔄 Refreshing...');
+  loadGuardContacts();
+
+  // Also update my location
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      updateNetworkLocation(`https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`);
+    });
+  }
+}
+
+// ── PING CONTACT ──
+function pingContact(contactID) {
+  const myID   = localStorage.getItem('guardID');
+  const myName = localStorage.getItem('guardName');
+  showToast(`📍 Pinging ${contactID}...`);
+  // In full version: push notification via Supabase realtime
+  // For now show toast
+  setTimeout(() => showToast('📶 Ping sent — they will see it next time they open the app'), 1000);
+}
+
+// ── CHECK INCOMING REQUESTS ──
+function checkIncomingRequests(received, myID) {
+  const incoming = received.filter(c => c.status === 'pending');
+  if (incoming.length > 0) {
+    showToast(`📩 ${incoming.length} new connection request${incoming.length>1?'s':''}!`);
+  }
+}
+
+// ── MAP PINS ──
+function updateMapPins(approvedConnections, myID) {
+  const mapIcon  = document.getElementById('mapIcon');
+  const mapLabel = document.getElementById('mapLabel');
+  const pinsDiv  = document.getElementById('mapPins');
+  if (!pinsDiv) return;
+
+  pinsDiv.innerHTML = '';
+  if (!approvedConnections.length) {
+    if (mapIcon)  mapIcon.style.display  = 'block';
+    if (mapLabel) mapLabel.textContent   = 'Waiting for contacts to share location...';
+    return;
+  }
+
+  if (mapIcon)  mapIcon.style.display  = 'none';
+  if (mapLabel) mapLabel.textContent   = `${approvedConnections.length} contact${approvedConnections.length>1?'s':''} on map`;
+
+  // Simple relative positioning for map pins
+  const mapEl   = document.querySelector('.map-placeholder');
+  if (!mapEl) return;
+  const w = mapEl.offsetWidth;
+  const h = mapEl.offsetHeight;
+
+  // Find bounds
+  const lats = approvedConnections.map(c=>c.lat);
+  const lngs = approvedConnections.map(c=>c.lng);
+  const minLat=Math.min(...lats), maxLat=Math.max(...lats);
+  const minLng=Math.min(...lngs), maxLng=Math.max(...lngs);
+  const latRange=maxLat-minLat || 0.01;
+  const lngRange=maxLng-minLng || 0.01;
+
+  approvedConnections.forEach(c => {
+    const x = ((c.lng - minLng) / lngRange) * (w*0.7) + w*0.15;
+    const y = ((maxLat - c.lat) / latRange) * (h*0.7) + h*0.15;
+    const name = c.from_id===myID ? (c.to_name||c.to_id) : c.from_name;
+    const initial = (name||'U').charAt(0).toUpperCase();
+    const colors  = ['#cc44ff','#00e676','#ff9100','#2196F3','#ff1744'];
+    const color   = colors[approvedConnections.indexOf(c) % colors.length];
+
+    const pin = document.createElement('div');
+    pin.className = 'map-pin';
+    pin.style.cssText = `left:${x}px;top:${y}px`;
+    pin.innerHTML = `
+      <div class="pin-label">${initial} ${name?.slice(0,6)||''}</div>
+      <div class="pin-dot" style="background:${color}"></div>`;
+    pinsDiv.appendChild(pin);
+  });
+}
+
+</script>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
