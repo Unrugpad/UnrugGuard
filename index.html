@@ -249,6 +249,26 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
   <div class="fc-bottom"><button class="fc-decline" onclick="endFakeCall()">✕</button><button class="fc-accept" onclick="endFakeCall()">✓</button></div>
 </div>
 
+<!-- GUARD ALERT OVERLAY -->
+<div id="guardAlertOverlay" style="display:none;position:fixed;inset:0;background:rgba(5,7,26,0.97);z-index:9997;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:30px;">
+  <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden">
+    <div id="gar1" style="position:absolute;top:50%;left:50%;width:200px;height:200px;border-radius:50%;border:2px solid rgba(255,23,68,0.3);transform:translate(-50%,-50%);animation:guardRing 2s ease-out infinite"></div>
+    <div id="gar2" style="position:absolute;top:50%;left:50%;width:300px;height:300px;border-radius:50%;border:2px solid rgba(255,23,68,0.2);transform:translate(-50%,-50%);animation:guardRing 2s ease-out infinite;animation-delay:.6s"></div>
+    <div id="gar3" style="position:absolute;top:50%;left:50%;width:400px;height:400px;border-radius:50%;border:2px solid rgba(255,23,68,0.1);transform:translate(-50%,-50%);animation:guardRing 2s ease-out infinite;animation-delay:1.2s"></div>
+  </div>
+  <div style="font-size:70px;animation:shake .4s ease infinite alternate;position:relative;z-index:1">🚨</div>
+  <div style="font-family:'Exo 2',sans-serif;font-weight:900;font-size:26px;color:#ff1744;letter-spacing:2px;position:relative;z-index:1;text-align:center">EMERGENCY ALERT</div>
+  <div id="guardAlertName" style="font-family:'Exo 2',sans-serif;font-weight:700;font-size:20px;color:#fff;position:relative;z-index:1;text-align:center"></div>
+  <div id="guardAlertMsg" style="font-size:14px;color:rgba(240,238,255,0.8);text-align:center;line-height:1.6;max-width:300px;position:relative;z-index:1"></div>
+  <div id="guardAlertTime" style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;position:relative;z-index:1"></div>
+  <a id="guardAlertMapBtn" href="#" target="_blank" style="width:100%;max-width:300px;padding:15px;border:none;border-radius:13px;background:#ff1744;color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:14px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;text-align:center;text-decoration:none;position:relative;z-index:1;display:block">📍 Open Google Maps</a>
+  <button onclick="respondToGuardAlert()" style="width:100%;max-width:300px;padding:14px;border:1.5px solid var(--green);border-radius:13px;background:rgba(0,230,118,0.1);color:var(--green);font-family:'Exo 2',sans-serif;font-weight:700;font-size:14px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;position:relative;z-index:1">✅ I Am Responding</button>
+  <button onclick="dismissGuardAlert()" style="padding:10px 30px;border:1.5px solid rgba(180,80,255,0.2);border-radius:30px;background:transparent;color:rgba(240,238,255,0.35);font-family:'Rajdhani',sans-serif;font-size:13px;cursor:pointer;position:relative;z-index:1">Dismiss</button>
+</div>
+<style>
+@keyframes guardRing{0%{transform:translate(-50%,-50%) scale(.5);opacity:.8}100%{transform:translate(-50%,-50%) scale(1.5);opacity:0}}
+</style>
+
 <!-- PWA BANNER -->
 <div class="pwa-banner hidden" id="pwaBanner">
   <span style="font-size:22px">📲</span>
@@ -304,7 +324,7 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
   <div class="nav-tab" onclick="showScreen('contacts',this)">👥<span>Contacts</span></div>
   <div class="nav-tab" onclick="showScreen('settings',this)">⚙️<span>Settings</span></div>
   <div class="nav-tab" onclick="showScreen('guide',this)">📖<span>Guide</span></div>
-  <div class="nav-tab" onclick="showScreen('network',this)">🛡️<span>Network</span></div>
+  <div class="nav-tab" onclick="showScreen('network',this);setTimeout(checkForGuardAlerts,500)">🛡️<span>Network</span></div>
 </nav>
 
 <!-- HOME -->
@@ -571,6 +591,9 @@ window.addEventListener('DOMContentLoaded',()=>{
   initPWA();
   autoSaveLocation();
   requestNotificationPermission();
+  // Check for GuardNetwork alerts on load and every 30 seconds
+  setTimeout(checkForGuardAlerts, 2000);
+  setInterval(checkForGuardAlerts, 30000);
 });
 
 window.addEventListener('online',updateStatus);
@@ -1280,7 +1303,101 @@ async function updateNetworkLocation(locationStr){
 
 function refreshNetwork(){
   if(!navigator.onLine){showToast('📶 No internet connection');return;}
-  showToast('🔄 Refreshing...');loadGuardContacts();autoSaveLocation();
+  showToast('🔄 Refreshing...');loadGuardContacts();autoSaveLocation();checkForGuardAlerts();
+}
+
+// ── GUARD ALERT SYSTEM ──
+let lastAlertCheck=0;
+let currentAlertLocation='';
+
+async function checkForGuardAlerts(){
+  const myID=localStorage.getItem('guardID');
+  if(!myID||!navigator.onLine)return;
+  const now=Date.now();
+  if(now-lastAlertCheck<15000)return; // throttle to every 15s
+  lastAlertCheck=now;
+  try{
+    // Get all approved connections
+    const conns=JSON.parse(localStorage.getItem('guardConnections')||'[]').filter(c=>c.status==='approved');
+    if(!conns.length)return;
+    // Get IDs of people connected to me
+    const otherIDs=conns.map(c=>c.from_id===myID?c.to_id:c.from_id);
+    if(!otherIDs.length)return;
+    // Fetch their latest alert status
+    const users=await sbFetch(`guard_users?guard_id=in.(${otherIDs.join(',')})&select=guard_id,username,last_alert,last_seen`);
+    users.forEach(u=>{
+      if(!u.last_alert)return;
+      let alert;
+      try{alert=JSON.parse(u.last_alert);}catch(e){return;}
+      if(!alert||alert.type!=='sos')return;
+      // Check if alert is recent (within last 10 minutes)
+      const alertTime=new Date(alert.timestamp).getTime();
+      const ageMinutes=(Date.now()-alertTime)/60000;
+      if(ageMinutes>10)return;
+      // Check if we already showed this alert
+      const shownKey=`shownAlert_${u.guard_id}_${alert.timestamp}`;
+      if(localStorage.getItem(shownKey))return;
+      // Mark as shown
+      localStorage.setItem(shownKey,'true');
+      // Show the alert
+      showGuardAlert(u.username||u.guard_id, alert.location, alert.timestamp);
+    });
+  }catch(e){}
+}
+
+function showGuardAlert(senderName, location, timestamp){
+  const overlay=document.getElementById('guardAlertOverlay');
+  const nameEl=document.getElementById('guardAlertName');
+  const msgEl=document.getElementById('guardAlertMsg');
+  const timeEl=document.getElementById('guardAlertTime');
+  const mapBtn=document.getElementById('guardAlertMapBtn');
+  if(!overlay)return;
+  currentAlertLocation=location||'';
+  if(nameEl)nameEl.textContent=senderName+' NEEDS HELP NOW!';
+  if(msgEl)msgEl.textContent='Your trusted contact has triggered an emergency SOS alert. They need your help immediately.';
+  if(timeEl)timeEl.textContent=timestamp?formatTimeAgo(timestamp):'Just now';
+  if(mapBtn){
+    if(location&&location.includes('maps.google')){
+      mapBtn.href=location;
+      mapBtn.style.opacity='1';
+      mapBtn.style.pointerEvents='auto';
+    } else {
+      mapBtn.href='#';
+      mapBtn.textContent='📍 Location Unavailable';
+      mapBtn.style.opacity='0.5';
+      mapBtn.style.pointerEvents='none';
+    }
+  }
+  overlay.style.display='flex';
+  if('vibrate' in navigator)navigator.vibrate([500,200,500,200,500,200,500]);
+  // Play alert sound
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    [440,550,660,550,440].forEach((freq,i)=>{
+      const osc=ctx.createOscillator();
+      const gain=ctx.createGain();
+      osc.connect(gain);gain.connect(ctx.destination);
+      osc.frequency.value=freq;
+      osc.type='square';
+      gain.gain.setValueAtTime(0.3,ctx.currentTime+i*0.15);
+      gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+i*0.15+0.1);
+      osc.start(ctx.currentTime+i*0.15);
+      osc.stop(ctx.currentTime+i*0.15+0.15);
+    });
+  }catch(e){}
+}
+
+function respondToGuardAlert(){
+  dismissGuardAlert();
+  if(currentAlertLocation&&currentAlertLocation.includes('maps.google')){
+    window.open(currentAlertLocation,'_blank');
+  }
+  showToast('✅ Response noted — opening location');
+}
+
+function dismissGuardAlert(){
+  const overlay=document.getElementById('guardAlertOverlay');
+  if(overlay)overlay.style.display='none';
 }
 
 function updateMapPins(approved,myID){
