@@ -9,6 +9,28 @@
 <meta name="description" content="UnrugGuard — Free global emergency safety app. Alert your contacts instantly. Powered by Unrugpad.">
 <title>UnrugGuard — Powered by Unrugpad</title>
 <link rel="manifest" href="manifest.json">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const manifestData = {
+  "name": "UnrugGuard",
+  "short_name": "UnrugGuard", 
+  "description": "Free global emergency safety app. Powered by Unrugpad.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#05071a",
+  "theme_color": "#05071a",
+  "orientation": "portrait",
+  "icons": [
+    {"src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgZmlsbD0iIzA1MDcxYSIvPgogIDxkZWZzPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJoZyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxYTA1MzUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiMzZDEwNzAiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMWEwNTM1Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJocyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmZjgwZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiNjYzQ0ZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNzcyMmNjIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzZyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmZjk5ZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiNjYzQ0ZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjODgyMmVlIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGZpbHRlciBpZD0iZ2xvdyI+CiAgICAgIDxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjgiIHJlc3VsdD0iYmx1ciIvPgogICAgICA8ZmVNZXJnZT48ZmVNZXJnZU5vZGUgaW49ImJsdXIiLz48ZmVNZXJnZU5vZGUgaW49IlNvdXJjZUdyYXBoaWMiLz48L2ZlTWVyZ2U+CiAgICA8L2ZpbHRlcj4KICA8L2RlZnM+CiAgPCEtLSBHbG93IHJpbmcgLS0+CiAgPGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIyMjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2NjNDRmZiIgc3Ryb2tlLXdpZHRoPSIyIiBvcGFjaXR5PSIwLjMiIGZpbHRlcj0idXJsKCNnbG93KSIvPgogIDwhLS0gSGV4YWdvbiAtLT4KICA8cG9seWdvbiBwb2ludHM9IjI1Niw0MCA0NDAsMTQ4IDQ0MCwzNjQgMjU2LDQ3MiA3MiwzNjQgNzIsMTQ4IiBmaWxsPSJ1cmwoI2hnKSIgc3Ryb2tlPSJ1cmwoI2hzKSIgc3Ryb2tlLXdpZHRoPSI4IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KICA8cG9seWdvbiBwb2ludHM9IjI1Niw4MCA0MDAsMTYyIDQwMCwzMzggMjU2LDQyMCAxMTIsMzM4IDExMiwxNjIiIGZpbGw9InJnYmEoMTMsMiwzNywwLjgpIiBzdHJva2U9IiM3NzIyY2MiIHN0cm9rZS13aWR0aD0iMyIgb3BhY2l0eT0iMC42Ii8+CiAgPCEtLSBDb3JuZXIgZG90cyAtLT4KICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSI0MCIgcj0iMTAiIGZpbGw9IiNmZjgwZmYiIG9wYWNpdHk9IjAuOSIvPgogIDxjaXJjbGUgY3g9IjQ0MCIgY3k9IjE0OCIgcj0iMTAiIGZpbGw9IiNjYzQ0ZmYiIG9wYWNpdHk9IjAuOSIvPgogIDxjaXJjbGUgY3g9IjQ0MCIgY3k9IjM2NCIgcj0iMTAiIGZpbGw9IiNjYzQ0ZmYiIG9wYWNpdHk9IjAuOSIvPgogIDxjaXJjbGUgY3g9IjI1NiIgY3k9IjQ3MiIgcj0iMTAiIGZpbGw9IiNmZjgwZmYiIG9wYWNpdHk9IjAuOSIvPgogIDxjaXJjbGUgY3g9IjcyIiBjeT0iMzY0IiByPSIxMCIgZmlsbD0iI2NjNDRmZiIgb3BhY2l0eT0iMC45Ii8+CiAgPGNpcmNsZSBjeD0iNzIiIGN5PSIxNDgiIHI9IjEwIiBmaWxsPSIjY2M0NGZmIiBvcGFjaXR5PSIwLjkiLz4KICA8IS0tIFNoaWVsZCAtLT4KICA8cGF0aCBkPSJNMjU2IDEzMCBMMTYwIDE3NSBMMTYwIDI3MCBDMTYwIDMzMCAyNTYgMzg1IDI1NiAzODUgQzI1NiAzODUgMzUyIDMzMCAzNTIgMjcwIEwzNTIgMTc1IFoiIGZpbGw9InVybCgjc2cpIiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KICA8cGF0aCBkPSJNMjU2IDE1NSBMMTgwIDE5MyBMMTgwIDI2OCBDMTgwIDMxOCAyNTYgMzYzIDI1NiAzNjMgQzI1NiAzNjMgMzMyIDMxOCAzMzIgMjY4IEwzMzIgMTkzIFoiIGZpbGw9InJnYmEoMTMsMiwzNywwLjg1KSIvPgogIDwhLS0gQ2hlY2ttYXJrIC0tPgogIDxwYXRoIGQ9Ik0yMTAgMjY4IEwyMzggMjk2IEwzMDIgMjI1IiBzdHJva2U9IiNmZjk5ZmYiIHN0cm9rZS13aWR0aD0iMTgiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4=", "sizes": "512x512", "type": "image/svg+xml"},
+    {"src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgZmlsbD0iIzA1MDcxYSIvPgogIDxkZWZzPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJoZyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxYTA1MzUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiMzZDEwNzAiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMWEwNTM1Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJocyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmZjgwZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiNjYzQ0ZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNzcyMmNjIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzZyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmZjk5ZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiNjYzQ0ZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjODgyMmVlIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGZpbHRlciBpZD0iZ2xvdyI+CiAgICAgIDxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjgiIHJlc3VsdD0iYmx1ciIvPgogICAgICA8ZmVNZXJnZT48ZmVNZXJnZU5vZGUgaW49ImJsdXIiLz48ZmVNZXJnZU5vZGUgaW49IlNvdXJjZUdyYXBoaWMiLz48L2ZlTWVyZ2U+CiAgICA8L2ZpbHRlcj4KICA8L2RlZnM+CiAgPCEtLSBHbG93IHJpbmcgLS0+CiAgPGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIyMjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2NjNDRmZiIgc3Ryb2tlLXdpZHRoPSIyIiBvcGFjaXR5PSIwLjMiIGZpbHRlcj0idXJsKCNnbG93KSIvPgogIDwhLS0gSGV4YWdvbiAtLT4KICA8cG9seWdvbiBwb2ludHM9IjI1Niw0MCA0NDAsMTQ4IDQ0MCwzNjQgMjU2LDQ3MiA3MiwzNjQgNzIsMTQ4IiBmaWxsPSJ1cmwoI2hnKSIgc3Ryb2tlPSJ1cmwoI2hzKSIgc3Ryb2tlLXdpZHRoPSI4IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KICA8cG9seWdvbiBwb2ludHM9IjI1Niw4MCA0MDAsMTYyIDQwMCwzMzggMjU2LDQyMCAxMTIsMzM4IDExMiwxNjIiIGZpbGw9InJnYmEoMTMsMiwzNywwLjgpIiBzdHJva2U9IiM3NzIyY2MiIHN0cm9rZS13aWR0aD0iMyIgb3BhY2l0eT0iMC42Ii8+CiAgPCEtLSBDb3JuZXIgZG90cyAtLT4KICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSI0MCIgcj0iMTAiIGZpbGw9IiNmZjgwZmYiIG9wYWNpdHk9IjAuOSIvPgogIDxjaXJjbGUgY3g9IjQ0MCIgY3k9IjE0OCIgcj0iMTAiIGZpbGw9IiNjYzQ0ZmYiIG9wYWNpdHk9IjAuOSIvPgogIDxjaXJjbGUgY3g9IjQ0MCIgY3k9IjM2NCIgcj0iMTAiIGZpbGw9IiNjYzQ0ZmYiIG9wYWNpdHk9IjAuOSIvPgogIDxjaXJjbGUgY3g9IjI1NiIgY3k9IjQ3MiIgcj0iMTAiIGZpbGw9IiNmZjgwZmYiIG9wYWNpdHk9IjAuOSIvPgogIDxjaXJjbGUgY3g9IjcyIiBjeT0iMzY0IiByPSIxMCIgZmlsbD0iI2NjNDRmZiIgb3BhY2l0eT0iMC45Ii8+CiAgPGNpcmNsZSBjeD0iNzIiIGN5PSIxNDgiIHI9IjEwIiBmaWxsPSIjY2M0NGZmIiBvcGFjaXR5PSIwLjkiLz4KICA8IS0tIFNoaWVsZCAtLT4KICA8cGF0aCBkPSJNMjU2IDEzMCBMMTYwIDE3NSBMMTYwIDI3MCBDMTYwIDMzMCAyNTYgMzg1IDI1NiAzODUgQzI1NiAzODUgMzUyIDMzMCAzNTIgMjcwIEwzNTIgMTc1IFoiIGZpbGw9InVybCgjc2cpIiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KICA8cGF0aCBkPSJNMjU2IDE1NSBMMTgwIDE5MyBMMTgwIDI2OCBDMTgwIDMxOCAyNTYgMzYzIDI1NiAzNjMgQzI1NiAzNjMgMzMyIDMxOCAzMzIgMjY4IEwzMzIgMTkzIFoiIGZpbGw9InJnYmEoMTMsMiwzNywwLjg1KSIvPgogIDwhLS0gQ2hlY2ttYXJrIC0tPgogIDxwYXRoIGQ9Ik0yMTAgMjY4IEwyMzggMjk2IEwzMDIgMjI1IiBzdHJva2U9IiNmZjk5ZmYiIHN0cm9rZS13aWR0aD0iMTgiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4=", "sizes": "192x192", "type": "image/svg+xml"},
+    {"src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgZmlsbD0iIzA1MDcxYSIvPgogIDxkZWZzPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJoZyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxYTA1MzUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiMzZDEwNzAiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMWEwNTM1Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJocyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmZjgwZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiNjYzQ0ZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNzcyMmNjIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzZyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmZjk5ZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiNjYzQ0ZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjODgyMmVlIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGZpbHRlciBpZD0iZ2xvdyI+CiAgICAgIDxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjgiIHJlc3VsdD0iYmx1ciIvPgogICAgICA8ZmVNZXJnZT48ZmVNZXJnZU5vZGUgaW49ImJsdXIiLz48ZmVNZXJnZU5vZGUgaW49IlNvdXJjZUdyYXBoaWMiLz48L2ZlTWVyZ2U+CiAgICA8L2ZpbHRlcj4KICA8L2RlZnM+CiAgPCEtLSBHbG93IHJpbmcgLS0+CiAgPGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIyMjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2NjNDRmZiIgc3Ryb2tlLXdpZHRoPSIyIiBvcGFjaXR5PSIwLjMiIGZpbHRlcj0idXJsKCNnbG93KSIvPgogIDwhLS0gSGV4YWdvbiAtLT4KICA8cG9seWdvbiBwb2ludHM9IjI1Niw0MCA0NDAsMTQ4IDQ0MCwzNjQgMjU2LDQ3MiA3MiwzNjQgNzIsMTQ4IiBmaWxsPSJ1cmwoI2hnKSIgc3Ryb2tlPSJ1cmwoI2hzKSIgc3Ryb2tlLXdpZHRoPSI4IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KICA8cG9seWdvbiBwb2ludHM9IjI1Niw4MCA0MDAsMTYyIDQwMCwzMzggMjU2LDQyMCAxMTIsMzM4IDExMiwxNjIiIGZpbGw9InJnYmEoMTMsMiwzNywwLjgpIiBzdHJva2U9IiM3NzIyY2MiIHN0cm9rZS13aWR0aD0iMyIgb3BhY2l0eT0iMC42Ii8+CiAgPCEtLSBDb3JuZXIgZG90cyAtLT4KICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSI0MCIgcj0iMTAiIGZpbGw9IiNmZjgwZmYiIG9wYWNpdHk9IjAuOSIvPgogIDxjaXJjbGUgY3g9IjQ0MCIgY3k9IjE0OCIgcj0iMTAiIGZpbGw9IiNjYzQ0ZmYiIG9wYWNpdHk9IjAuOSIvPgogIDxjaXJjbGUgY3g9IjQ0MCIgY3k9IjM2NCIgcj0iMTAiIGZpbGw9IiNjYzQ0ZmYiIG9wYWNpdHk9IjAuOSIvPgogIDxjaXJjbGUgY3g9IjI1NiIgY3k9IjQ3MiIgcj0iMTAiIGZpbGw9IiNmZjgwZmYiIG9wYWNpdHk9IjAuOSIvPgogIDxjaXJjbGUgY3g9IjcyIiBjeT0iMzY0IiByPSIxMCIgZmlsbD0iI2NjNDRmZiIgb3BhY2l0eT0iMC45Ii8+CiAgPGNpcmNsZSBjeD0iNzIiIGN5PSIxNDgiIHI9IjEwIiBmaWxsPSIjY2M0NGZmIiBvcGFjaXR5PSIwLjkiLz4KICA8IS0tIFNoaWVsZCAtLT4KICA8cGF0aCBkPSJNMjU2IDEzMCBMMTYwIDE3NSBMMTYwIDI3MCBDMTYwIDMzMCAyNTYgMzg1IDI1NiAzODUgQzI1NiAzODUgMzUyIDMzMCAzNTIgMjcwIEwzNTIgMTc1IFoiIGZpbGw9InVybCgjc2cpIiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KICA8cGF0aCBkPSJNMjU2IDE1NSBMMTgwIDE5MyBMMTgwIDI2OCBDMTgwIDMxOCAyNTYgMzYzIDI1NiAzNjMgQzI1NiAzNjMgMzMyIDMxOCAzMzIgMjY4IEwzMzIgMTkzIFoiIGZpbGw9InJnYmEoMTMsMiwzNywwLjg1KSIvPgogIDwhLS0gQ2hlY2ttYXJrIC0tPgogIDxwYXRoIGQ9Ik0yMTAgMjY4IEwyMzggMjk2IEwzMDIgMjI1IiBzdHJva2U9IiNmZjk5ZmYiIHN0cm9rZS13aWR0aD0iMTgiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4=", "sizes": "512x512", "type": "image/svg+xml", "purpose": "maskable any"}
+  ]
+};
+const blob = new Blob([JSON.stringify(manifestData)], {type: 'application/manifest+json'});
+const manifestURL = URL.createObjectURL(blob);
+document.querySelector('link[rel="manifest"]').href = manifestURL;
+</script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 :root{--navy:#05071a;--dark:#080b22;--card:#0d1133;--purple:#7722cc;--purple2:#9933ff;--pink:#e060ff;--magenta:#cc44ff;--lavender:#b388ff;--white:#f0eeff;--muted:#6655aa;--green:#00e676;--red:#ff1744;--orange:#ff9100;--border:rgba(180,80,255,0.18)}
@@ -464,11 +486,7 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
         <button class="btn-primary" style="width:auto;padding:10px 16px;font-size:12px" onclick="sendGuardRequest()">Invite</button>
       </div>
     </div>
-    <div class="map-placeholder">
-      <div class="map-grid"></div><div id="mapPins"></div>
-      <div class="map-icon" id="mapIcon">🗺️</div>
-      <div class="map-label" id="mapLabel">Approve connections to see locations</div>
-    </div>
+    <div id="leafletMap" style="height:220px;border-radius:14px;border:1px solid rgba(180,80,255,0.18);overflow:hidden;margin-bottom:18px;background:#0d1133"></div>
     <div class="section-title">Your GuardNetwork</div>
     <div id="guardContactsList"></div>
     <button class="btn-outline" onclick="refreshNetwork()">🔄 Refresh Locations</button>
@@ -593,12 +611,44 @@ function installPWA(){
   if(deferredInstallPrompt){
     deferredInstallPrompt.prompt();
     deferredInstallPrompt.userChoice.then(r=>{
-      if(r.outcome==='accepted'){localStorage.setItem('pwaInstalled','true');const b=document.getElementById('pwaBanner');if(b)b.classList.add('hidden');}
+      if(r.outcome==='accepted'){localStorage.setItem('pwaInstalled','true');const b=document.getElementById('pwaBanner');if(b)b.classList.add('hidden');showToast('✅ UnrugGuard installed!');}
       deferredInstallPrompt=null;
     });
   } else {
-    showToast('Tap ⋮ menu → Add to Home Screen');
+    showInstallGuide();
   }
+}
+
+function showInstallGuide(){
+  const existing=document.getElementById('installGuideModal');
+  if(existing)existing.remove();
+  const isIOS=/iPhone|iPad|iPod/.test(navigator.userAgent);
+  const modal=document.createElement('div');
+  modal.id='installGuideModal';
+  modal.style.cssText='position:fixed;inset:0;background:rgba(5,7,26,0.97);z-index:9998;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:30px;animation:fadeUp .3s ease;';
+  const steps = isIOS 
+    ? `<div style="background:rgba(119,34,204,0.1);border:1px solid rgba(180,80,255,0.2);border-radius:12px;padding:14px;width:100%;max-width:300px">
+        <div style="font-size:13px;color:rgba(240,238,255,0.8);line-height:2">
+          <div>1️⃣ Tap the <strong style="color:#b388ff">Share</strong> button at the bottom</div>
+          <div>2️⃣ Scroll down and tap <strong style="color:#b388ff">Add to Home Screen</strong></div>
+          <div>3️⃣ Tap <strong style="color:#b388ff">Add</strong></div>
+        </div>
+      </div>`
+    : `<div style="background:rgba(119,34,204,0.1);border:1px solid rgba(180,80,255,0.2);border-radius:12px;padding:14px;width:100%;max-width:300px">
+        <div style="font-size:13px;color:rgba(240,238,255,0.8);line-height:2">
+          <div>1️⃣ Tap the <strong style="color:#b388ff">⋮ menu</strong> at top right of Chrome</div>
+          <div>2️⃣ Tap <strong style="color:#b388ff">Add to Home Screen</strong></div>
+          <div>3️⃣ Tap <strong style="color:#b388ff">Install</strong></div>
+        </div>
+      </div>`;
+  modal.innerHTML=`
+    <div style="font-size:50px">📲</div>
+    <div style="font-family:Exo 2,sans-serif;font-weight:900;font-size:20px;color:#e060ff;text-align:center">Install UnrugGuard</div>
+    <div style="font-size:12px;color:rgba(240,238,255,0.5);text-align:center">Follow these steps to install on your home screen</div>
+    ${steps}
+    <button onclick="document.getElementById('installGuideModal').remove()" style="width:100%;max-width:300px;padding:14px;border:none;border-radius:13px;background:linear-gradient(135deg,#7722cc,#e060ff);color:#fff;font-family:Exo 2,sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;cursor:pointer;">Got It ✓</button>
+  `;
+  document.body.appendChild(modal);
 }
 function dismissPWA(){
   const b=document.getElementById('pwaBanner');if(b)b.classList.add('hidden');
@@ -860,10 +910,20 @@ function listenShake(){
 
 // SOS
 function fireSOS(silent=false){
-  const testMode=localStorage.getItem('testMode')==='true';
+  // Check if any contacts are saved
+  const contacts=JSON.parse(localStorage.getItem('contacts')||'[]').filter(c=>c.phone&&c.phone.trim());
+  const guardID=localStorage.getItem('guardID');
+  const guardConns=JSON.parse(localStorage.getItem('guardConnections')||'[]').filter(c=>c.status==='approved');
+  
+  if(!contacts.length && !guardConns.length){
+    // No contacts at all — show warning
+    showNoContactsWarning();
+    return;
+  }
+  
   const trigger=localStorage.getItem('trigger')||'shake';
   
-  // Button tap — show countdown (not for shake/silent)
+  // Button tap — show countdown (not for shake/silent which are always intentional)
   if(!silent&&trigger!=='fakecall'){
     showCountdown();return;
   }
@@ -872,6 +932,23 @@ function fireSOS(silent=false){
   }
   
   executeSOSWithLocation();
+}
+
+function showNoContactsWarning(){
+  const existing=document.getElementById('noContactsModal');
+  if(existing)existing.remove();
+  const modal=document.createElement('div');
+  modal.id='noContactsModal';
+  modal.style.cssText='position:fixed;inset:0;background:rgba(5,7,26,0.95);z-index:9998;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:30px;animation:fadeUp .3s ease;';
+  modal.innerHTML=`
+    <div style="font-size:60px">⚠️</div>
+    <div style="font-family:Exo 2,sans-serif;font-weight:900;font-size:22px;color:#ff9100;text-align:center;letter-spacing:1px;">No Emergency Contacts</div>
+    <div style="font-size:14px;color:rgba(240,238,255,0.7);text-align:center;line-height:1.7;max-width:300px;">You need to add at least one emergency contact before you can send an SOS alert.</div>
+    <button onclick="document.getElementById('noContactsModal').remove();showScreen('contacts',document.querySelectorAll('.nav-tab')[1])" style="width:100%;max-width:300px;padding:15px;border:none;border-radius:13px;background:linear-gradient(135deg,#7722cc,#e060ff);color:#fff;font-family:Exo 2,sans-serif;font-weight:700;font-size:14px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-top:8px;">➕ Add Contacts Now</button>
+    <button onclick="document.getElementById('noContactsModal').remove()" style="padding:10px 30px;border:1.5px solid rgba(180,80,255,0.3);border-radius:30px;background:transparent;color:rgba(240,238,255,0.5);font-family:Rajdhani,sans-serif;font-size:13px;cursor:pointer;">Cancel</button>
+  `;
+  document.body.appendChild(modal);
+  if('vibrate' in navigator)navigator.vibrate([200,100,200]);
 }
 
 function showCountdown(){
@@ -1186,25 +1263,68 @@ function refreshNetwork(){
   showToast('🔄 Refreshing...');loadGuardContacts();autoSaveLocation();
 }
 
+let leafletMap=null;let leafletMarkers=[];
+
 function updateMapPins(approved,myID){
-  const mapIcon=document.getElementById('mapIcon'),mapLabel=document.getElementById('mapLabel'),pinsDiv=document.getElementById('mapPins');
-  if(!pinsDiv)return;pinsDiv.innerHTML='';
-  if(!approved.length){if(mapIcon)mapIcon.style.display='block';if(mapLabel)mapLabel.style.display='block';return;}
-  if(mapIcon)mapIcon.style.display='none';if(mapLabel)mapLabel.textContent=`${approved.length} contact${approved.length>1?'s':''} visible`;
-  const mapEl=document.querySelector('.map-placeholder');if(!mapEl)return;
-  const w=mapEl.offsetWidth,h=mapEl.offsetHeight;
-  const lats=approved.map(c=>c.lat),lngs=approved.map(c=>c.lng);
-  const minLat=Math.min(...lats),maxLat=Math.max(...lats),minLng=Math.min(...lngs),maxLng=Math.max(...lngs);
-  const latR=maxLat-minLat||0.01,lngR=maxLng-minLng||0.01;
+  const mapDiv=document.getElementById('leafletMap');
+  if(!mapDiv)return;
+
+  if(!approved.length){
+    // Show placeholder when no approved connections with location
+    mapDiv.innerHTML='<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:#0d1133"><div style="font-size:36px">🗺️</div><div style="font-size:11px;letter-spacing:2px;color:#6655aa;text-transform:uppercase">Approve connections to see locations</div></div>';
+    if(leafletMap){leafletMap.remove();leafletMap=null;}
+    return;
+  }
+
+  // Init or reuse Leaflet map
+  if(!leafletMap){
+    mapDiv.innerHTML='';
+    leafletMap=L.map('leafletMap',{zoomControl:true,attributionControl:false});
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18}).addTo(leafletMap);
+  }
+
+  // Clear old markers
+  leafletMarkers.forEach(m=>leafletMap.removeLayer(m));
+  leafletMarkers=[];
+
   const colors=['#cc44ff','#00e676','#ff9100','#2196F3','#ff1744'];
+  const bounds=[];
+
   approved.forEach((c,i)=>{
-    const x=((c.lng-minLng)/lngR)*(w*0.7)+w*0.15,y=((maxLat-c.lat)/latR)*(h*0.7)+h*0.15;
+    if(!c.lat||!c.lng)return;
     const name=c.from_id===myID?(c.to_name||c.to_id):c.from_name;
-    const initial=(name||'U').charAt(0).toUpperCase();
-    const pin=document.createElement('div');pin.className='map-pin';pin.style.cssText=`left:${x}px;top:${y}px`;
-    pin.innerHTML=`<div class="pin-label">${initial} ${(name||'').slice(0,6)}</div><div class="pin-dot" style="background:${colors[i%5]};box-shadow:0 0 8px ${colors[i%5]}"></div>`;
-    pinsDiv.appendChild(pin);
+    const color=colors[i%5];
+    const icon=L.divIcon({
+      className:'',
+      html:`<div style="background:${color};width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 10px ${color}"></div>`,
+      iconSize:[14,14],iconAnchor:[7,7]
+    });
+    const marker=L.marker([c.lat,c.lng],{icon}).addTo(leafletMap);
+    const timeAgo=c.last_seen?formatTimeAgo(c.last_seen):'';
+    marker.bindPopup(`<strong>${name||c.to_id}</strong><br><small>${timeAgo}</small>`);
+    leafletMarkers.push(marker);
+    bounds.push([c.lat,c.lng]);
   });
+
+  // Also add my own location
+  const myLoc=JSON.parse(localStorage.getItem('lastLocation')||'{}');
+  if(myLoc.lat&&myLoc.lng){
+    const myIcon=L.divIcon({
+      className:'',
+      html:`<div style="background:#e060ff;width:16px;height:16px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 12px #e060ff"></div>`,
+      iconSize:[16,16],iconAnchor:[8,8]
+    });
+    const myMarker=L.marker([myLoc.lat,myLoc.lng],{icon:myIcon}).addTo(leafletMap);
+    myMarker.bindPopup('<strong>You</strong>');
+    leafletMarkers.push(myMarker);
+    bounds.push([myLoc.lat,myLoc.lng]);
+  }
+
+  if(bounds.length===1){
+    leafletMap.setView(bounds[0],15);
+  } else if(bounds.length>1){
+    leafletMap.fitBounds(bounds,{padding:[20,20]});
+  }
 }
 </script>
 <script>
