@@ -11,28 +11,11 @@
 <link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
-:root {
-  --navy:    #05071a;
-  --dark:    #080b22;
-  --card:    #0d1133;
-  --purple:  #7722cc;
-  --purple2: #9933ff;
-  --pink:    #e060ff;
-  --magenta: #cc44ff;
-  --lavender:#b388ff;
-  --white:   #f0eeff;
-  --muted:   #6655aa;
-  --green:   #00e676;
-  --red:     #ff1744;
-  --orange:  #ff9100;
-  --border:  rgba(180,80,255,0.18);
-}
+:root{--navy:#05071a;--dark:#080b22;--card:#0d1133;--purple:#7722cc;--purple2:#9933ff;--pink:#e060ff;--magenta:#cc44ff;--lavender:#b388ff;--white:#f0eeff;--muted:#6655aa;--green:#00e676;--red:#ff1744;--orange:#ff9100;--border:rgba(180,80,255,0.18)}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
 body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden}
-
-/* ── TICKER ── */
-.ticker-bar{background:rgba(13,17,51,0.97);border-bottom:1px solid var(--border);padding:8px 0;overflow:hidden;position:sticky;top:0;z-index:100}
+.ticker-bar{background:rgba(13,17,51,.97);border-bottom:1px solid var(--border);padding:8px 0;overflow:hidden;position:sticky;top:0;z-index:100}
 .ticker-track{display:flex;gap:50px;animation:tickerScroll 20s linear infinite;white-space:nowrap;width:max-content}
 @keyframes tickerScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .ticker-item{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:12px;text-decoration:none;padding:2px 10px;border-radius:20px;border:1px solid transparent;transition:border-color .3s}
@@ -44,9 +27,13 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
 .ticker-price{color:var(--white)}
 .ticker-change.up{color:var(--green)}
 .ticker-change.down{color:var(--red)}
-
-/* ── HEADER ── */
-.app-header{text-align:center;padding:24px 20px 16px;position:relative}
+.pwa-banner{background:linear-gradient(135deg,rgba(119,34,204,.2),rgba(224,96,255,.1));border-bottom:1px solid rgba(180,80,255,.3);padding:10px 14px;display:flex;align-items:center;gap:10px}
+.pwa-banner.hidden{display:none}
+.pwa-banner-text{flex:1;font-size:12px;color:var(--lavender);line-height:1.4}
+.pwa-banner-text strong{color:var(--white);display:block;font-size:13px}
+.pwa-install-btn{background:linear-gradient(135deg,var(--purple),var(--pink));border:none;border-radius:20px;padding:7px 14px;color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:11px;letter-spacing:1px;cursor:pointer;white-space:nowrap}
+.pwa-dismiss{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0 4px}
+.app-header{text-align:center;padding:24px 20px 16px}
 .logo-mark{position:relative;width:90px;height:90px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center}
 .glow-ring{position:absolute;width:90px;height:90px;border-radius:50%;animation:pulseGlow 3s ease-in-out infinite}
 @keyframes pulseGlow{0%,100%{box-shadow:0 0 20px 5px rgba(220,80,255,.4),0 0 40px 10px rgba(150,50,220,.2)}50%{box-shadow:0 0 30px 10px rgba(220,80,255,.7),0 0 60px 20px rgba(150,50,220,.4)}}
@@ -65,21 +52,14 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
 .status-label{font-size:11px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
 .status-sep{color:var(--muted);font-size:10px}
-
-/* ── NAV ── */
 .nav-tabs{display:flex;background:var(--dark);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;position:sticky;top:39px;z-index:99}
 .nav-tabs::-webkit-scrollbar{display:none}
 .nav-tab{flex:1;min-width:60px;padding:10px 6px;text-align:center;font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .3s;display:flex;flex-direction:column;align-items:center;gap:2px}
 .nav-tab span{font-size:9px}
 .nav-tab.active{color:var(--pink);border-bottom-color:var(--pink)}
-.nav-tab:hover{color:var(--lavender)}
-
-/* ── SCREENS ── */
 .screen{display:none;padding:18px 14px 40px;animation:fadeUp .4s ease}
 .screen.active{display:block}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-
-/* ── HOME ── */
 .battery-warning{background:rgba(255,145,0,.1);border:1px solid var(--orange);border-radius:12px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--orange)}
 .battery-warning.hidden{display:none}
 .sos-wrapper{display:flex;flex-direction:column;align-items:center;gap:24px;padding:8px 0 26px}
@@ -93,17 +73,46 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
 .emergency-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
 .emergency-card{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:12px 10px;display:flex;flex-direction:column;gap:3px;text-decoration:none;transition:border-color .3s,transform .2s}
 .emergency-card:active{transform:scale(.96)}
-.emergency-card:hover{border-color:var(--purple2)}
-.ec-icon{font-size:20px}
-.ec-name{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-weight:600}
+.ec-icon{font-size:20px}.ec-name{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-weight:600}
 .ec-num{font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--white);font-weight:700}
 .ec-note{font-size:10px;color:var(--muted)}
-
-/* ── CONTACTS ── */
+.countdown-overlay{display:none;position:fixed;inset:0;background:rgba(180,0,30,.97);z-index:998;flex-direction:column;align-items:center;justify-content:center;gap:20px}
+.countdown-overlay.active{display:flex}
+.countdown-num{font-family:'Exo 2',sans-serif;font-weight:900;font-size:120px;color:#fff;line-height:1;animation:countPulse .8s ease-in-out infinite}
+@keyframes countPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.countdown-label{font-family:'Rajdhani',sans-serif;font-size:16px;letter-spacing:4px;color:rgba(255,255,255,.8);text-transform:uppercase}
+.countdown-cancel{padding:14px 40px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.5);border-radius:30px;color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:15px;letter-spacing:2px;cursor:pointer;margin-top:10px}
+.sos-overlay{display:none;position:fixed;inset:0;background:rgba(180,0,30,.97);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:18px}
+.sos-overlay.active{display:flex}
+.sos-overlay-rings{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.ring{position:absolute;border-radius:50%;border:2px solid rgba(255,255,255,.15);animation:expandRing 2s ease-out infinite}
+.ring.r1{width:200px;height:200px;animation-delay:0s}.ring.r2{width:300px;height:300px;animation-delay:.6s}.ring.r3{width:400px;height:400px;animation-delay:1.2s}
+@keyframes expandRing{0%{transform:scale(.5);opacity:.8}100%{transform:scale(1.5);opacity:0}}
+.overlay-icon{font-size:72px;animation:shake .5s ease infinite alternate;position:relative;z-index:1}
+@keyframes shake{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}
+.overlay-title{font-family:'Exo 2',sans-serif;font-weight:900;font-size:30px;color:#fff;letter-spacing:2px;position:relative;z-index:1}
+.overlay-sub{font-size:13px;color:rgba(255,255,255,.8);letter-spacing:1px;text-align:center;padding:0 28px;position:relative;z-index:1;line-height:1.6}
+.overlay-close{margin-top:16px;padding:13px 36px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.4);border-radius:30px;color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;cursor:pointer;position:relative;z-index:1}
+.false-alarm-btn{padding:10px 30px;background:rgba(0,230,118,.15);border:2px solid var(--green);border-radius:30px;color:var(--green);font-family:'Exo 2',sans-serif;font-weight:700;font-size:12px;letter-spacing:2px;cursor:pointer;position:relative;z-index:1}
+.fakecall-overlay{display:none;position:fixed;inset:0;background:#0a0a0a;z-index:997;flex-direction:column;align-items:center;justify-content:space-between;padding:60px 30px 80px}
+.fakecall-overlay.active{display:flex}
+.fc-top{text-align:center}.fc-caller{font-family:'Exo 2',sans-serif;font-weight:700;font-size:30px;color:#fff;margin-bottom:8px}
+.fc-status{font-size:14px;color:rgba(255,255,255,.6);letter-spacing:2px}
+.fc-avatar{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,#444,#222);display:flex;align-items:center;justify-content:center;font-family:'Exo 2',sans-serif;font-weight:900;font-size:48px;color:#fff;border:3px solid rgba(255,255,255,.2);animation:fcPulse 1.5s ease-in-out infinite}
+@keyframes fcPulse{0%,100%{box-shadow:0 0 30px rgba(0,230,118,.3)}50%{box-shadow:0 0 50px rgba(0,230,118,.6)}}
+.fc-bottom{display:flex;gap:60px;align-items:center}
+.fc-decline{width:64px;height:64px;border-radius:50%;background:#ff1744;border:none;color:#fff;font-size:26px;cursor:pointer}
+.fc-accept{width:64px;height:64px;border-radius:50%;background:#00e676;border:none;color:#222;font-size:26px;cursor:pointer}
 .contact-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px}
+.contact-card.saved{border-color:rgba(0,230,118,.25);background:rgba(0,230,118,.03)}
 .contact-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.contact-num-badge{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-family:'Exo 2',sans-serif;font-size:12px;font-weight:700;color:#fff}
+.contact-num-badge{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-family:'Exo 2',sans-serif;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
 .contact-label{font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+.contact-saved-info{flex:1;min-width:0;padding:0 10px}
+.contact-saved-name{font-family:'Exo 2',sans-serif;font-weight:700;font-size:15px;color:var(--white)}
+.contact-saved-phone{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--lavender);margin-top:2px}
+.contact-wa-badge{display:inline-block;margin-top:4px;font-size:10px;color:#25D366;background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.3);border-radius:10px;padding:2px 8px}
+.contact-edit-btn{background:rgba(119,34,204,.15);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--lavender);cursor:pointer;font-size:14px;flex-shrink:0}
 .input-group{margin-bottom:8px}
 .input-label{font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;display:block}
 .app-input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:9px;padding:9px 12px;color:var(--white);font-family:'Rajdhani',sans-serif;font-size:14px;outline:none;transition:border-color .3s}
@@ -118,8 +127,6 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
 .toggle input:checked+.toggle-slider{background:linear-gradient(90deg,var(--purple),var(--pink));border-color:var(--purple2)}
 .toggle input:checked+.toggle-slider::before{transform:translateX(18px)}
 .safe-word-display{background:rgba(119,34,204,.1);border:1px solid rgba(119,34,204,.3);border-radius:9px;padding:9px 12px;font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--lavender);letter-spacing:2px;text-align:center;margin-top:5px}
-
-/* ── SETTINGS ── */
 .trigger-options{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
 .trigger-option{background:var(--card);border:1.5px solid var(--border);border-radius:13px;padding:14px;cursor:pointer;transition:all .3s;display:flex;align-items:center;gap:12px}
 .trigger-option.selected{border-color:var(--pink);background:rgba(224,96,255,.08)}
@@ -129,17 +136,19 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
 .trigger-radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--muted);margin-left:auto;flex-shrink:0;transition:.3s;display:flex;align-items:center;justify-content:center}
 .trigger-option.selected .trigger-radio{border-color:var(--pink);background:var(--pink)}
 .trigger-option.selected .trigger-radio::after{content:'';width:7px;height:7px;border-radius:50%;background:#fff}
+.sensitivity-row{display:flex;gap:8px;margin-top:10px}
+.sens-btn{flex:1;padding:10px 6px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--muted);font-family:'Exo 2',sans-serif;font-weight:700;font-size:11px;letter-spacing:1px;cursor:pointer;text-align:center;transition:all .3s}
+.sens-btn.active{border-color:var(--pink);color:var(--pink);background:rgba(224,96,255,.08)}
+.test-mode-row{display:flex;align-items:center;justify-content:space-between;background:rgba(255,145,0,.08);border:1px solid rgba(255,145,0,.25);border-radius:12px;padding:12px 14px;margin-top:10px}
+.test-mode-label{font-size:13px;color:var(--orange);font-weight:600}
+.test-mode-sub{font-size:10px;color:var(--muted);margin-top:2px}
 .settings-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
 .settings-row{display:flex;align-items:center;justify-content:space-between;padding:14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .2s}
 .settings-row:last-child{border-bottom:none}
-.settings-row:hover{background:rgba(255,255,255,.02)}
 .settings-row-left{display:flex;align-items:center;gap:10px}
 .settings-icon{font-size:18px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:rgba(119,34,204,.15);border-radius:9px;border:1px solid var(--border)}
 .settings-row-title{font-size:14px;font-weight:600;color:var(--white)}
 .settings-row-sub{font-size:11px;color:var(--muted);margin-top:1px}
-.settings-arrow{color:var(--muted);font-size:16px}
-
-/* ── GUIDE ── */
 .guide-hero{background:linear-gradient(135deg,rgba(119,34,204,.2),rgba(224,96,255,.08));border:1px solid rgba(224,96,255,.25);border-radius:16px;padding:20px 16px;text-align:center;margin-bottom:20px}
 .guide-hero-icon{font-size:40px;margin-bottom:8px}
 .guide-hero-title{font-family:'Exo 2',sans-serif;font-weight:900;font-size:20px;background:linear-gradient(135deg,#e060ff,#9933ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:5px}
@@ -154,14 +163,11 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
 .guide-step-body strong{color:var(--lavender)}
 .tip{display:block;margin-top:8px;background:rgba(119,34,204,.1);border:1px solid rgba(119,34,204,.2);border-radius:7px;padding:7px 9px;font-size:11px;color:var(--lavender)}
 .warning{display:block;margin-top:8px;background:rgba(255,145,0,.08);border:1px solid rgba(255,145,0,.25);border-radius:7px;padding:7px 9px;font-size:11px;color:var(--orange)}
-
-/* ── GUARD NETWORK ── */
 .gn-profile-card{background:linear-gradient(135deg,rgba(119,34,204,.2),rgba(224,96,255,.08));border:1px solid rgba(224,96,255,.25);border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;margin-bottom:16px}
 .gn-avatar{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-family:'Exo 2',sans-serif;font-weight:900;font-size:22px;color:#fff;flex-shrink:0}
 .gn-name{font-family:'Exo 2',sans-serif;font-weight:700;font-size:18px;color:var(--white)}
 .gn-id{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--lavender);margin-top:2px}
-.gn-share-btn{margin-left:auto;background:rgba(119,34,204,.15);border:1px solid var(--border);border-radius:20px;padding:7px 14px;font-size:11px;letter-spacing:1px;color:var(--lavender);cursor:pointer;white-space:nowrap;transition:.3s}
-.gn-share-btn:hover{border-color:var(--purple2);color:var(--white)}
+.gn-share-btn{margin-left:auto;background:rgba(119,34,204,.15);border:1px solid var(--border);border-radius:20px;padding:7px 14px;font-size:11px;letter-spacing:1px;color:var(--lavender);cursor:pointer;white-space:nowrap}
 .map-placeholder{background:var(--card);border:1px solid var(--border);border-radius:14px;height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;margin-bottom:18px;position:relative;overflow:hidden}
 .map-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(119,34,204,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(119,34,204,.07) 1px,transparent 1px);background-size:28px 28px}
 .map-icon{font-size:36px;position:relative;z-index:1}
@@ -169,141 +175,73 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
 .network-contact{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px}
 .nc-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;font-family:'Exo 2',sans-serif;color:#fff;flex-shrink:0}
 .nc-name{font-size:14px;font-weight:700}
+.nc-id-small{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);margin-top:1px;margin-bottom:2px}
 .nc-status{font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-top:2px}
-.nc-status.pending{color:var(--orange)}
-.nc-status.approved{color:var(--green)}
-.nc-status.incoming{color:var(--pink)}
-.nc-action{margin-left:auto;background:rgba(119,34,204,.15);border:1px solid var(--border);border-radius:18px;padding:5px 12px;font-size:10px;letter-spacing:1px;color:var(--lavender);cursor:pointer;transition:.3s;white-space:nowrap}
-.nc-action:hover{border-color:var(--purple2)}
+.nc-status.pending{color:var(--orange)}.nc-status.approved{color:var(--green)}.nc-status.incoming{color:var(--pink)}
+.nc-actions{display:flex;flex-direction:column;gap:4px;margin-left:auto}
+.nc-action{background:rgba(119,34,204,.15);border:1px solid var(--border);border-radius:18px;padding:5px 12px;font-size:10px;letter-spacing:1px;color:var(--lavender);cursor:pointer;white-space:nowrap;text-decoration:none;text-align:center}
 .nc-action.approve{background:rgba(0,230,118,.1);border-color:var(--green);color:var(--green)}
 .nc-action.decline{background:rgba(255,23,68,.08);border-color:var(--red);color:var(--red)}
+.nc-action.remove{background:rgba(255,23,68,.08);border-color:rgba(255,23,68,.3);color:var(--red)}
 .map-pin{position:absolute;z-index:2;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;transform:translate(-50%,-100%)}
-.pin-dot{width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 8px rgba(220,80,255,.8)}
+.pin-dot{width:12px;height:12px;border-radius:50%;border:2px solid #fff}
 .pin-label{font-size:9px;font-family:'Share Tech Mono',monospace;color:var(--lavender);background:rgba(13,17,51,.9);padding:1px 5px;border-radius:4px;white-space:nowrap}
-
-/* ── BUTTONS ── */
 .btn-primary{width:100%;padding:14px;border:none;border-radius:13px;background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:14px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:opacity .2s,transform .15s;box-shadow:0 4px 18px rgba(119,34,204,.35)}
 .btn-primary:active{opacity:.85;transform:scale(.98)}
 .btn-outline{width:100%;padding:12px;border:1.5px solid var(--border);border-radius:13px;background:transparent;color:var(--lavender);font-family:'Exo 2',sans-serif;font-weight:600;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:border-color .3s;margin-top:8px}
-.btn-outline:hover{border-color:var(--purple2);color:var(--white)}
-
-/* ── COMMUNITY ── */
 .community-section{margin:18px 14px}
 .community-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px 18px}
 .community-title{font-family:'Exo 2',sans-serif;font-weight:700;font-size:19px;color:var(--pink);margin-bottom:10px}
 .community-text{font-size:13px;line-height:1.6;color:rgba(240,238,255,.8);margin-bottom:18px}
 .community-text strong{color:var(--white)}
 .community-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.btn-whatsapp{display:flex;align-items:center;justify-content:center;gap:7px;padding:13px 8px;background:#25D366;border-radius:13px;color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;text-decoration:none;transition:opacity .2s}
-.btn-telegram{display:flex;align-items:center;justify-content:center;gap:7px;padding:13px 8px;background:#0088cc;border-radius:13px;color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;text-decoration:none;transition:opacity .2s}
-.btn-whatsapp:active,.btn-telegram:active{opacity:.85}
-
-/* ── DONATION ── */
+.btn-whatsapp{display:flex;align-items:center;justify-content:center;gap:7px;padding:13px 8px;background:#25D366;border-radius:13px;color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;text-decoration:none}
+.btn-telegram{display:flex;align-items:center;justify-content:center;gap:7px;padding:13px 8px;background:#0088cc;border-radius:13px;color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;text-decoration:none}
 .donation-section{margin:0 14px 18px}
 .donation-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px 18px;text-align:center}
 .donation-icon{font-size:32px;margin-bottom:8px}
 .donation-title{font-family:'Exo 2',sans-serif;font-weight:700;font-size:17px;color:var(--pink);margin-bottom:7px}
 .donation-text{font-size:12px;line-height:1.6;color:rgba(240,238,255,.7);margin-bottom:16px}
 .wallet-label{font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:7px}
-.wallet-address{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:11px;padding:10px 12px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--lavender);word-break:break-all;text-align:left;margin-bottom:5px;text-decoration:none;display:block;transition:border-color .3s}
-.wallet-address:hover{border-color:var(--purple2)}
+.wallet-address{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:11px;padding:10px 12px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--lavender);word-break:break-all;text-align:left;margin-bottom:5px;text-decoration:none;display:block}
 .wallet-network{font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:12px}
 .btn-copy{width:100%;padding:12px;border:1.5px solid var(--purple2);border-radius:11px;background:rgba(119,34,204,.1);color:var(--lavender);font-family:'Exo 2',sans-serif;font-weight:700;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .3s}
-.btn-copy:hover{background:rgba(119,34,204,.25);color:var(--white)}
 .btn-copy.copied{background:rgba(0,230,118,.1);border-color:var(--green);color:var(--green)}
-
-/* ── FOOTER ── */
 .app-footer{text-align:center;padding:18px;border-top:1px solid var(--border);margin-top:8px}
 .footer-powered{font-size:9px;letter-spacing:4px;color:var(--muted);text-transform:uppercase}
 .footer-brand{font-family:'Exo 2',sans-serif;font-weight:900;font-size:15px;background:linear-gradient(135deg,var(--pink),var(--purple2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px;margin-top:3px}
-
-/* ── SOS OVERLAY ── */
-.sos-overlay{display:none;position:fixed;inset:0;background:rgba(180,0,30,.97);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:18px;animation:overlayIn .3s ease}
-.sos-overlay.active{display:flex}
-@keyframes overlayIn{from{opacity:0}to{opacity:1}}
-.sos-overlay-rings{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
-.ring{position:absolute;border-radius:50%;border:2px solid rgba(255,255,255,.15);animation:expandRing 2s ease-out infinite}
-.ring.r1{width:200px;height:200px;animation-delay:0s}
-.ring.r2{width:300px;height:300px;animation-delay:.6s}
-.ring.r3{width:400px;height:400px;animation-delay:1.2s}
-@keyframes expandRing{0%{transform:scale(.5);opacity:.8}100%{transform:scale(1.5);opacity:0}}
-.overlay-icon{font-size:72px;animation:shake .5s ease infinite alternate;position:relative;z-index:1}
-@keyframes shake{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}
-.overlay-title{font-family:'Exo 2',sans-serif;font-weight:900;font-size:30px;color:#fff;letter-spacing:2px;position:relative;z-index:1}
-.overlay-sub{font-size:13px;color:rgba(255,255,255,.8);letter-spacing:1px;text-align:center;padding:0 28px;position:relative;z-index:1;line-height:1.6}
-.overlay-close{margin-top:16px;padding:13px 36px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.4);border-radius:30px;color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;cursor:pointer;position:relative;z-index:1}
-
-/* ── FAKE CALL ── */
-.fakecall-overlay{display:none;position:fixed;inset:0;background:#0a0a0a;z-index:998;flex-direction:column;align-items:center;justify-content:space-between;padding:60px 30px 80px;animation:overlayIn .3s ease}
-.fakecall-overlay.active{display:flex}
-.fc-top{text-align:center}
-.fc-caller{font-family:'Exo 2',sans-serif;font-weight:700;font-size:30px;color:#fff;margin-bottom:8px}
-.fc-status{font-size:14px;color:rgba(255,255,255,.6);letter-spacing:2px}
-.fc-avatar{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,#444,#222);display:flex;align-items:center;justify-content:center;font-family:'Exo 2',sans-serif;font-weight:900;font-size:48px;color:#fff;border:3px solid rgba(255,255,255,.2);animation:fcPulse 1.5s ease-in-out infinite;box-shadow:0 0 30px rgba(0,230,118,.3)}
-@keyframes fcPulse{0%,100%{box-shadow:0 0 30px rgba(0,230,118,.3)}50%{box-shadow:0 0 50px rgba(0,230,118,.6)}}
-.fc-bottom{display:flex;gap:60px;align-items:center}
-.fc-decline{width:64px;height:64px;border-radius:50%;background:#ff1744;border:none;color:#fff;font-size:26px;cursor:pointer;box-shadow:0 4px 20px rgba(255,23,68,.4)}
-.fc-accept{width:64px;height:64px;border-radius:50%;background:#00e676;border:none;color:#222;font-size:26px;cursor:pointer;box-shadow:0 4px 20px rgba(0,230,118,.4)}
-
-/* ── MISC ── */
 .divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:2px 0 18px}
 .info-box{background:rgba(119,34,204,.08);border:1px solid rgba(119,34,204,.2);border-radius:11px;padding:11px 13px;font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px}
 .info-box strong{color:var(--lavender)}
-.phase-banner{background:linear-gradient(135deg,rgba(119,34,204,.15),rgba(224,96,255,.08));border:1px solid rgba(224,96,255,.2);border-radius:13px;padding:14px;margin-bottom:18px;display:flex;align-items:center;gap:10px}
-.phase-icon{font-size:26px}
-.phase-title{font-size:13px;font-weight:700;color:var(--pink)}
-.phase-desc{font-size:11px;color:var(--muted);margin-top:1px}
-
-
-/* PWA Banner */
-.pwa-banner{background:linear-gradient(135deg,rgba(119,34,204,.2),rgba(224,96,255,.1));border-bottom:1px solid rgba(180,80,255,.3);padding:10px 14px;display:flex;align-items:center;gap:10px;animation:fadeUp .4s ease}
-.pwa-banner.hidden{display:none}
-.pwa-banner-text{flex:1;font-size:12px;color:var(--lavender);line-height:1.4}
-.pwa-banner-text strong{color:var(--white);display:block;font-size:13px}
-.pwa-install-btn{background:linear-gradient(135deg,var(--purple),var(--pink));border:none;border-radius:20px;padding:7px 14px;color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:11px;letter-spacing:1px;cursor:pointer;white-space:nowrap}
-.pwa-dismiss{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0 4px;line-height:1}
-
-/* Saved contact styles */
-.contact-card.saved{border-color:rgba(0,230,118,.2);background:rgba(0,230,118,.03)}
-.contact-saved-info{flex:1;min-width:0}
-.contact-saved-name{font-family:'Exo 2',sans-serif;font-weight:700;font-size:15px;color:var(--white)}
-.contact-saved-phone{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--lavender);margin-top:2px}
-.contact-wa-badge{display:inline-block;margin-top:4px;font-size:10px;color:#25D366;background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.3);border-radius:10px;padding:2px 8px}
-.contact-edit-btn{background:rgba(119,34,204,.15);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--lavender);cursor:pointer;font-size:14px;transition:.3s;flex-shrink:0}
-.contact-edit-btn:hover{border-color:var(--purple2);color:var(--white)}
-
-/* Network extras */
-.nc-id-small{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);margin-top:1px;margin-bottom:2px}
-
 </style>
 </head>
 <body>
 
+<!-- COUNTDOWN OVERLAY -->
+<div class="countdown-overlay" id="countdownOverlay">
+  <div class="countdown-num" id="countdownNum">3</div>
+  <div class="countdown-label">Sending SOS Alert...</div>
+  <button class="countdown-cancel" onclick="cancelCountdown()">✕ Cancel — I Am Safe</button>
+</div>
+
 <!-- SOS OVERLAY -->
 <div class="sos-overlay" id="sosOverlay">
-  <div class="sos-overlay-rings">
-    <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
-  </div>
+  <div class="sos-overlay-rings"><div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div></div>
   <div class="overlay-icon">🚨</div>
   <div class="overlay-title">SOS SENT!</div>
   <div class="overlay-sub">All your emergency contacts have been alerted with your GPS location.</div>
-  <button class="overlay-close" onclick="closeSOS()">I AM SAFE NOW</button>
+  <button class="false-alarm-btn" onclick="sendFalseAlarm()">✅ False Alarm — Send "I Am Safe"</button>
+  <button class="overlay-close" onclick="closeSOS()">Close</button>
 </div>
 
 <!-- FAKE CALL OVERLAY -->
 <div class="fakecall-overlay" id="fakeCallOverlay">
-  <div class="fc-top">
-    <div class="fc-caller" id="fcCallerName">Mum</div>
-    <div class="fc-status">Incoming Call...</div>
-  </div>
+  <div class="fc-top"><div class="fc-caller" id="fcCallerName">Mum</div><div class="fc-status">Incoming Call...</div></div>
   <div class="fc-avatar" id="fcAvatar">M</div>
-  <div class="fc-bottom">
-    <button class="fc-decline" onclick="endFakeCall()">✕</button>
-    <button class="fc-accept" onclick="endFakeCall()">✓</button>
-  </div>
+  <div class="fc-bottom"><button class="fc-decline" onclick="endFakeCall()">✕</button><button class="fc-accept" onclick="endFakeCall()">✓</button></div>
 </div>
 
-<!-- PWA INSTALL BANNER -->
+<!-- PWA BANNER -->
 <div class="pwa-banner hidden" id="pwaBanner">
   <span style="font-size:22px">📲</span>
   <div class="pwa-banner-text">
@@ -314,25 +252,13 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
   <button class="pwa-dismiss" onclick="dismissPWA()">✕</button>
 </div>
 
-<!-- TOKEN TICKER -->
+<!-- TICKER -->
 <div class="ticker-bar">
-  <div class="ticker-track" id="tickerTrack">
-    <a class="ticker-item" href="https://dexscreener.com/solana/JuLhhMjaWyWKCWEPetMV5hucpCmR212MzrRLWWZEgem" target="_blank">
-      <span class="ticker-dot sol"></span><span class="ticker-name">UPAD</span>
-      <span class="ticker-price" id="p1">—</span><span class="ticker-change" id="c1">SOL</span>
-    </a>
-    <a class="ticker-item" href="https://dexscreener.com/bsc/0x591DF09AF60366298FE31C4590a9230585D34FBd" target="_blank">
-      <span class="ticker-dot bsc"></span><span class="ticker-name">BNC</span>
-      <span class="ticker-price" id="p2">—</span><span class="ticker-change" id="c2">BSC</span>
-    </a>
-    <a class="ticker-item" href="https://dexscreener.com/solana/JuLhhMjaWyWKCWEPetMV5hucpCmR212MzrRLWWZEgem" target="_blank">
-      <span class="ticker-dot sol"></span><span class="ticker-name">UPAD</span>
-      <span class="ticker-price" id="p3">—</span><span class="ticker-change" id="c3">SOL</span>
-    </a>
-    <a class="ticker-item" href="https://dexscreener.com/bsc/0x591DF09AF60366298FE31C4590a9230585D34FBd" target="_blank">
-      <span class="ticker-dot bsc"></span><span class="ticker-name">BNC</span>
-      <span class="ticker-price" id="p4">—</span><span class="ticker-change" id="c4">BSC</span>
-    </a>
+  <div class="ticker-track">
+    <a class="ticker-item" href="https://dexscreener.com/solana/JuLhhMjaWyWKCWEPetMV5hucpCmR212MzrRLWWZEgem" target="_blank"><span class="ticker-dot sol"></span><span class="ticker-name">UPAD</span><span class="ticker-price" id="p1">—</span><span class="ticker-change" id="c1">SOL</span></a>
+    <a class="ticker-item" href="https://dexscreener.com/bsc/0x591DF09AF60366298FE31C4590a9230585D34FBd" target="_blank"><span class="ticker-dot bsc"></span><span class="ticker-name">BNC</span><span class="ticker-price" id="p2">—</span><span class="ticker-change" id="c2">BSC</span></a>
+    <a class="ticker-item" href="https://dexscreener.com/solana/JuLhhMjaWyWKCWEPetMV5hucpCmR212MzrRLWWZEgem" target="_blank"><span class="ticker-dot sol"></span><span class="ticker-name">UPAD</span><span class="ticker-price" id="p3">—</span><span class="ticker-change" id="c3">SOL</span></a>
+    <a class="ticker-item" href="https://dexscreener.com/bsc/0x591DF09AF60366298FE31C4590a9230585D34FBd" target="_blank"><span class="ticker-dot bsc"></span><span class="ticker-name">BNC</span><span class="ticker-price" id="p4">—</span><span class="ticker-change" id="c4">BSC</span></a>
   </div>
 </div>
 
@@ -341,29 +267,13 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
   <div class="logo-mark">
     <div class="glow-ring"></div>
     <svg class="hex-svg" viewBox="0 0 140 140" fill="none">
-      <defs>
-        <linearGradient id="hg" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#1a0535"/><stop offset="50%" stop-color="#3d1070"/><stop offset="100%" stop-color="#1a0535"/>
-        </linearGradient>
-        <linearGradient id="hs" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#ff80ff"/><stop offset="50%" stop-color="#cc44ff"/><stop offset="100%" stop-color="#7722cc"/>
-        </linearGradient>
-      </defs>
+      <defs><linearGradient id="hg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1a0535"/><stop offset="50%" stop-color="#3d1070"/><stop offset="100%" stop-color="#1a0535"/></linearGradient><linearGradient id="hs" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff80ff"/><stop offset="50%" stop-color="#cc44ff"/><stop offset="100%" stop-color="#7722cc"/></linearGradient></defs>
       <polygon points="70,8 126,39 126,101 70,132 14,101 14,39" fill="url(#hg)" stroke="url(#hs)" stroke-width="3"/>
       <polygon points="70,22 112,46 112,94 70,118 28,94 28,46" fill="rgba(13,2,37,0.7)" stroke="#7722cc" stroke-width="1" opacity="0.6"/>
-      <circle cx="70" cy="8" r="3.5" fill="#ff80ff" opacity="0.9"/>
-      <circle cx="126" cy="39" r="3.5" fill="#cc44ff" opacity="0.9"/>
-      <circle cx="126" cy="101" r="3.5" fill="#cc44ff" opacity="0.9"/>
-      <circle cx="70" cy="132" r="3.5" fill="#ff80ff" opacity="0.9"/>
-      <circle cx="14" cy="101" r="3.5" fill="#cc44ff" opacity="0.9"/>
-      <circle cx="14" cy="39" r="3.5" fill="#cc44ff" opacity="0.9"/>
+      <circle cx="70" cy="8" r="3.5" fill="#ff80ff" opacity="0.9"/><circle cx="126" cy="39" r="3.5" fill="#cc44ff" opacity="0.9"/><circle cx="126" cy="101" r="3.5" fill="#cc44ff" opacity="0.9"/><circle cx="70" cy="132" r="3.5" fill="#ff80ff" opacity="0.9"/><circle cx="14" cy="101" r="3.5" fill="#cc44ff" opacity="0.9"/><circle cx="14" cy="39" r="3.5" fill="#cc44ff" opacity="0.9"/>
     </svg>
     <svg class="shield-inner" viewBox="0 0 62 72" fill="none">
-      <defs>
-        <linearGradient id="sg" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#ff99ff"/><stop offset="50%" stop-color="#cc44ff"/><stop offset="100%" stop-color="#8822ee"/>
-        </linearGradient>
-      </defs>
+      <defs><linearGradient id="sg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff99ff"/><stop offset="50%" stop-color="#cc44ff"/><stop offset="100%" stop-color="#8822ee"/></linearGradient></defs>
       <path d="M31 2L4 13V35C4 51 31 70 31 70C31 70 58 51 58 35V13L31 2Z" fill="url(#sg)"/>
       <path d="M31 9L10 18V35C10 48 31 63 31 63C31 63 52 48 52 35V18L31 9Z" fill="rgba(13,2,37,0.85)"/>
       <path d="M20 36L27 43L42 28" stroke="#ff99ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
@@ -393,14 +303,11 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
 <div class="screen active" id="screen-home">
   <div class="battery-warning hidden" id="batteryWarn">🔋 Battery low! Charge before entering a risky area.</div>
   <div class="sos-wrapper">
-    <button class="sos-btn" id="sosBtn" onclick="fireSOS()">
+    <button class="sos-btn" id="sosBtn" onclick="fireSOS(false)">
       <span class="sos-label">SOS</span>
       <span class="sos-sub">TAP TO ALERT</span>
     </button>
-    <div class="trigger-badge">
-      <span id="triggerIcon">📳</span>
-      <span id="triggerText">Shake to Send active</span>
-    </div>
+    <div class="trigger-badge"><span id="triggerIcon">📳</span><span id="triggerText">Shake to Send active</span></div>
   </div>
   <div class="divider"></div>
   <div class="section-title" id="emergencyTitle">🇳🇬 Nigeria Emergency Numbers</div>
@@ -409,26 +316,11 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
 
 <!-- CONTACTS -->
 <div class="screen" id="screen-contacts">
-  <div class="info-box">
-    <strong>Your Name / Username</strong>
-    <input class="app-input" type="text" placeholder="e.g. Kalu or GuardKalu (max 12 chars)" id="userName" maxlength="12" oninput="saveUserName()" style="margin-top:6px">
-  </div>
-  <div class="info-box">
-    <strong>Custom SOS Message</strong>
-    <textarea class="app-input" style="resize:none;height:70px;margin-top:6px" placeholder="EMERGENCY! I need help. My location: [GPS]. — [Your name]" id="customMsg" oninput="saveMsg()"></textarea>
-    <div style="font-size:10px;color:var(--muted);margin-top:4px">Use [GPS] and [Your name] as placeholders</div>
-  </div>
-  <div class="info-box">
-    <strong>🔑 Safe Word</strong> — Say this on a call to secretly signal danger
-    <input class="app-input" style="margin-top:8px" type="text" placeholder="e.g. Pineapple" id="safeWord" oninput="saveSafeWord()">
-    <div class="safe-word-display" id="safeWordDisplay">—</div>
-  </div>
+  <div class="info-box"><strong>Your Name / Username</strong><input class="app-input" type="text" placeholder="e.g. Kalu (max 12 chars)" id="userName" maxlength="12" oninput="saveUserName()" style="margin-top:6px"></div>
+  <div class="info-box"><strong>Custom SOS Message</strong><textarea class="app-input" style="resize:none;height:70px;margin-top:6px" placeholder="EMERGENCY! I need help. My location: [GPS]. — [Your name]" id="customMsg" oninput="saveMsg()"></textarea><div style="font-size:10px;color:var(--muted);margin-top:4px">Use [GPS] and [Your name] as placeholders</div></div>
+  <div class="info-box"><strong>🔑 Safe Word</strong> — Say this on a call to secretly signal danger<input class="app-input" style="margin-top:8px" type="text" placeholder="e.g. Pineapple" id="safeWord" oninput="saveSafeWord()"><div class="safe-word-display" id="safeWordDisplay">—</div></div>
   <div class="section-title">Emergency Contacts (Up to 5)</div>
-  <div class="info-box" style="margin-bottom:14px">
-    <strong>📱 Import from phone contacts</strong><br>
-    <small style="color:var(--muted)">Tap to open your phone contacts and select</small>
-    <button class="btn-outline" style="margin-top:8px;padding:10px" onclick="importContacts()">📲 Open Phone Contacts</button>
-  </div>
+  <div class="info-box" style="margin-bottom:14px"><strong>📱 Import from phone contacts</strong><br><small style="color:var(--muted)">Tap to open your phone contacts and select</small><button class="btn-outline" style="margin-top:8px;padding:10px" onclick="importContacts()">📲 Open Phone Contacts</button></div>
   <div id="contactsList"></div>
   <button class="btn-primary" onclick="saveContacts()">💾 Save All Contacts</button>
 </div>
@@ -437,129 +329,131 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
 <div class="screen" id="screen-settings">
   <div class="section-title">Trigger Method</div>
   <div class="trigger-options">
-    <div class="trigger-option selected" id="trig-shake" onclick="selectTrigger('shake')">
-      <span class="trigger-option-icon">📳</span>
-      <div><div class="trigger-option-title">Shake to Send</div><div class="trigger-option-desc">Shake phone 3× in pocket — completely invisible</div></div>
-      <div class="trigger-radio"></div>
-    </div>
-    <div class="trigger-option" id="trig-silent" onclick="selectTrigger('silent')">
-      <span class="trigger-option-icon">🔕</span>
-      <div><div class="trigger-option-title">Silent SOS</div><div class="trigger-option-desc">Press volume button 3× — no screen change</div></div>
-      <div class="trigger-radio"></div>
-    </div>
-    <div class="trigger-option" id="trig-fakecall" onclick="selectTrigger('fakecall')">
-      <span class="trigger-option-icon">📞</span>
-      <div><div class="trigger-option-title">Fake Call Button</div><div class="trigger-option-desc">Shows incoming call screen while SOS fires silently</div></div>
-      <div class="trigger-radio"></div>
-    </div>
+    <div class="trigger-option selected" id="trig-shake" onclick="selectTrigger('shake')"><span class="trigger-option-icon">📳</span><div><div class="trigger-option-title">Shake to Send</div><div class="trigger-option-desc">Shake phone 3× in pocket — completely invisible</div></div><div class="trigger-radio"></div></div>
+    <div class="trigger-option" id="trig-silent" onclick="selectTrigger('silent')"><span class="trigger-option-icon">🔕</span><div><div class="trigger-option-title">Silent SOS</div><div class="trigger-option-desc">Press volume button 3× — no screen change</div></div><div class="trigger-radio"></div></div>
+    <div class="trigger-option" id="trig-fakecall" onclick="selectTrigger('fakecall')"><span class="trigger-option-icon">📞</span><div><div class="trigger-option-title">Fake Call Button</div><div class="trigger-option-desc">Shows incoming call while SOS fires silently</div></div><div class="trigger-radio"></div></div>
   </div>
   <div id="fakeCallSection" style="display:none;margin-top:14px">
-    <div class="info-box">
-      <strong>Fake Caller Name:</strong>
-      <input class="app-input" style="margin-top:8px" type="text" placeholder="e.g. Mum" id="fakeCallerName" oninput="saveFakeCaller()">
-    </div>
+    <div class="info-box"><strong>Fake Caller Name:</strong><input class="app-input" style="margin-top:8px" type="text" placeholder="e.g. Mum" id="fakeCallerName" oninput="saveFakeCaller()"></div>
   </div>
+
+  <div class="divider"></div>
+  <div class="section-title">Shake Sensitivity</div>
+  <div class="info-box" style="margin-bottom:8px">Controls how hard you need to shake to trigger SOS. Use <strong>Low</strong> if you travel on rough roads or okada.</div>
+  <div class="sensitivity-row">
+    <button class="sens-btn" id="sens-low" onclick="setSensitivity('low')">🪨 Low<br><small>Hard shake</small></button>
+    <button class="sens-btn active" id="sens-medium" onclick="setSensitivity('medium')">👋 Medium<br><small>Normal shake</small></button>
+    <button class="sens-btn" id="sens-high" onclick="setSensitivity('high')">🪶 High<br><small>Light shake</small></button>
+  </div>
+
+  <div class="divider"></div>
+  <div class="section-title">Test Mode</div>
+  <div class="test-mode-row">
+    <div><div class="test-mode-label">🧪 Test Mode</div><div class="test-mode-sub">Alerts will say [TEST] — for practice only. Auto-off after 10 minutes.</div></div>
+    <label class="toggle"><input type="checkbox" id="testModeToggle" onchange="toggleTestMode()"><span class="toggle-slider"></span></label>
+  </div>
+
   <div class="divider"></div>
   <div class="section-title">About</div>
   <div class="settings-card">
-    <div class="settings-row"><div class="settings-row-left"><div class="settings-icon">ℹ️</div><div><div class="settings-row-title">UnrugGuard v2.0</div><div class="settings-row-sub">Global emergency safety app</div></div></div></div>
-    <div class="settings-row"><div class="settings-row-left"><div class="settings-icon">🌍</div><div><div class="settings-row-title">Available Worldwide</div><div class="settings-row-sub">Auto-detects your country & emergency numbers</div></div></div></div>
+    <div class="settings-row"><div class="settings-row-left"><div class="settings-icon">ℹ️</div><div><div class="settings-row-title">UnrugGuard v3.0</div><div class="settings-row-sub">Global emergency safety app</div></div></div></div>
+    <div class="settings-row"><div class="settings-row-left"><div class="settings-icon">🌍</div><div><div class="settings-row-title">Available Worldwide</div><div class="settings-row-sub">Auto-detects country & emergency numbers</div></div></div></div>
     <div class="settings-row"><div class="settings-row-left"><div class="settings-icon">🛡️</div><div><div class="settings-row-title">100% Free — Always</div><div class="settings-row-sub">No subscription. No hidden fees. Ever.</div></div></div></div>
   </div>
 </div>
 
 <!-- GUIDE -->
 <div class="screen" id="screen-guide">
+
   <div class="guide-hero">
     <div class="guide-hero-icon">📖</div>
     <div class="guide-hero-title">How To Use UnrugGuard</div>
-    <div class="guide-hero-sub">Read this before you need it. Knowing how to use this app could save your life.</div>
+    <div class="guide-hero-sub">Read this before you need it. This app could save your life.</div>
   </div>
 
   <div class="guide-step">
     <div class="guide-step-header"><div class="guide-step-num">1</div><span class="guide-step-icon">📲</span><div class="guide-step-title">Install on Your Phone</div></div>
-    <div class="guide-step-body">Open UnrugGuard in <strong>Chrome</strong> on your Android phone. Tap the <strong>Install</strong> banner at the top or tap the browser menu (3 dots) → <strong>Add to Home Screen</strong>. UnrugGuard will appear on your home screen like a real app and works offline.<span class="tip">💡 Installing gives you the best experience — faster, full screen, and works without internet after first load.</span></div>
+    <div class="guide-step-body">Open UnrugGuard in <strong>Chrome</strong>. Tap the <strong>Install</strong> banner at the top or tap the browser menu (⋮) → <strong>Add to Home Screen</strong>. UnrugGuard appears on your home screen like a real app and works offline after installation.<span class="tip">💡 After installing, open from your home screen — not from Chrome. This unlocks full features including phone contact import.</span></div>
   </div>
 
   <div class="guide-step">
     <div class="guide-step-header"><div class="guide-step-num">2</div><span class="guide-step-icon">👤</span><div class="guide-step-title">Set Up Your Profile</div></div>
-    <div class="guide-step-body">Go to <strong>Contacts tab</strong> and enter your name or username. This name appears in every SOS message your contacts receive. You can also write a <strong>custom SOS message</strong> — include your blood type or medical condition if it is important.<span class="tip">💡 Keep your name short and clear. In an emergency your contacts need to know immediately who is sending the alert.</span></div>
+    <div class="guide-step-body">Go to <strong>Contacts tab</strong>. Enter your name or username — this appears in every SOS message. Write a <strong>custom SOS message</strong> if you want — include blood type or medical condition.<span class="tip">💡 Keep your name short and clear. Your contacts need to know immediately who is sending the alert.</span></div>
   </div>
 
   <div class="guide-step">
     <div class="guide-step-header"><div class="guide-step-num">3</div><span class="guide-step-icon">👥</span><div class="guide-step-title">Add Emergency Contacts</div></div>
-    <div class="guide-step-body">Add up to <strong>5 trusted people</strong>. Tap <strong>Open Phone Contacts</strong> to import directly — no typing needed. Or enter name and phone number manually with country code e.g. +234XXXXXXXXXX. Toggle WhatsApp on for contacts who use it. Once saved each contact shows their name clearly with an <strong>edit ✏️ button</strong> to change anytime.<span class="warning">⚠️ Add people who will ACT fast — not just people you know. Someone who is awake at night. Someone who can call for help immediately.</span></div>
+    <div class="guide-step-body">Add up to <strong>5 trusted people</strong>. Tap <strong>Open Phone Contacts</strong> to import directly — no typing. Or enter name and phone number manually with country code e.g. +234XXXXXXXXXX. Toggle WhatsApp on for contacts who use it.<br><br>Saved contacts show name, number and WhatsApp badge clearly. Tap <strong>✏️</strong> to edit anytime.<span class="warning">⚠️ Add people who will ACT fast — someone awake at night, someone who can immediately call for help.</span></div>
   </div>
 
   <div class="guide-step">
     <div class="guide-step-header"><div class="guide-step-num">4</div><span class="guide-step-icon">🔑</span><div class="guide-step-title">Set Your Safe Word</div></div>
-    <div class="guide-step-body">Choose a secret word — e.g. <strong>Pineapple</strong>. If you are in danger but cannot press SOS, call a trusted contact and say your safe word naturally in the conversation. They will know you are in danger without the attacker realising.<span class="tip">💡 Tell ALL your emergency contacts your safe word before an emergency happens. Agree on it together.</span></div>
+    <div class="guide-step-body">Choose a secret word — e.g. <strong>Pineapple</strong>. If you are in danger but cannot press SOS, call a contact and say your safe word naturally in conversation. They know you are in danger without the attacker realising.<span class="tip">💡 Tell ALL your emergency contacts your safe word BEFORE an emergency happens. Agree on it together.</span></div>
   </div>
 
   <div class="guide-step">
     <div class="guide-step-header"><div class="guide-step-num">5</div><span class="guide-step-icon">⚙️</span><div class="guide-step-title">Choose Your Trigger Method</div></div>
-    <div class="guide-step-body">Go to <strong>Settings</strong> and pick your trigger. Change it based on your situation:<br><br>
-    <strong>📳 Shake to Send</strong> — Shake phone 3 times in your pocket. Nothing shows on screen. Best for armed robbery or kidnapping.<br><br>
-    <strong>🔕 Silent SOS</strong> — Press volume button 3 times. No screen change. Best for being followed or watched.<br><br>
-    <strong>📞 Fake Call</strong> — SOS fires silently then shows a fake incoming call. Best for lower threat situations.<span class="warning">⚠️ The app must be OPEN for triggers to work. Open UnrugGuard before entering any risky area.</span></div>
+    <div class="guide-step-body"><strong>📳 Shake to Send</strong> — Shake phone 3 times in pocket. Completely invisible. Best for armed robbery or kidnapping.<br><br><strong>🔕 Silent SOS</strong> — Press volume button 3 times. No screen change. Best for being followed or watched.<br><br><strong>📞 Fake Call</strong> — SOS fires silently then shows a fake incoming call screen to disguise what you did. Best for lower threat situations.<span class="warning">⚠️ The app must be OPEN for triggers to work. Open UnrugGuard before entering any risky area.</span></div>
   </div>
 
   <div class="guide-step">
-    <div class="guide-step-header"><div class="guide-step-num">6</div><span class="guide-step-icon">🔴</span><div class="guide-step-title">How SOS Works</div></div>
-    <div class="guide-step-body">When SOS fires: 1) Gets your GPS location instantly. 2) Builds a Google Maps link. 3) Sends SMS to all phone number contacts at once. 4) Sends instant in-app alert to all GuardNetwork trusted contacts. 5) Their phones receive a loud alarm automatically — no extra taps needed.<br><br>SMS works with <strong>zero data</strong> on any network worldwide. If GPS fails the message still sends without a location link.<span class="tip">💡 Your last known location is always saved every time you open the app — even if GPS fails during emergency.</span></div>
+    <div class="guide-step-header"><div class="guide-step-num">6</div><span class="guide-step-icon">📳</span><div class="guide-step-title">Shake Sensitivity Settings</div></div>
+    <div class="guide-step-body">In Settings you can control how hard you need to shake.<br><br><strong>Low Sensitivity</strong> — Very hard shake needed. Best for travelling on rough roads, okada, or bumpy vehicles. Prevents accidental triggers from bumps.<br><br><strong>Medium Sensitivity</strong> — Normal firm shake. Best for most people in most situations. This is the default.<br><br><strong>High Sensitivity</strong> — Light gentle shake. Best for elderly people or limited hand strength. Risk: walking or bag movement may trigger accidentally.<br><br>No matter the sensitivity — you must always shake <strong>3 times in a row</strong> within 1.5 seconds to fire SOS. One shake never triggers it.<span class="tip">💡 If you travel by okada or rough roads daily — use Low sensitivity to avoid false alarms.</span></div>
   </div>
 
   <div class="guide-step">
-    <div class="guide-step-header"><div class="guide-step-num">7</div><span class="guide-step-icon">🛡️</span><div class="guide-step-title">GuardNetwork — App to App</div></div>
-    <div class="guide-step-body">Go to the <strong>Network tab</strong> and create your <strong>GuardNetwork ID</strong> — e.g. UG-KALU-7742. Share this ID with trusted people. They enter your ID in their app and send you an invite. You must <strong>approve the invite</strong> before they can see anything.<br><br>Once connected:<br>• You can see each other's live location on a map<br>• When you press SOS their phone rings automatically<br>• They see your exact location immediately<br>• You can see their <strong>last known location</strong> even if their phone is off<span class="tip">💡 GuardNetwork only works between people who BOTH have UnrugGuard installed and have approved each other.</span></div>
+    <div class="guide-step-header"><div class="guide-step-num">7</div><span class="guide-step-icon">🧪</span><div class="guide-step-title">Test Mode</div></div>
+    <div class="guide-step-body">Before using UnrugGuard in real life — turn on <strong>Test Mode</strong> in Settings. When Test Mode is on all alerts say <strong>[TEST]</strong> at the beginning so your contacts know it is a drill. Test Mode automatically turns off after 10 minutes.<span class="warning">⚠️ Always make sure Test Mode is OFF before going into a real risky situation. Check Settings before you leave.</span></div>
   </div>
 
   <div class="guide-step">
-    <div class="guide-step-header"><div class="guide-step-num">8</div><span class="guide-step-icon">📍</span><div class="guide-step-title">Last Known Location</div></div>
-    <div class="guide-step-body">Every time someone opens UnrugGuard their location is saved automatically. If someone goes missing — open their profile in GuardNetwork and tap <strong>Last Location</strong>. You will see exactly where they were and when. This works even if their phone is now off, taken, or destroyed.<span class="warning">⚠️ This requires both people to be connected on GuardNetwork with approved invites.</span></div>
+    <div class="guide-step-header"><div class="guide-step-num">8</div><span class="guide-step-icon">🔴</span><div class="guide-step-title">How SOS Works</div></div>
+    <div class="guide-step-body">When SOS fires:<br><br>1. Gets your GPS location instantly<br>2. Builds a Google Maps link<br>3. Sends to WhatsApp contacts via WhatsApp pre-filled message<br>4. Sends to other contacts via SMS<br>5. Sends instant in-app alarm to all GuardNetwork trusted contacts automatically<br><br>If you pressed the button by mistake — a <strong>3 second countdown</strong> appears. Tap <strong>Cancel</strong> to stop it.<br><br>If SOS already sent — tap <strong>False Alarm</strong> to send a follow-up message: <em>"I am safe, previous alert was a mistake."</em><span class="tip">💡 Your last known location is saved every time you open the app — even if GPS fails during emergency.</span></div>
   </div>
 
   <div class="guide-step">
-    <div class="guide-step-header"><div class="guide-step-num">9</div><span class="guide-step-icon">🌍</span><div class="guide-step-title">Emergency Numbers — Your Country</div></div>
-    <div class="guide-step-body">UnrugGuard <strong>automatically detects your country</strong> and shows the correct local emergency numbers on the Home screen. Tap any number to call instantly — works with zero data. Supported countries include Nigeria, Ghana, Kenya, South Africa, UK, USA, India, Germany, France and more.</div>
+    <div class="guide-step-header"><div class="guide-step-num">9</div><span class="guide-step-icon">🛡️</span><div class="guide-step-title">GuardNetwork — App to App</div></div>
+    <div class="guide-step-body">Go to <strong>Network tab</strong> and create your GuardNetwork ID — e.g. <strong>UG-KALU-7742</strong>. Share it with trusted people. They enter your ID and send an invite. You must <strong>approve the invite</strong> before they can see anything.<br><br>Once approved:<br>• You see each other's live location on the map<br>• Their phone gets an automatic alarm when you press SOS<br>• You can see their <strong>last known location</strong> even if their phone is off<br>• You can <strong>Remove</strong> anyone from your network anytime<br>• If you accidentally <strong>Decline</strong> an invite they can simply send it again<span class="tip">💡 Both people must have UnrugGuard installed and must approve each other. No one can see your location without your permission.</span></div>
   </div>
 
   <div class="guide-step">
-    <div class="guide-step-header"><div class="guide-step-num">10</div><span class="guide-step-icon">🔋</span><div class="guide-step-title">Before Entering a Risky Area</div></div>
-    <div class="guide-step-body">
-    ✅ Open UnrugGuard<br>
-    ✅ Check contacts are saved<br>
-    ✅ Check trigger method is correct<br>
-    ✅ Charge phone above 20%<br>
-    ✅ Tell one contact where you are going<br>
-    ✅ Know your safe word<br>
-    ✅ Keep GPS on while travelling<span class="warning">⚠️ UnrugGuard cannot work if your phone is off or battery is dead. Always charge before travelling.</span></div>
+    <div class="guide-step-header"><div class="guide-step-num">10</div><span class="guide-step-icon">📍</span><div class="guide-step-title">Last Known Location</div></div>
+    <div class="guide-step-body">Every time someone opens UnrugGuard their location is saved automatically. If someone goes missing — go to their profile in GuardNetwork and tap <strong>Last Location</strong>. You see exactly where they were and when. Works even if their phone is off, destroyed or taken.<span class="warning">⚠️ This requires both people to be connected on GuardNetwork with approved invites.</span></div>
   </div>
+
+  <div class="guide-step">
+    <div class="guide-step-header"><div class="guide-step-num">11</div><span class="guide-step-icon">🌍</span><div class="guide-step-title">Emergency Numbers — Your Country</div></div>
+    <div class="guide-step-body">UnrugGuard <strong>automatically detects your country</strong> and shows the correct local emergency numbers on the Home screen. Tap any number to call instantly with zero data. Works worldwide in 200+ countries.<span class="tip">💡 112 works as the international emergency number on any phone, any network, even without a SIM card in most countries.</span></div>
+  </div>
+
+  <div class="guide-step">
+    <div class="guide-step-header"><div class="guide-step-num">12</div><span class="guide-step-icon">🔔</span><div class="guide-step-title">Push Notifications</div></div>
+    <div class="guide-step-body">When you first open UnrugGuard tap <strong>Allow</strong> when asked about notifications. This lets the app alert you even when it is closed.<br><br>You will receive notifications for:<br>• 📩 New GuardNetwork invite from someone<br>• ✅ Someone approved your invite<br>• 🚨 A trusted contact pressed SOS — their location is shown immediately<span class="tip">💡 Allow notifications to get the full protection of GuardNetwork. Without notifications you will only see alerts when the app is open.</span></div>
+  </div>
+
+  <div class="guide-step">
+    <div class="guide-step-header"><div class="guide-step-num">13</div><span class="guide-step-icon">🔋</span><div class="guide-step-title">Before Entering a Risky Area</div></div>
+    <div class="guide-step-body">✅ Open UnrugGuard<br>✅ Check contacts are saved<br>✅ Check trigger method is correct<br>✅ Make sure Test Mode is OFF<br>✅ Charge phone above 20%<br>✅ Tell one contact where you are going<br>✅ Keep GPS on while travelling<br>✅ Know your safe word<span class="warning">⚠️ UnrugGuard cannot work if your phone is off or battery is dead. Always charge before travelling.</span></div>
+  </div>
+
 </div>
 
-<!-- GUARD NETWORK -->
+<!-- NETWORK -->
 <div class="screen" id="screen-network">
   <div id="networkSetup" style="display:none">
     <div class="guide-hero" style="margin-bottom:20px">
       <div class="guide-hero-icon">🛡️</div>
       <div class="guide-hero-title">Create Your GuardNetwork ID</div>
-      <div class="guide-hero-sub">Enter your name or username to generate your unique ID. Share it with trusted contacts to connect and share live locations.</div>
+      <div class="guide-hero-sub">Enter your name or username. Share your ID with trusted contacts to connect and protect each other.</div>
     </div>
-    <div class="info-box">
-      <strong>Your Name or Username</strong><br>
-      <small style="color:var(--muted)">Max 12 characters. Letters and numbers only.</small>
-      <input class="app-input" style="margin-top:8px" type="text" id="gnUsername" maxlength="12" placeholder="e.g. KALU or GUARDKALU" oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
-    </div>
+    <div class="info-box"><strong>Your Name or Username</strong><br><small style="color:var(--muted)">Max 12 characters. Letters and numbers only.</small><input class="app-input" style="margin-top:8px" type="text" id="gnUsername" maxlength="12" placeholder="e.g. KALU or GUARDKALU" oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')"></div>
     <button class="btn-primary" onclick="createGuardID()">🛡️ Generate My GuardNetwork ID</button>
   </div>
 
   <div id="networkDashboard" style="display:none">
     <div class="gn-profile-card">
       <div class="gn-avatar" id="gnAvatarDisplay">K</div>
-      <div>
-        <div class="gn-name" id="gnNameDisplay">KALU</div>
-        <div class="gn-id" id="gnIdDisplay">UG-KALU-7742</div>
-      </div>
+      <div><div class="gn-name" id="gnNameDisplay">KALU</div><div class="gn-id" id="gnIdDisplay">UG-KALU-7742</div></div>
       <div class="gn-share-btn" onclick="shareGuardID()">📤 Share ID</div>
     </div>
     <div class="info-box" style="margin-bottom:14px">
@@ -571,10 +465,9 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
       </div>
     </div>
     <div class="map-placeholder">
-      <div class="map-grid"></div>
-      <div id="mapPins"></div>
+      <div class="map-grid"></div><div id="mapPins"></div>
       <div class="map-icon" id="mapIcon">🗺️</div>
-      <div class="map-label" id="mapLabel">Approve connections to see locations here</div>
+      <div class="map-label" id="mapLabel">Approve connections to see locations</div>
     </div>
     <div class="section-title">Your GuardNetwork</div>
     <div id="guardContactsList"></div>
@@ -615,981 +508,693 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
 <input type="file" id="contactFilePicker" accept=".vcf" style="display:none" onchange="parseVCF(event)">
 
 <script>
-// Global Emergency Numbers Database
 const EMERGENCY_NUMBERS = {
-  NG: { name:'Nigeria', flag:'🇳🇬', numbers:[
-    {icon:'🚨',name:'National',num:'112',note:'Police · Fire · Ambulance · Free'},
-    {icon:'🚔',name:'Police',num:'122',note:'Nigeria Police Force'},
-    {icon:'🏙️',name:'Lagos',num:'767',note:'LASEMA · Lagos only'},
-    {icon:'🚗',name:'Road Safety',num:'122',note:'FRSC · Accidents'},
-  ]},
-  US: { name:'United States', flag:'🇺🇸', numbers:[
-    {icon:'🚨',name:'Emergency',num:'911',note:'Police · Fire · Ambulance'},
-    {icon:'🧠',name:'Crisis Line',num:'988',note:'Mental health · Suicide'},
-    {icon:'☠️',name:'Poison',num:'1-800-222-1222',note:'Poison emergency'},
-    {icon:'🚔',name:'Non-Emergency',num:'311',note:'Non-urgent police'},
-  ]},
-  GB: { name:'United Kingdom', flag:'🇬🇧', numbers:[
-    {icon:'🚨',name:'Emergency',num:'999',note:'Police · Fire · Ambulance'},
-    {icon:'🌍',name:'Int\'l',num:'112',note:'Works on any phone'},
-    {icon:'🚔',name:'Non-Emergency',num:'101',note:'Police non-urgent'},
-    {icon:'🏥',name:'NHS',num:'111',note:'Medical advice'},
-  ]},
-  GH: { name:'Ghana', flag:'🇬🇭', numbers:[
-    {icon:'🚨',name:'National',num:'112',note:'All emergencies'},
-    {icon:'🚔',name:'Police',num:'191',note:'Ghana Police Service'},
-    {icon:'🚒',name:'Fire',num:'192',note:'Ghana Fire Service'},
-    {icon:'🚑',name:'Ambulance',num:'193',note:'National Ambulance'},
-  ]},
-  ZA: { name:'South Africa', flag:'🇿🇦', numbers:[
-    {icon:'🚨',name:'National',num:'112',note:'All emergencies (mobile)'},
-    {icon:'🚔',name:'Police',num:'10111',note:'SAPS emergency'},
-    {icon:'🚑',name:'Ambulance',num:'10177',note:'Medical emergency'},
-    {icon:'🚒',name:'Fire',num:'10177',note:'Fire & rescue'},
-  ]},
-  KE: { name:'Kenya', flag:'🇰🇪', numbers:[
-    {icon:'🚨',name:'National',num:'112',note:'All emergencies'},
-    {icon:'🚔',name:'Police',num:'999',note:'Kenya Police'},
-    {icon:'🚑',name:'Ambulance',num:'1199',note:'Emergency medical'},
-    {icon:'🚒',name:'Fire',num:'999',note:'Fire brigade'},
-  ]},
-  CA: { name:'Canada', flag:'🇨🇦', numbers:[
-    {icon:'🚨',name:'Emergency',num:'911',note:'Police · Fire · Ambulance'},
-    {icon:'🧠',name:'Crisis Line',num:'988',note:'Suicide & crisis'},
-    {icon:'🚔',name:'Non-Emergency',num:'311',note:'Non-urgent police'},
-    {icon:'🌍',name:'Int\'l',num:'112',note:'Works on any phone'},
-  ]},
-  AU: { name:'Australia', flag:'🇦🇺', numbers:[
-    {icon:'🚨',name:'Emergency',num:'000',note:'Police · Fire · Ambulance'},
-    {icon:'🌍',name:'Int\'l',num:'112',note:'Works on any phone'},
-    {icon:'🧠',name:'Lifeline',num:'13-11-14',note:'Crisis support'},
-    {icon:'🚔',name:'Non-Emergency',num:'131-444',note:'Police non-urgent'},
-  ]},
-  IN: { name:'India', flag:'🇮🇳', numbers:[
-    {icon:'🚨',name:'National',num:'112',note:'All emergencies'},
-    {icon:'🚔',name:'Police',num:'100',note:'Police'},
-    {icon:'🚑',name:'Ambulance',num:'108',note:'Medical emergency'},
-    {icon:'🚒',name:'Fire',num:'101',note:'Fire brigade'},
-  ]},
-  DE: { name:'Germany', flag:'🇩🇪', numbers:[
-    {icon:'🚨',name:'Emergency',num:'112',note:'Fire · Ambulance · EU wide'},
-    {icon:'🚔',name:'Police',num:'110',note:'German Police'},
-    {icon:'🧠',name:'Crisis',num:'0800-111-0111',note:'Crisis helpline'},
-    {icon:'🚑',name:'Poison',num:'030-19240',note:'Poison control'},
-  ]},
-  FR: { name:'France', flag:'🇫🇷', numbers:[
-    {icon:'🚨',name:'All Emergency',num:'112',note:'EU emergency number'},
-    {icon:'🚔',name:'Police',num:'17',note:'Police Nationale'},
-    {icon:'🚒',name:'Fire',num:'18',note:'Pompiers'},
-    {icon:'🚑',name:'SAMU',num:'15',note:'Medical emergency'},
-  ]},
-  ZW: { name:'Zimbabwe', flag:'🇿🇼', numbers:[
-    {icon:'🚨',name:'National',num:'112',note:'All emergencies (mobile)'},
-    {icon:'🚔',name:'Police',num:'995',note:'Zimbabwe Republic Police'},
-    {icon:'🚑',name:'Ambulance',num:'994',note:'Emergency medical'},
-    {icon:'🚒',name:'Fire',num:'993',note:'Fire brigade'},
-  ]},
-  ZM: { name:'Zambia', flag:'🇿🇲', numbers:[
-    {icon:'🚨',name:'National',num:'112',note:'All emergencies'},
-    {icon:'🚔',name:'Police',num:'991',note:'Zambia Police'},
-    {icon:'🚑',name:'Ambulance',num:'993',note:'Emergency medical'},
-    {icon:'🚒',name:'Fire',num:'992',note:'Fire brigade'},
-  ]},
-  RW: { name:'Rwanda', flag:'🇷🇼', numbers:[
-    {icon:'🚨',name:'National',num:'112',note:'All emergencies'},
-    {icon:'🚔',name:'Police',num:'113',note:'Rwanda National Police'},
-    {icon:'🚑',name:'Ambulance',num:'912',note:'Emergency medical'},
-    {icon:'🚒',name:'Fire',num:'111',note:'Fire brigade'},
-  ]},
-  DEFAULT: { name:'Global', flag:'🌍', numbers:[
-    {icon:'🚨',name:'Int\'l Emergency',num:'112',note:'Works in 200+ countries · Free'},
-    {icon:'📞',name:'Local Emergency',num:'911 / 999',note:'US · UK · Canada · Australia'},
-    {icon:'🚔',name:'Local Police',num:'Check locally',note:'Varies by country'},
-    {icon:'🚑',name:'Local Ambulance',num:'Check locally',note:'Varies by country'},
-  ]},
+  NG:{name:'Nigeria',flag:'🇳🇬',numbers:[{icon:'🚨',name:'National',num:'112',note:'Police · Fire · Ambulance · Free'},{icon:'🚔',name:'Police',num:'122',note:'Nigeria Police Force'},{icon:'🏙️',name:'Lagos',num:'767',note:'LASEMA · Lagos only'},{icon:'🚗',name:'Road Safety',num:'122',note:'FRSC · Accidents'}]},
+  US:{name:'United States',flag:'🇺🇸',numbers:[{icon:'🚨',name:'Emergency',num:'911',note:'Police · Fire · Ambulance'},{icon:'🧠',name:'Crisis Line',num:'988',note:'Mental health · Suicide'},{icon:'☠️',name:'Poison',num:'1-800-222-1222',note:'Poison emergency'},{icon:'🚔',name:'Non-Emergency',num:'311',note:'Non-urgent police'}]},
+  GB:{name:'United Kingdom',flag:'🇬🇧',numbers:[{icon:'🚨',name:'Emergency',num:'999',note:'Police · Fire · Ambulance'},{icon:'🌍',name:"Int'l",num:'112',note:'Works on any phone'},{icon:'🚔',name:'Non-Emergency',num:'101',note:'Police non-urgent'},{icon:'🏥',name:'NHS',num:'111',note:'Medical advice'}]},
+  GH:{name:'Ghana',flag:'🇬🇭',numbers:[{icon:'🚨',name:'National',num:'112',note:'All emergencies'},{icon:'🚔',name:'Police',num:'191',note:'Ghana Police Service'},{icon:'🚒',name:'Fire',num:'192',note:'Ghana Fire Service'},{icon:'🚑',name:'Ambulance',num:'193',note:'National Ambulance'}]},
+  ZA:{name:'South Africa',flag:'🇿🇦',numbers:[{icon:'🚨',name:'National',num:'112',note:'All emergencies'},{icon:'🚔',name:'Police',num:'10111',note:'SAPS emergency'},{icon:'🚑',name:'Ambulance',num:'10177',note:'Medical emergency'},{icon:'🚒',name:'Fire',num:'10177',note:'Fire & rescue'}]},
+  KE:{name:'Kenya',flag:'🇰🇪',numbers:[{icon:'🚨',name:'National',num:'112',note:'All emergencies'},{icon:'🚔',name:'Police',num:'999',note:'Kenya Police'},{icon:'🚑',name:'Ambulance',num:'1199',note:'Emergency medical'},{icon:'🚒',name:'Fire',num:'999',note:'Fire brigade'}]},
+  CA:{name:'Canada',flag:'🇨🇦',numbers:[{icon:'🚨',name:'Emergency',num:'911',note:'Police · Fire · Ambulance'},{icon:'🧠',name:'Crisis',num:'988',note:'Suicide & crisis'},{icon:'🚔',name:'Non-Emergency',num:'311',note:'Non-urgent police'},{icon:'🌍',name:"Int'l",num:'112',note:'Works on any phone'}]},
+  AU:{name:'Australia',flag:'🇦🇺',numbers:[{icon:'🚨',name:'Emergency',num:'000',note:'Police · Fire · Ambulance'},{icon:'🌍',name:"Int'l",num:'112',note:'Works on any phone'},{icon:'🧠',name:'Lifeline',num:'13-11-14',note:'Crisis support'},{icon:'🚔',name:'Non-Emergency',num:'131-444',note:'Police non-urgent'}]},
+  IN:{name:'India',flag:'🇮🇳',numbers:[{icon:'🚨',name:'National',num:'112',note:'All emergencies'},{icon:'🚔',name:'Police',num:'100',note:'Police'},{icon:'🚑',name:'Ambulance',num:'108',note:'Medical emergency'},{icon:'🚒',name:'Fire',num:'101',note:'Fire brigade'}]},
+  DE:{name:'Germany',flag:'🇩🇪',numbers:[{icon:'🚨',name:'Emergency',num:'112',note:'Fire · Ambulance · EU wide'},{icon:'🚔',name:'Police',num:'110',note:'German Police'},{icon:'🧠',name:'Crisis',num:'0800-111-0111',note:'Crisis helpline'},{icon:'🚑',name:'Poison',num:'030-19240',note:'Poison control'}]},
+  FR:{name:'France',flag:'🇫🇷',numbers:[{icon:'🚨',name:'All Emergency',num:'112',note:'EU emergency number'},{icon:'🚔',name:'Police',num:'17',note:'Police Nationale'},{icon:'🚒',name:'Fire',num:'18',note:'Pompiers'},{icon:'🚑',name:'SAMU',num:'15',note:'Medical emergency'}]},
+  ZW:{name:'Zimbabwe',flag:'🇿🇼',numbers:[{icon:'🚨',name:'National',num:'112',note:'All emergencies'},{icon:'🚔',name:'Police',num:'995',note:'Zimbabwe Republic Police'},{icon:'🚑',name:'Ambulance',num:'994',note:'Emergency medical'},{icon:'🚒',name:'Fire',num:'993',note:'Fire brigade'}]},
+  DEFAULT:{name:'Global',flag:'🌍',numbers:[{icon:'🚨',name:"Int'l Emergency",num:'112',note:'Works in 200+ countries · Free'},{icon:'📞',name:'Local Emergency',num:'911 / 999',note:'US · UK · Canada · Australia'},{icon:'🚔',name:'Local Police',num:'Check locally',note:'Varies by country'},{icon:'🚑',name:'Local Ambulance',num:'Check locally',note:'Varies by country'}]},
 };
-
-async function detectCountry() {
-  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const tzMap = {
-    'Africa/Lagos':'NG','Africa/Accra':'GH','Africa/Nairobi':'KE',
-    'Africa/Johannesburg':'ZA','Africa/Harare':'ZW','Africa/Lusaka':'ZM',
-    'Africa/Kigali':'RW','America/New_York':'US','America/Los_Angeles':'US',
-    'America/Chicago':'US','America/Toronto':'CA','America/Vancouver':'CA',
-    'Europe/London':'GB','Europe/Paris':'FR','Europe/Berlin':'DE',
-    'Australia/Sydney':'AU','Australia/Melbourne':'AU',
-    'Asia/Kolkata':'IN','Asia/Calcutta':'IN',
-  };
-  for (const [zone, code] of Object.entries(tzMap)) {
-    if (tz === zone) return code;
-  }
-  if (navigator.onLine) {
-    try {
-      const r = await fetch('https://ipapi.co/json/');
-      const d = await r.json();
-      if (d.country_code) return d.country_code;
-    } catch(e) {}
-  }
+async function detectCountry(){
+  const tz=Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const m={'Africa/Lagos':'NG','Africa/Accra':'GH','Africa/Nairobi':'KE','Africa/Johannesburg':'ZA','Africa/Harare':'ZW','America/New_York':'US','America/Los_Angeles':'US','America/Chicago':'US','America/Toronto':'CA','America/Vancouver':'CA','Europe/London':'GB','Europe/Paris':'FR','Europe/Berlin':'DE','Australia/Sydney':'AU','Australia/Melbourne':'AU','Asia/Kolkata':'IN','Asia/Calcutta':'IN'};
+  if(m[tz]) return m[tz];
+  if(navigator.onLine){try{const r=await fetch('https://ipapi.co/json/');const d=await r.json();if(d.country_code)return d.country_code;}catch(e){}}
   return 'DEFAULT';
 }
-
-async function loadEmergencyNumbers() {
-  const code = await detectCountry();
-  const data = EMERGENCY_NUMBERS[code] || EMERGENCY_NUMBERS['DEFAULT'];
-  localStorage.setItem('countryCode', code);
-  localStorage.setItem('countryName', data.name);
-  const lbl = document.getElementById('countryLabel');
-  if (lbl) lbl.textContent = data.flag + ' ' + data.name;
-  const title = document.getElementById('emergencyTitle');
-  if (title) title.textContent = data.flag + ' ' + data.name + ' Emergency Numbers';
-  const grid = document.getElementById('emergencyGrid');
-  if (!grid) return;
-  grid.innerHTML = '';
-  data.numbers.forEach(n => {
-    grid.innerHTML += `<a class="emergency-card" href="tel:${n.num}">
-      <span class="ec-icon">${n.icon}</span>
-      <span class="ec-name">${n.name}</span>
-      <span class="ec-num">${n.num}</span>
-      <span class="ec-note">${n.note}</span>
-    </a>`;
-  });
+async function loadEmergencyNumbers(){
+  const code=await detectCountry();
+  const data=EMERGENCY_NUMBERS[code]||EMERGENCY_NUMBERS['DEFAULT'];
+  localStorage.setItem('countryCode',code);
+  const lbl=document.getElementById('countryLabel');if(lbl)lbl.textContent=data.flag+' '+data.name;
+  const title=document.getElementById('emergencyTitle');if(title)title.textContent=data.flag+' '+data.name+' Emergency Numbers';
+  const grid=document.getElementById('emergencyGrid');if(!grid)return;
+  grid.innerHTML='';
+  data.numbers.forEach(n=>{grid.innerHTML+=`<a class="emergency-card" href="tel:${n.num}"><span class="ec-icon">${n.icon}</span><span class="ec-name">${n.name}</span><span class="ec-num">${n.num}</span><span class="ec-note">${n.note}</span></a>`;});
 }
+</script>
+<script>
+// VAPID public key for push notifications
+const VAPID_PUBLIC_KEY = 'BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U';
+let deferredInstallPrompt=null;
+let countdownTimer=null;
+let swRegistration=null;
 
-// ══════════════════════════════════
-//  UNRUGGUARD v2.0 — MAIN APP LOGIC
-// ══════════════════════════════════
-
-let deferredInstallPrompt = null;
-
-// ── INIT ──
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded',()=>{
   loadEmergencyNumbers();
   updateStatus();
   checkBattery();
   fetchPrices();
-  setInterval(fetchPrices, 60000);
+  setInterval(fetchPrices,60000);
   restoreFormValues();
   loadTrigger();
+  loadSensitivity();
   buildContacts();
   initShake();
   initNetwork();
-  initPWABanner();
+  initPWA();
   autoSaveLocation();
+  requestNotificationPermission();
 });
 
-window.addEventListener('online',  updateStatus);
-window.addEventListener('offline', updateStatus);
+window.addEventListener('online',updateStatus);
+window.addEventListener('offline',updateStatus);
 
-// ── PWA INSTALL BANNER ──
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredInstallPrompt = e;
-  const banner = document.getElementById('pwaBanner');
-  if (banner) banner.classList.remove('hidden');
+// PWA
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();deferredInstallPrompt=e;
+  const b=document.getElementById('pwaBanner');
+  if(b&&localStorage.getItem('pwaDismissed')!=='true')b.classList.remove('hidden');
 });
-
-window.addEventListener('appinstalled', () => {
-  const banner = document.getElementById('pwaBanner');
-  if (banner) banner.classList.add('hidden');
-  deferredInstallPrompt = null;
-  localStorage.setItem('pwaInstalled', 'true');
+window.addEventListener('appinstalled',()=>{
+  const b=document.getElementById('pwaBanner');if(b)b.classList.add('hidden');
+  deferredInstallPrompt=null;localStorage.setItem('pwaInstalled','true');
+  showToast('✅ UnrugGuard installed on your home screen!');
 });
-
-function initPWABanner() {
-  if (localStorage.getItem('pwaInstalled') === 'true') {
-    const banner = document.getElementById('pwaBanner');
-    if (banner) banner.classList.add('hidden');
+function initPWA(){
+  if(localStorage.getItem('pwaInstalled')==='true'||window.matchMedia('(display-mode: standalone)').matches){
+    const b=document.getElementById('pwaBanner');if(b)b.classList.add('hidden');return;
   }
-  if (window.matchMedia('(display-mode: standalone)').matches) {
-    const banner = document.getElementById('pwaBanner');
-    if (banner) banner.classList.add('hidden');
-  }
+  // Show banner after 3 seconds even if prompt not fired
+  setTimeout(()=>{
+    const b=document.getElementById('pwaBanner');
+    if(b&&localStorage.getItem('pwaDismissed')!=='true')b.classList.remove('hidden');
+  },3000);
 }
-
-function installPWA() {
-  if (deferredInstallPrompt) {
+function installPWA(){
+  if(deferredInstallPrompt){
     deferredInstallPrompt.prompt();
-    deferredInstallPrompt.userChoice.then(result => {
-      if (result.outcome === 'accepted') {
-        localStorage.setItem('pwaInstalled', 'true');
-        const banner = document.getElementById('pwaBanner');
-        if (banner) banner.classList.add('hidden');
-      }
-      deferredInstallPrompt = null;
+    deferredInstallPrompt.userChoice.then(r=>{
+      if(r.outcome==='accepted'){localStorage.setItem('pwaInstalled','true');const b=document.getElementById('pwaBanner');if(b)b.classList.add('hidden');}
+      deferredInstallPrompt=null;
     });
   } else {
-    showToast('📲 Tap browser menu → Add to Home Screen');
+    showToast('Tap ⋮ menu → Add to Home Screen');
+  }
+}
+function dismissPWA(){
+  const b=document.getElementById('pwaBanner');if(b)b.classList.add('hidden');
+  localStorage.setItem('pwaDismissed','true');
+}
+
+// Service Worker + Push
+async function initServiceWorker(){
+  if('serviceWorker' in navigator){
+    try{
+      swRegistration=await navigator.serviceWorker.register('/sw.js');
+      console.log('SW ready');
+    }catch(e){console.warn('SW:',e);}
   }
 }
 
-function dismissPWA() {
-  const banner = document.getElementById('pwaBanner');
-  if (banner) banner.classList.add('hidden');
-  localStorage.setItem('pwaDismissed', 'true');
-}
-
-// ── SCREEN NAVIGATION ──
-function showScreen(name, tab) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('screen-' + name).classList.add('active');
-  tab.classList.add('active');
-  window.scrollTo(0, 0);
-}
-
-// ── STATUS ──
-function updateStatus() {
-  const dot = document.getElementById('statusDot');
-  const lbl = document.getElementById('statusLabel');
-  if (navigator.onLine) {
-    dot.className = 'status-dot';
-    lbl.textContent = 'Online';
-  } else {
-    dot.className = 'status-dot offline';
-    lbl.textContent = 'Offline';
+async function requestNotificationPermission(){
+  if(!('Notification' in window))return;
+  if(Notification.permission==='default'){
+    const p=await Notification.requestPermission();
+    if(p==='granted') await subscribeToPush();
+  } else if(Notification.permission==='granted'){
+    await subscribeToPush();
   }
 }
 
-// ── BATTERY ──
-async function checkBattery() {
-  try {
-    const b = await navigator.getBattery();
-    const warn = document.getElementById('batteryWarn');
-    const check = () => {
-      if (b.level <= 0.15 && !b.charging) warn.classList.remove('hidden');
-      else warn.classList.add('hidden');
-    };
-    check();
-    b.addEventListener('levelchange', check);
-    b.addEventListener('chargingchange', check);
-  } catch(e) {}
-}
-
-// ── TOKEN PRICES ──
-async function fetchPrices() {
-  try {
-    const [r1, r2] = await Promise.all([
-      fetch('https://api.dexscreener.com/latest/dex/tokens/JuLhhMjaWyWKCWEPetMV5hucpCmR212MzrRLWWZEgem'),
-      fetch('https://api.dexscreener.com/latest/dex/tokens/0x591DF09AF60366298FE31C4590a9230585D34FBd')
-    ]);
-    const [d1, d2] = await Promise.all([r1.json(), r2.json()]);
-    function set(pIds, cIds, pair) {
-      if (!pair) return;
-      const price  = parseFloat(pair.priceUsd);
-      const change = parseFloat(pair.priceChange?.h24 || 0);
-      const pStr   = price < 0.000001 ? '$'+price.toExponential(2) : price < 0.01 ? '$'+price.toFixed(6) : '$'+price.toFixed(4);
-      const cStr   = (change >= 0 ? '▲' : '▼') + Math.abs(change).toFixed(2) + '%';
-      const cls    = change >= 0 ? 'ticker-change up' : 'ticker-change down';
-      pIds.forEach(id => { const el=document.getElementById(id); if(el) el.textContent=pStr; });
-      cIds.forEach(id => { const el=document.getElementById(id); if(el) { el.textContent=cStr; el.className=cls; } });
+async function subscribeToPush(){
+  if(!swRegistration)return;
+  try{
+    const existing=await swRegistration.pushManager.getSubscription();
+    if(existing){localStorage.setItem('pushSub',JSON.stringify(existing.toJSON()));return;}
+    const sub=await swRegistration.pushManager.subscribe({
+      userVisibleOnly:true,
+      applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+    });
+    localStorage.setItem('pushSub',JSON.stringify(sub.toJSON()));
+    // Save to Supabase
+    const myID=localStorage.getItem('guardID');
+    if(myID&&navigator.onLine){
+      try{
+        await sbFetch('guard_users?guard_id=eq.'+myID,'PATCH',{push_sub:JSON.stringify(sub.toJSON())});
+      }catch(e){}
     }
-    const upad = d1.pairs?.find(p=>p.chainId==='solana') || d1.pairs?.[0];
-    const bnc  = d2.pairs?.find(p=>p.chainId==='bsc')    || d2.pairs?.[0];
-    set(['p1','p3'],['c1','c3'], upad);
-    set(['p2','p4'],['c2','c4'], bnc);
-  } catch(e) {}
+  }catch(e){console.warn('Push sub:',e);}
 }
 
-// ── AUTO SAVE LOCATION ──
-function autoSaveLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(pos => {
-      const loc = {
-        lat: pos.coords.latitude,
-        lng: pos.coords.longitude,
-        time: new Date().toLocaleTimeString(),
-        date: new Date().toLocaleDateString(),
-        link: `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`
-      };
-      localStorage.setItem('lastLocation', JSON.stringify(loc));
-      if (navigator.onLine) updateNetworkLocation(loc.link);
-    }, () => {}, { timeout: 8000, enableHighAccuracy: true });
+function urlBase64ToUint8Array(base64String){
+  const padding='='.repeat((4-base64String.length%4)%4);
+  const base64=(base64String+padding).replace(/-/g,'+').replace(/_/g,'/');
+  const rawData=window.atob(base64);
+  const outputArray=new Uint8Array(rawData.length);
+  for(let i=0;i<rawData.length;++i)outputArray[i]=rawData.charCodeAt(i);
+  return outputArray;
+}
+
+// Screen navigation
+function showScreen(name,tab){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  tab.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// Status
+function updateStatus(){
+  const dot=document.getElementById('statusDot'),lbl=document.getElementById('statusLabel');
+  if(navigator.onLine){dot.className='status-dot';lbl.textContent='Online';}
+  else{dot.className='status-dot offline';lbl.textContent='Offline';}
+}
+
+// Battery
+async function checkBattery(){
+  try{
+    const b=await navigator.getBattery();
+    const warn=document.getElementById('batteryWarn');
+    const check=()=>{if(b.level<=0.15&&!b.charging)warn.classList.remove('hidden');else warn.classList.add('hidden');};
+    check();b.addEventListener('levelchange',check);b.addEventListener('chargingchange',check);
+  }catch(e){}
+}
+
+// Prices
+async function fetchPrices(){
+  try{
+    const[r1,r2]=await Promise.all([fetch('https://api.dexscreener.com/latest/dex/tokens/JuLhhMjaWyWKCWEPetMV5hucpCmR212MzrRLWWZEgem'),fetch('https://api.dexscreener.com/latest/dex/tokens/0x591DF09AF60366298FE31C4590a9230585D34FBd')]);
+    const[d1,d2]=await Promise.all([r1.json(),r2.json()]);
+    function set(pIds,cIds,pair){if(!pair)return;const price=parseFloat(pair.priceUsd),change=parseFloat(pair.priceChange?.h24||0);const pStr=price<0.000001?'$'+price.toExponential(2):price<0.01?'$'+price.toFixed(6):'$'+price.toFixed(4);const cStr=(change>=0?'▲':'▼')+Math.abs(change).toFixed(2)+'%';const cls=change>=0?'ticker-change up':'ticker-change down';pIds.forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=pStr;});cIds.forEach(id=>{const el=document.getElementById(id);if(el){el.textContent=cStr;el.className=cls;}});}
+    set(['p1','p3'],['c1','c3'],d1.pairs?.find(p=>p.chainId==='solana')||d1.pairs?.[0]);
+    set(['p2','p4'],['c2','c4'],d2.pairs?.find(p=>p.chainId==='bsc')||d2.pairs?.[0]);
+  }catch(e){}
+}
+
+// Auto save location
+function autoSaveLocation(){
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(pos=>{
+      const loc={lat:pos.coords.latitude,lng:pos.coords.longitude,time:new Date().toLocaleTimeString(),date:new Date().toLocaleDateString(),link:`https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`};
+      localStorage.setItem('lastLocation',JSON.stringify(loc));
+      if(navigator.onLine)updateNetworkLocation(loc.link);
+    },()=>{},{timeout:8000,enableHighAccuracy:true});
   }
 }
 
-// ── CONTACTS ──
-const NUM_CONTACTS = 5;
-
-function buildContacts() {
-  const list  = document.getElementById('contactsList');
-  if (!list) return;
-  const saved = JSON.parse(localStorage.getItem('contacts') || '[]');
-  list.innerHTML = '';
-  for (let i = 0; i < NUM_CONTACTS; i++) {
-    const c = saved[i] || {};
-    if (c.name && c.phone) {
-      // Saved state
-      list.innerHTML += `
-      <div class="contact-card saved" id="contact-card-${i}">
+// Contacts
+const NUM_CONTACTS=5;
+function buildContacts(){
+  const list=document.getElementById('contactsList');if(!list)return;
+  const saved=JSON.parse(localStorage.getItem('contacts')||'[]');
+  list.innerHTML='';
+  for(let i=0;i<NUM_CONTACTS;i++){
+    const c=saved[i]||{};
+    if(c.name&&c.phone){
+      list.innerHTML+=`<div class="contact-card saved" id="contact-card-${i}">
         <div class="contact-header">
           <div class="contact-num-badge">${i+1}</div>
           <div class="contact-saved-info">
             <div class="contact-saved-name">${c.name}</div>
             <div class="contact-saved-phone">${c.phone}</div>
-            ${c.whatsapp ? '<div class="contact-wa-badge">💬 WhatsApp</div>' : ''}
+            ${c.whatsapp?'<div class="contact-wa-badge">💬 WhatsApp</div>':''}
           </div>
-          <button class="contact-edit-btn" onclick="editContact(${i})" title="Edit contact">✏️</button>
+          <button class="contact-edit-btn" onclick="editContact(${i})">✏️</button>
         </div>
       </div>`;
     } else {
-      // Empty state
-      list.innerHTML += `
-      <div class="contact-card" id="contact-card-${i}">
-        <div class="contact-header">
-          <div class="contact-num-badge">${i+1}</div>
-          <div class="contact-label">Contact ${i+1}</div>
-        </div>
-        <div class="input-group">
-          <label class="input-label">Full Name</label>
-          <input class="app-input" type="text" placeholder="e.g. Mum" id="cname${i}" value="${c.name||''}">
-        </div>
-        <div class="input-group">
-          <label class="input-label">Phone Number (with country code)</label>
-          <input class="app-input" type="tel" placeholder="+234XXXXXXXXXX" id="cphone${i}" value="${c.phone||''}">
-        </div>
-        <div class="toggle-row">
-          <span class="toggle-label">💬 WhatsApp available</span>
-          <label class="toggle">
-            <input type="checkbox" id="cwa${i}" ${c.whatsapp?'checked':''}>
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
+      list.innerHTML+=`<div class="contact-card" id="contact-card-${i}">
+        <div class="contact-header"><div class="contact-num-badge">${i+1}</div><div class="contact-label">Contact ${i+1}</div></div>
+        <div class="input-group"><label class="input-label">Full Name</label><input class="app-input" type="text" placeholder="e.g. Mum" id="cname${i}" value="${c.name||''}"></div>
+        <div class="input-group"><label class="input-label">Phone Number (with country code)</label><input class="app-input" type="tel" placeholder="+234XXXXXXXXXX" id="cphone${i}" value="${c.phone||''}"></div>
+        <div class="toggle-row"><span class="toggle-label">💬 WhatsApp available</span><label class="toggle"><input type="checkbox" id="cwa${i}" ${c.whatsapp?'checked':''}><span class="toggle-slider"></span></label></div>
       </div>`;
     }
   }
 }
-
-function editContact(i) {
-  const saved = JSON.parse(localStorage.getItem('contacts') || '[]');
-  const c = saved[i] || {};
-  const card = document.getElementById('contact-card-'+i);
-  if (!card) return;
+function editContact(i){
+  const saved=JSON.parse(localStorage.getItem('contacts')||'[]');
+  const c=saved[i]||{};
+  const card=document.getElementById('contact-card-'+i);if(!card)return;
   card.classList.remove('saved');
-  card.innerHTML = `
-    <div class="contact-header">
-      <div class="contact-num-badge">${i+1}</div>
-      <div class="contact-label">Contact ${i+1}</div>
-    </div>
-    <div class="input-group">
-      <label class="input-label">Full Name</label>
-      <input class="app-input" type="text" placeholder="e.g. Mum" id="cname${i}" value="${c.name||''}">
-    </div>
-    <div class="input-group">
-      <label class="input-label">Phone Number (with country code)</label>
-      <input class="app-input" type="tel" placeholder="+234XXXXXXXXXX" id="cphone${i}" value="${c.phone||''}">
-    </div>
-    <div class="toggle-row">
-      <span class="toggle-label">💬 WhatsApp available</span>
-      <label class="toggle">
-        <input type="checkbox" id="cwa${i}" ${c.whatsapp?'checked':''}>
-        <span class="toggle-slider"></span>
-      </label>
-    </div>`;
+  card.innerHTML=`<div class="contact-header"><div class="contact-num-badge">${i+1}</div><div class="contact-label">Contact ${i+1}</div></div>
+    <div class="input-group"><label class="input-label">Full Name</label><input class="app-input" type="text" placeholder="e.g. Mum" id="cname${i}" value="${c.name||''}"></div>
+    <div class="input-group"><label class="input-label">Phone Number (with country code)</label><input class="app-input" type="tel" placeholder="+234XXXXXXXXXX" id="cphone${i}" value="${c.phone||''}"></div>
+    <div class="toggle-row"><span class="toggle-label">💬 WhatsApp available</span><label class="toggle"><input type="checkbox" id="cwa${i}" ${c.whatsapp?'checked':''}><span class="toggle-slider"></span></label></div>`;
 }
-
-function saveContacts() {
-  const contacts = [];
-  const saved = JSON.parse(localStorage.getItem('contacts') || '[]');
-  for (let i = 0; i < NUM_CONTACTS; i++) {
-    const nameEl  = document.getElementById('cname'+i);
-    const phoneEl = document.getElementById('cphone'+i);
-    const waEl    = document.getElementById('cwa'+i);
-    if (nameEl && phoneEl) {
-      contacts.push({
-        name:     nameEl.value  || saved[i]?.name  || '',
-        phone:    phoneEl.value || saved[i]?.phone || '',
-        whatsapp: waEl ? waEl.checked : (saved[i]?.whatsapp || false),
-      });
-    } else {
-      contacts.push(saved[i] || {name:'', phone:'', whatsapp:false});
-    }
+function saveContacts(){
+  const contacts=[];
+  const saved=JSON.parse(localStorage.getItem('contacts')||'[]');
+  for(let i=0;i<NUM_CONTACTS;i++){
+    const ne=document.getElementById('cname'+i),pe=document.getElementById('cphone'+i),we=document.getElementById('cwa'+i);
+    contacts.push({name:ne?ne.value:saved[i]?.name||'',phone:pe?pe.value:saved[i]?.phone||'',whatsapp:we?we.checked:saved[i]?.whatsapp||false});
   }
-  localStorage.setItem('contacts', JSON.stringify(contacts));
-  buildContacts();
-  showToast('✅ Contacts saved successfully!');
+  localStorage.setItem('contacts',JSON.stringify(contacts));
+  buildContacts();showToast('✅ Contacts saved!');
 }
 
-// ── IMPORT CONTACTS FROM PHONE ──
-function importContacts() {
-  if ('contacts' in navigator && 'select' in navigator.contacts) {
-    navigator.contacts.select(['name','tel'], {multiple:true})
-      .then(results => {
-        if (!results || !results.length) return;
-        let filled = 0;
-        results.forEach(contact => {
-          const name  = contact.name?.[0]  || '';
-          const phone = contact.tel?.[0]   || '';
-          if (name && phone) {
-            if (fillNextEmptyContact(name, phone)) filled++;
-          }
-        });
-        if (filled) showToast(`✅ ${filled} contact${filled>1?'s':''} imported!`);
-        else showToast('⚠️ All contact slots are filled');
-      })
-      .catch(() => fallbackVCF());
-  } else {
-    fallbackVCF();
-  }
+// Import contacts
+function importContacts(){
+  if('contacts' in navigator&&'select' in navigator.contacts){
+    navigator.contacts.select(['name','tel'],{multiple:true}).then(results=>{
+      if(!results||!results.length)return;
+      let filled=0;
+      results.forEach(c=>{const name=c.name?.[0]||'',phone=c.tel?.[0]||'';if(name&&phone&&fillNextEmptyContact(name,phone))filled++;});
+      showToast(filled?`✅ ${filled} contact${filled>1?'s':''} imported!`:'⚠️ All slots filled');
+    }).catch(()=>fallbackVCF());
+  } else {fallbackVCF();}
 }
-
-function fallbackVCF() {
-  showToast('💡 Tip: Save contact as .vcf file and select it');
-  document.getElementById('contactFilePicker').click();
-}
-
-function parseVCF(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const text  = e.target.result;
-    const names = text.match(/FN:(.+)/g)?.map(l=>l.replace('FN:','').trim()) || [];
-    const tels  = text.match(/TEL[^:]*:(.+)/g)?.map(l=>l.split(':').pop().trim().replace(/\s/g,'')) || [];
-    if (names[0] && tels[0]) {
-      fillNextEmptyContact(names[0], tels[0]);
-      showToast('✅ Contact imported!');
-    }
+function fallbackVCF(){document.getElementById('contactFilePicker').click();}
+function parseVCF(event){
+  const file=event.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const text=e.target.result;
+    const names=text.match(/FN:(.+)/g)?.map(l=>l.replace('FN:','').trim())||[];
+    const tels=text.match(/TEL[^:]*:(.+)/g)?.map(l=>l.split(':').pop().trim().replace(/\s/g,''))||[];
+    if(names[0]&&tels[0]){fillNextEmptyContact(names[0],tels[0]);showToast('✅ Contact imported!');}
   };
   reader.readAsText(file);
 }
-
-function fillNextEmptyContact(name, phone) {
-  const saved = JSON.parse(localStorage.getItem('contacts') || '[]');
-  for (let i = 0; i < NUM_CONTACTS; i++) {
-    const nameEl = document.getElementById('cname'+i);
-    if (nameEl && !nameEl.value && !(saved[i]?.name)) {
-      nameEl.value = name;
-      const phoneEl = document.getElementById('cphone'+i);
-      if (phoneEl) phoneEl.value = phone;
-      showScreen('contacts', document.querySelectorAll('.nav-tab')[1]);
-      return true;
-    }
+function fillNextEmptyContact(name,phone){
+  const saved=JSON.parse(localStorage.getItem('contacts')||'[]');
+  for(let i=0;i<NUM_CONTACTS;i++){
+    const ne=document.getElementById('cname'+i);
+    if(ne&&!ne.value&&!saved[i]?.name){ne.value=name;const pe=document.getElementById('cphone'+i);if(pe)pe.value=phone;showScreen('contacts',document.querySelectorAll('.nav-tab')[1]);return true;}
   }
   return false;
 }
 
-// ── RESTORE FORM VALUES ──
-function restoreFormValues() {
-  const fields = {userName:'userName', customMsg:'customMsg', safeWord:'safeWord', fakeCaller:'fakeCallerName'};
-  Object.entries(fields).forEach(([key, id]) => {
-    const val = localStorage.getItem(key);
-    const el  = document.getElementById(id);
-    if (val && el) el.value = val;
-  });
-  const sw   = localStorage.getItem('safeWord');
-  const disp = document.getElementById('safeWordDisplay');
-  if (sw && disp) disp.textContent = sw;
+// Form values
+function restoreFormValues(){
+  const fields={userName:'userName',customMsg:'customMsg',safeWord:'safeWord',fakeCaller:'fakeCallerName'};
+  Object.entries(fields).forEach(([k,id])=>{const v=localStorage.getItem(k),el=document.getElementById(id);if(v&&el)el.value=v;});
+  const sw=localStorage.getItem('safeWord'),disp=document.getElementById('safeWordDisplay');
+  if(sw&&disp)disp.textContent=sw;
+}
+function saveUserName(){localStorage.setItem('userName',document.getElementById('userName')?.value||'');}
+function saveMsg(){localStorage.setItem('customMsg',document.getElementById('customMsg')?.value||'');}
+function saveSafeWord(){const w=document.getElementById('safeWord')?.value||'';localStorage.setItem('safeWord',w);const d=document.getElementById('safeWordDisplay');if(d)d.textContent=w||'—';}
+function saveFakeCaller(){localStorage.setItem('fakeCaller',document.getElementById('fakeCallerName')?.value||'');}
+
+// Trigger
+function selectTrigger(type){localStorage.setItem('trigger',type);loadTrigger();}
+function loadTrigger(){
+  const type=localStorage.getItem('trigger')||'shake';
+  document.querySelectorAll('.trigger-option').forEach(o=>o.classList.remove('selected'));
+  const el=document.getElementById('trig-'+type);if(el)el.classList.add('selected');
+  const fc=document.getElementById('fakeCallSection');if(fc)fc.style.display=type==='fakecall'?'block':'none';
+  const icons={shake:'📳',silent:'🔕',fakecall:'📞'};
+  const texts={shake:'Shake to Send active',silent:'Silent SOS active',fakecall:'Fake Call active'};
+  const ti=document.getElementById('triggerIcon'),tt=document.getElementById('triggerText');
+  if(ti)ti.textContent=icons[type]||'📳';if(tt)tt.textContent=texts[type]||'';
 }
 
-function saveUserName()   { localStorage.setItem('userName',   document.getElementById('userName')?.value   || ''); }
-function saveMsg()        { localStorage.setItem('customMsg',  document.getElementById('customMsg')?.value  || ''); }
-function saveSafeWord()   {
-  const w = document.getElementById('safeWord')?.value || '';
-  localStorage.setItem('safeWord', w);
-  const disp = document.getElementById('safeWordDisplay');
-  if (disp) disp.textContent = w || '—';
+// Sensitivity
+function setSensitivity(level){
+  localStorage.setItem('shakeSensitivity',level);loadSensitivity();
 }
-function saveFakeCaller() { localStorage.setItem('fakeCaller', document.getElementById('fakeCallerName')?.value || ''); }
-
-// ── TRIGGER ──
-function selectTrigger(type) {
-  localStorage.setItem('trigger', type);
-  loadTrigger();
+function loadSensitivity(){
+  const level=localStorage.getItem('shakeSensitivity')||'medium';
+  document.querySelectorAll('.sens-btn').forEach(b=>b.classList.remove('active'));
+  const el=document.getElementById('sens-'+level);if(el)el.classList.add('active');
+}
+function getShakeThreshold(){
+  const level=localStorage.getItem('shakeSensitivity')||'medium';
+  return level==='low'?35:level==='high'?15:25;
 }
 
-function loadTrigger() {
-  const type = localStorage.getItem('trigger') || 'shake';
-  document.querySelectorAll('.trigger-option').forEach(o => o.classList.remove('selected'));
-  const el = document.getElementById('trig-'+type);
-  if (el) el.classList.add('selected');
-  const fc = document.getElementById('fakeCallSection');
-  if (fc) fc.style.display = type === 'fakecall' ? 'block' : 'none';
-  const icons = {shake:'📳', silent:'🔕', fakecall:'📞'};
-  const texts = {shake:'Shake to Send active', silent:'Silent SOS active', fakecall:'Fake Call active'};
-  const ti = document.getElementById('triggerIcon');
-  const tt = document.getElementById('triggerText');
-  if (ti) ti.textContent = icons[type] || '📳';
-  if (tt) tt.textContent = texts[type] || '';
+// Test mode
+function toggleTestMode(){
+  const current=localStorage.getItem('testMode')==='true';
+  localStorage.setItem('testMode',(!current).toString());
+  const toggle=document.getElementById('testModeToggle');
+  if(toggle)toggle.checked=!current;
+  showToast(!current?'🧪 Test Mode ON — alerts will say TEST':'✅ Test Mode OFF — real alerts active');
+  if(!current)setTimeout(()=>{localStorage.setItem('testMode','false');const t=document.getElementById('testModeToggle');if(t)t.checked=false;showToast('⏱️ Test Mode automatically turned off');},600000);
 }
 
-// ── SHAKE TO SEND ──
-let shakeCount=0, lastShakeTime=0, lastX=0, lastY=0, lastZ=0;
-
-function initShake() {
-  if (!window.DeviceMotionEvent) return;
-  const req = DeviceMotionEvent.requestPermission;
-  if (typeof req === 'function') {
-    document.getElementById('sosBtn')?.addEventListener('click', () => {
-      req().then(state => { if (state==='granted') listenShake(); });
-    }, {once:true});
-  } else {
-    listenShake();
-  }
+// Shake
+let shakeCount=0,lastShakeTime=0,lastX=0,lastY=0,lastZ=0;
+function initShake(){
+  if(!window.DeviceMotionEvent)return;
+  const req=DeviceMotionEvent.requestPermission;
+  if(typeof req==='function'){
+    document.getElementById('sosBtn')?.addEventListener('click',()=>{req().then(s=>{if(s==='granted')listenShake();});},{once:true});
+  } else {listenShake();}
 }
-
-function listenShake() {
-  window.addEventListener('devicemotion', e => {
-    if ((localStorage.getItem('trigger')||'shake') !== 'shake') return;
-    const acc = e.accelerationIncludingGravity;
-    if (!acc) return;
-    const dx=Math.abs(acc.x-lastX), dy=Math.abs(acc.y-lastY), dz=Math.abs(acc.z-lastZ);
-    lastX=acc.x; lastY=acc.y; lastZ=acc.z;
-    if (dx+dy+dz > 25) {
-      const now = Date.now();
-      shakeCount = (now-lastShakeTime < 1500) ? shakeCount+1 : 1;
-      lastShakeTime = now;
-      if (shakeCount >= 3) { shakeCount=0; fireSOS(); }
+function listenShake(){
+  window.addEventListener('devicemotion',e=>{
+    if((localStorage.getItem('trigger')||'shake')!=='shake')return;
+    const acc=e.accelerationIncludingGravity;if(!acc)return;
+    const dx=Math.abs(acc.x-lastX),dy=Math.abs(acc.y-lastY),dz=Math.abs(acc.z-lastZ);
+    lastX=acc.x;lastY=acc.y;lastZ=acc.z;
+    if(dx+dy+dz>getShakeThreshold()){
+      const now=Date.now();
+      shakeCount=(now-lastShakeTime<1500)?shakeCount+1:1;
+      lastShakeTime=now;
+      if(shakeCount>=3){shakeCount=0;fireSOS(true);}
     }
   });
 }
 
-// ── SOS FIRE ──
-function fireSOS() {
-  const contacts = JSON.parse(localStorage.getItem('contacts')||'[]').filter(c=>c.phone);
-  const guardID  = localStorage.getItem('guardID');
-
-  if (!contacts.length && !guardID) {
-    showToast('⚠️ Add at least one emergency contact first!');
-    showScreen('contacts', document.querySelectorAll('.nav-tab')[1]);
-    return;
+// SOS
+function fireSOS(silent=false){
+  const testMode=localStorage.getItem('testMode')==='true';
+  const trigger=localStorage.getItem('trigger')||'shake';
+  
+  // Button tap — show countdown (not for shake/silent)
+  if(!silent&&trigger!=='fakecall'){
+    showCountdown();return;
   }
+  if(trigger==='fakecall'&&!silent){
+    showCountdown();return;
+  }
+  
+  executeSOSWithLocation();
+}
 
-  const trigger = localStorage.getItem('trigger') || 'shake';
+function showCountdown(){
+  const overlay=document.getElementById('countdownOverlay');
+  if(!overlay)return;
+  overlay.classList.add('active');
+  let count=3;
+  const numEl=document.getElementById('countdownNum');
+  if(numEl)numEl.textContent=count;
+  countdownTimer=setInterval(()=>{
+    count--;
+    if(numEl)numEl.textContent=count;
+    if(count<=0){
+      clearInterval(countdownTimer);
+      overlay.classList.remove('active');
+      executeSOSWithLocation();
+    }
+  },1000);
+}
 
-  if (navigator.geolocation) {
+function cancelCountdown(){
+  if(countdownTimer)clearInterval(countdownTimer);
+  const overlay=document.getElementById('countdownOverlay');
+  if(overlay)overlay.classList.remove('active');
+  showToast('✅ SOS cancelled');
+}
+
+function executeSOSWithLocation(){
+  const contacts=JSON.parse(localStorage.getItem('contacts')||'[]').filter(c=>c.phone);
+  const guardID=localStorage.getItem('guardID');
+  if(!contacts.length&&!guardID){showToast('⚠️ Add emergency contacts first!');showScreen('contacts',document.querySelectorAll('.nav-tab')[1]);return;}
+  
+  if(navigator.geolocation){
     navigator.geolocation.getCurrentPosition(
-      pos => {
-        const loc = `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
-        localStorage.setItem('lastLocation', JSON.stringify({
-          lat: pos.coords.latitude, lng: pos.coords.longitude,
-          link: loc, time: new Date().toLocaleTimeString(), date: new Date().toLocaleDateString()
-        }));
-        processAlert(contacts, loc, trigger);
+      pos=>{
+        const loc=`https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
+        localStorage.setItem('lastLocation',JSON.stringify({lat:pos.coords.latitude,lng:pos.coords.longitude,link:loc,time:new Date().toLocaleTimeString(),date:new Date().toLocaleDateString()}));
+        processAlert(contacts,loc);
       },
-      () => {
-        const last = JSON.parse(localStorage.getItem('lastLocation')||'{}');
-        processAlert(contacts, last.link || 'Location unavailable', trigger);
-      },
-      {timeout:5000, enableHighAccuracy:true}
+      ()=>{const last=JSON.parse(localStorage.getItem('lastLocation')||'{}');processAlert(contacts,last.link||'Location unavailable');},
+      {timeout:5000,enableHighAccuracy:true}
     );
   } else {
-    processAlert(contacts, 'Location unavailable', trigger);
+    const last=JSON.parse(localStorage.getItem('lastLocation')||'{}');
+    processAlert(contacts,last.link||'Location unavailable');
   }
 }
 
-function processAlert(contacts, location, trigger) {
-  // Send SMS to phone number contacts
-  if (contacts.length) sendSMSAlerts(contacts, location);
-
-  // Send in-app alert to GuardNetwork trusted contacts
-  if (navigator.onLine) sendGuardAlert(location);
-
-  // Update my location in network
-  if (navigator.onLine) updateNetworkLocation(location);
-
-  if (trigger === 'fakecall') {
-    showFakeCall();
-  } else {
-    showSOSOverlay();
-  }
+function processAlert(contacts,location){
+  const trigger=localStorage.getItem('trigger')||'shake';
+  const testMode=localStorage.getItem('testMode')==='true';
+  
+  if(contacts.length)sendSMSAlerts(contacts,location,testMode);
+  if(navigator.onLine){sendGuardAlert(location,testMode);updateNetworkLocation(location);}
+  
+  if(trigger==='fakecall'){showFakeCall();}
+  else{showSOSOverlay();}
 }
 
-function sendSMSAlerts(contacts, location) {
-  const name      = localStorage.getItem('userName') || 'Me';
-  const customMsg = localStorage.getItem('customMsg') || '';
-  const msg = customMsg
-    ? customMsg.replace('[GPS]', location).replace('[Your name]', name)
-    : `EMERGENCY! I need help. My location: ${location} — ${name}`;
-
-  contacts.forEach((c, i) => {
-    if (!c.phone) return;
-    setTimeout(() => {
-      const smsLink = `sms:${c.phone}?body=${encodeURIComponent(msg)}`;
-      window.open(smsLink, '_blank');
-    }, i * 300);
+function sendSMSAlerts(contacts,location,testMode){
+  const name=localStorage.getItem('userName')||'Me';
+  const customMsg=localStorage.getItem('customMsg')||'';
+  const prefix=testMode?'[TEST] ':'';
+  const msg=customMsg
+    ?prefix+customMsg.replace('[GPS]',location).replace('[Your name]',name)
+    :`${prefix}EMERGENCY! I need help. My location: ${location} — ${name}`;
+  
+  contacts.forEach((c,i)=>{
+    if(!c.phone)return;
+    setTimeout(()=>{
+      if(c.whatsapp){
+        window.open(`https://wa.me/${c.phone.replace(/[^0-9+]/g,'')}?text=${encodeURIComponent(msg)}`,'_blank');
+      } else {
+        window.open(`sms:${c.phone}?body=${encodeURIComponent(msg)}`,'_blank');
+      }
+    },i*400);
   });
 }
 
-// ── SOS OVERLAY ──
-function showSOSOverlay() {
+// SOS Overlay
+function showSOSOverlay(){
   document.getElementById('sosOverlay').classList.add('active');
-  if ('vibrate' in navigator) navigator.vibrate([500,200,500,200,500]);
+  if('vibrate' in navigator)navigator.vibrate([500,200,500,200,500]);
 }
-
-function closeSOS() {
+function closeSOS(){
   document.getElementById('sosOverlay').classList.remove('active');
 }
-
-// ── FAKE CALL ──
-function showFakeCall() {
-  const name = localStorage.getItem('fakeCaller') || 'Mum';
-  const fcName = document.getElementById('fcCallerName');
-  const fcAva  = document.getElementById('fcAvatar');
-  if (fcName) fcName.textContent = name;
-  if (fcAva)  fcAva.textContent  = name.charAt(0).toUpperCase();
-  document.getElementById('fakeCallOverlay').classList.add('active');
-  if ('vibrate' in navigator) navigator.vibrate([1000,500,1000,500,1000]);
+function sendFalseAlarm(){
+  const name=localStorage.getItem('userName')||'Me';
+  const msg=`UPDATE: ${name} is safe. The previous SOS alert was a false alarm. Sorry for the concern.`;
+  const contacts=JSON.parse(localStorage.getItem('contacts')||'[]').filter(c=>c.phone);
+  contacts.forEach((c,i)=>{
+    if(!c.phone)return;
+    setTimeout(()=>{
+      window.open(`sms:${c.phone}?body=${encodeURIComponent(msg)}`,'_blank');
+    },i*300);
+  });
+  if(navigator.onLine)updateNetworkLocation('false_alarm');
+  closeSOS();
+  showToast('✅ False alarm message sent to all contacts');
 }
 
-function endFakeCall() {
+// Fake Call
+function showFakeCall(){
+  const name=localStorage.getItem('fakeCaller')||'Mum';
+  const fcName=document.getElementById('fcCallerName'),fcAva=document.getElementById('fcAvatar');
+  if(fcName)fcName.textContent=name;if(fcAva)fcAva.textContent=name.charAt(0).toUpperCase();
+  document.getElementById('fakeCallOverlay').classList.add('active');
+  if('vibrate' in navigator)navigator.vibrate([1000,500,1000,500,1000]);
+}
+function endFakeCall(){
   document.getElementById('fakeCallOverlay').classList.remove('active');
-  navigator.vibrate && navigator.vibrate(0);
+  navigator.vibrate&&navigator.vibrate(0);
   showSOSOverlay();
 }
 
-// ── COPY WALLET ──
-function copyWallet() {
-  const addr = '0x1b423817bab7058c295c9209453929d605c65f9f';
-  navigator.clipboard?.writeText(addr).then(() => {
-    const btn = document.getElementById('copyBtn');
-    btn.textContent = '✅ Copied!';
-    btn.classList.add('copied');
-    setTimeout(() => { btn.textContent='📋 Copy Wallet Address'; btn.classList.remove('copied'); }, 2500);
-  }).catch(() => { prompt('Copy this wallet address:', addr); });
+// Copy wallet
+function copyWallet(){
+  const addr='0x1b423817bab7058c295c9209453929d605c65f9f';
+  navigator.clipboard?.writeText(addr).then(()=>{
+    const btn=document.getElementById('copyBtn');
+    btn.textContent='✅ Copied!';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='📋 Copy Wallet Address';btn.classList.remove('copied');},2500);
+  }).catch(()=>{prompt('Copy this wallet address:',addr);});
 }
 
-// ── TOAST ──
-function showToast(msg) {
-  const existing = document.getElementById('toast');
-  if (existing) existing.remove();
-  const t = document.createElement('div');
-  t.id = 'toast';
-  t.textContent = msg;
-  t.style.cssText = `position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(13,17,51,0.97);border:1px solid rgba(180,80,255,0.3);color:#f0eeff;padding:10px 20px;border-radius:30px;font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:1px;z-index:9999;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4);animation:fadeUp .3s ease;`;
-  document.body.appendChild(t);
-  setTimeout(() => t.remove(), 2800);
+// Toast
+function showToast(msg){
+  const existing=document.getElementById('toast');if(existing)existing.remove();
+  const t=document.createElement('div');t.id='toast';t.textContent=msg;
+  t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(13,17,51,0.97);border:1px solid rgba(180,80,255,0.3);color:#f0eeff;padding:10px 20px;border-radius:30px;font-family:Rajdhani,sans-serif;font-size:13px;letter-spacing:1px;z-index:9999;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4);';
+  document.body.appendChild(t);setTimeout(()=>t.remove(),2800);
+}
+</script>
+<script>
+const SUPABASE_URL='https://hremkmaztfgozsizxprp.supabase.co';
+const SUPABASE_KEY='sb_publishable_lJtfuayvPv_x2wSmSPI8fw_MFlDvOtT';
+
+async function sbFetch(endpoint,method='GET',body=null){
+  const opts={method,headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Prefer':method==='POST'?'return=representation':''}};
+  if(body)opts.body=JSON.stringify(body);
+  const r=await fetch(SUPABASE_URL+'/rest/v1/'+endpoint,opts);
+  if(!r.ok)throw new Error(await r.text());
+  const text=await r.text();return text?JSON.parse(text):[];
 }
 
-// ══════════════════════════════════
-//  UNRUGGUARD — GUARD NETWORK v2.0
-// ══════════════════════════════════
-
-const SUPABASE_URL = 'https://hremkmaztfgozsizxprp.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_lJtfuayvPv_x2wSmSPI8fw_MFlDvOtT';
-
-async function sbFetch(endpoint, method='GET', body=null) {
-  const opts = {
-    method,
-    headers: {
-      'Content-Type':  'application/json',
-      'apikey':        SUPABASE_KEY,
-      'Authorization': 'Bearer ' + SUPABASE_KEY,
-      'Prefer':        method === 'POST' ? 'return=representation' : '',
-    }
-  };
-  if (body) opts.body = JSON.stringify(body);
-  const r = await fetch(SUPABASE_URL + '/rest/v1/' + endpoint, opts);
-  if (!r.ok) throw new Error(await r.text());
-  const text = await r.text();
-  return text ? JSON.parse(text) : [];
-}
-
-function generateGuardID(username) {
-  const clean  = username.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,12);
-  const suffix = Math.floor(1000 + Math.random() * 9000);
+function generateGuardID(username){
+  const clean=username.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,12);
+  const suffix=Math.floor(1000+Math.random()*9000);
   return `UG-${clean}-${suffix}`;
 }
 
-function initNetwork() {
-  const savedID = localStorage.getItem('guardID');
-  if (savedID) {
-    showNetworkDashboard();
+function initNetwork(){
+  const savedID=localStorage.getItem('guardID');
+  if(savedID){showNetworkDashboard();loadGuardContacts();}
+  else{showNetworkSetup();}
+}
+function showNetworkSetup(){
+  const s=document.getElementById('networkSetup'),d=document.getElementById('networkDashboard');
+  if(s)s.style.display='block';if(d)d.style.display='none';
+}
+function showNetworkDashboard(){
+  const s=document.getElementById('networkSetup'),d=document.getElementById('networkDashboard');
+  if(s)s.style.display='none';if(d)d.style.display='block';
+  const id=localStorage.getItem('guardID')||'',name=localStorage.getItem('guardName')||'';
+  const idEl=document.getElementById('gnIdDisplay'),nameEl=document.getElementById('gnNameDisplay'),avaEl=document.getElementById('gnAvatarDisplay');
+  if(idEl)idEl.textContent=id;if(nameEl)nameEl.textContent=name;if(avaEl)avaEl.textContent=name.charAt(0).toUpperCase();
+}
+
+async function createGuardID(){
+  const input=document.getElementById('gnUsername');
+  if(!input?.value.trim()){showToast('⚠️ Enter your name or username first');return;}
+  const username=input.value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,12);
+  if(!username){showToast('⚠️ Letters and numbers only');return;}
+  const guardID=generateGuardID(username);
+  localStorage.setItem('guardID',guardID);localStorage.setItem('guardName',username);
+  if(navigator.onLine){
+    try{await sbFetch('guard_users','POST',{guard_id:guardID,username,created_at:new Date().toISOString(),last_seen:new Date().toISOString(),lat:null,lng:null});}
+    catch(e){console.warn('Supabase:',e.message);}
+  }
+  showNetworkDashboard();showToast('✅ Your ID: '+guardID);
+  // Subscribe push after creating ID
+  await subscribeToPush();
+}
+
+function shareGuardID(){
+  const id=localStorage.getItem('guardID')||'',name=localStorage.getItem('guardName')||'';
+  const text=`My UnrugGuard ID is: ${id}\nAdd me on GuardNetwork — we can share live locations and alert each other in emergencies.\nDownload UnrugGuard free: https://unrug-guard.vercel.app\nPowered by Unrugpad 🛡️`;
+  if(navigator.share){navigator.share({title:'My UnrugGuard ID',text}).catch(()=>{navigator.clipboard?.writeText(id);showToast('📋 ID copied: '+id);});}
+  else{navigator.clipboard?.writeText(id).then(()=>showToast('📋 ID copied: '+id));}
+}
+
+async function sendGuardRequest(){
+  const input=document.getElementById('addGuardId');
+  const targetID=input?.value?.trim().toUpperCase();
+  const myID=localStorage.getItem('guardID'),myName=localStorage.getItem('guardName');
+  if(!targetID||!targetID.startsWith('UG-')){showToast('⚠️ Enter a valid ID — e.g. UG-ROSE-4431');return;}
+  if(targetID===myID){showToast('⚠️ You cannot add yourself');return;}
+  if(!navigator.onLine){showToast('📶 No internet connection');return;}
+  try{
+    const existing=await sbFetch(`guard_connections?from_id=eq.${myID}&to_id=eq.${targetID}&select=id`);
+    if(existing.length){showToast('⚠️ Request already sent');return;}
+    await sbFetch('guard_connections','POST',{from_id:myID,from_name:myName,to_id:targetID,to_name:'',status:'pending',created_at:new Date().toISOString()});
+    showToast('✅ Invite sent to '+targetID);
+    if(input)input.value='';
     loadGuardContacts();
-  } else {
-    showNetworkSetup();
-  }
+  }catch(e){showToast('❌ Error: '+e.message);}
 }
 
-function showNetworkSetup() {
-  const setup = document.getElementById('networkSetup');
-  const dash  = document.getElementById('networkDashboard');
-  if (setup) setup.style.display = 'block';
-  if (dash)  dash.style.display  = 'none';
+async function loadGuardContacts(){
+  const myID=localStorage.getItem('guardID');if(!myID)return;
+  const list=document.getElementById('guardContactsList');if(!list)return;
+  if(!navigator.onLine){renderGuardContacts(JSON.parse(localStorage.getItem('guardConnections')||'[]'),myID,list);return;}
+  try{
+    const[sent,received]=await Promise.all([sbFetch(`guard_connections?from_id=eq.${myID}&select=*`),sbFetch(`guard_connections?to_id=eq.${myID}&select=*`)]);
+    const all=[...sent,...received];
+    localStorage.setItem('guardConnections',JSON.stringify(all));
+    renderGuardContacts(all,myID,list);
+    const incoming=received.filter(c=>c.status==='pending');
+    if(incoming.length)showToast(`📩 ${incoming.length} new invite${incoming.length>1?'s':''}!`);
+  }catch(e){renderGuardContacts(JSON.parse(localStorage.getItem('guardConnections')||'[]'),myID,list);}
 }
 
-function showNetworkDashboard() {
-  const setup = document.getElementById('networkSetup');
-  const dash  = document.getElementById('networkDashboard');
-  if (setup) setup.style.display = 'none';
-  if (dash)  dash.style.display  = 'block';
-  const id   = localStorage.getItem('guardID')   || '';
-  const name = localStorage.getItem('guardName') || '';
-  const idEl   = document.getElementById('gnIdDisplay');
-  const nameEl = document.getElementById('gnNameDisplay');
-  const avaEl  = document.getElementById('gnAvatarDisplay');
-  if (idEl)   idEl.textContent   = id;
-  if (nameEl) nameEl.textContent = name;
-  if (avaEl)  avaEl.textContent  = name.charAt(0).toUpperCase();
-}
-
-async function createGuardID() {
-  const input = document.getElementById('gnUsername');
-  if (!input?.value.trim()) { showToast('⚠️ Enter your name or username first'); return; }
-  const username = input.value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,12);
-  if (!username) { showToast('⚠️ Letters and numbers only'); return; }
-  const guardID = generateGuardID(username);
-  localStorage.setItem('guardID',   guardID);
-  localStorage.setItem('guardName', username);
-  if (navigator.onLine) {
-    try {
-      await sbFetch('guard_users', 'POST', {
-        guard_id: guardID, username,
-        created_at: new Date().toISOString(),
-        last_seen:  new Date().toISOString(),
-        lat: null, lng: null,
-      });
-    } catch(e) { console.warn('Supabase:', e.message); }
-  }
-  showNetworkDashboard();
-  showToast('✅ Your ID: ' + guardID);
-}
-
-function shareGuardID() {
-  const id   = localStorage.getItem('guardID')   || '';
-  const name = localStorage.getItem('guardName') || '';
-  const text = `My UnrugGuard ID is: ${id}\nAdd me on GuardNetwork — we can share live locations and I can alert you in an emergency.\nDownload UnrugGuard free: https://unrug-guard.vercel.app\nPowered by Unrugpad 🛡️`;
-  if (navigator.share) {
-    navigator.share({title:'My UnrugGuard ID', text}).catch(() => copyToClipboard(id));
-  } else {
-    copyToClipboard(id);
-    showToast('📋 ID copied: ' + id);
-  }
-}
-
-function copyToClipboard(text) {
-  navigator.clipboard?.writeText(text).catch(() => {});
-}
-
-async function sendGuardRequest() {
-  const input    = document.getElementById('addGuardId');
-  const targetID = input?.value?.trim().toUpperCase();
-  const myID     = localStorage.getItem('guardID');
-  const myName   = localStorage.getItem('guardName');
-  if (!targetID || !targetID.startsWith('UG-')) {
-    showToast('⚠️ Enter a valid ID — e.g. UG-ROSE-4431'); return;
-  }
-  if (targetID === myID) { showToast('⚠️ You cannot add yourself'); return; }
-  if (!navigator.onLine) { showToast('📶 No internet — check connection'); return; }
-  try {
-    const existing = await sbFetch(`guard_connections?from_id=eq.${myID}&to_id=eq.${targetID}&select=id`);
-    if (existing.length) { showToast('⚠️ Request already sent'); return; }
-    await sbFetch('guard_connections', 'POST', {
-      from_id: myID, from_name: myName,
-      to_id: targetID, to_name: '',
-      status: 'pending', created_at: new Date().toISOString(),
-    });
-    showToast('✅ Invite sent to ' + targetID);
-    if (input) input.value = '';
-    loadGuardContacts();
-  } catch(e) { showToast('❌ Error: ' + e.message); }
-}
-
-async function loadGuardContacts() {
-  const myID = localStorage.getItem('guardID');
-  if (!myID) return;
-  const list = document.getElementById('guardContactsList');
-  if (!list) return;
-  if (!navigator.onLine) {
-    const local = JSON.parse(localStorage.getItem('guardConnections')||'[]');
-    renderGuardContacts(local, myID, list);
-    return;
-  }
-  try {
-    const [sent, received] = await Promise.all([
-      sbFetch(`guard_connections?from_id=eq.${myID}&select=*`),
-      sbFetch(`guard_connections?to_id=eq.${myID}&select=*`),
-    ]);
-    const all = [...sent, ...received];
-    localStorage.setItem('guardConnections', JSON.stringify(all));
-    renderGuardContacts(all, myID, list);
-    const incoming = received.filter(c=>c.status==='pending');
-    if (incoming.length) showToast(`📩 ${incoming.length} new invite${incoming.length>1?'s':''}!`);
-  } catch(e) {
-    const local = JSON.parse(localStorage.getItem('guardConnections')||'[]');
-    renderGuardContacts(local, myID, list);
-  }
-}
-
-function renderGuardContacts(connections, myID, list) {
-  if (!connections.length) {
-    list.innerHTML = `<div class="info-box" style="text-align:center"><strong>No connections yet</strong><br>Share your ID with trusted contacts to connect.</div>`;
-    updateMapPins([], myID);
-    return;
-  }
-  list.innerHTML = '';
-  connections.forEach(c => {
-    const isFrom    = c.from_id === myID;
-    const otherID   = isFrom ? c.to_id   : c.from_id;
-    const otherName = isFrom ? (c.to_name||otherID) : (c.from_name||c.from_id);
-    const status    = c.status;
-    const initial   = (otherName||'U').charAt(0).toUpperCase();
-    let statusHTML='', actionHTML='';
-    if (status==='pending' && isFrom) {
-      statusHTML = '<div class="nc-status pending">⏳ Awaiting Approval</div>';
-      actionHTML = `<div class="nc-action" onclick="cancelRequest('${c.id}')">Cancel</div>`;
-    } else if (status==='pending' && !isFrom) {
-      statusHTML = '<div class="nc-status incoming">📩 Wants to connect</div>';
-      actionHTML = `<div style="display:flex;flex-direction:column;gap:4px">
-        <div class="nc-action approve" onclick="approveRequest('${c.id}')">✓ Approve</div>
-        <div class="nc-action decline" onclick="declineRequest('${c.id}')">✕ Decline</div>
-      </div>`;
-    } else if (status==='approved') {
-      const lastLoc = c.lat && c.lng ? `https://maps.google.com/?q=${c.lat},${c.lng}` : null;
-      const timeAgo = c.last_seen ? formatTimeAgo(c.last_seen) : '';
-      statusHTML = `<div class="nc-status approved">✓ Connected${timeAgo ? ' · '+timeAgo : ''}</div>`;
-      actionHTML = lastLoc
-        ? `<a class="nc-action" href="${lastLoc}" target="_blank">📍 Last Location</a>`
-        : `<div class="nc-action" style="opacity:0.5">📍 No location yet</div>`;
+function renderGuardContacts(connections,myID,list){
+  if(!connections.length){list.innerHTML='<div class="info-box" style="text-align:center"><strong>No connections yet</strong><br>Share your ID with trusted contacts to connect.</div>';updateMapPins([],myID);return;}
+  list.innerHTML='';
+  connections.forEach(c=>{
+    const isFrom=c.from_id===myID;
+    const otherID=isFrom?c.to_id:c.from_id;
+    const otherName=isFrom?(c.to_name||otherID):(c.from_name||c.from_id);
+    const status=c.status;
+    const initial=(otherName||'U').charAt(0).toUpperCase();
+    let statusHTML='',actionHTML='';
+    if(status==='pending'&&isFrom){
+      statusHTML='<div class="nc-status pending">⏳ Awaiting Approval</div>';
+      actionHTML=`<div class="nc-actions"><div class="nc-action" onclick="cancelRequest('${c.id}')">Cancel</div></div>`;
+    } else if(status==='pending'&&!isFrom){
+      statusHTML='<div class="nc-status incoming">📩 Wants to connect</div>';
+      actionHTML=`<div class="nc-actions"><div class="nc-action approve" onclick="approveRequest('${c.id}')">✓ Approve</div><div class="nc-action decline" onclick="declineRequest('${c.id}')">✕ Decline</div></div>`;
+    } else if(status==='approved'){
+      const lastLoc=c.lat&&c.lng?`https://maps.google.com/?q=${c.lat},${c.lng}`:null;
+      const timeAgo=c.last_seen?formatTimeAgo(c.last_seen):'';
+      statusHTML=`<div class="nc-status approved">✓ Connected${timeAgo?' · '+timeAgo:''}</div>`;
+      actionHTML=`<div class="nc-actions">${lastLoc?`<a class="nc-action" href="${lastLoc}" target="_blank">📍 Last Location</a>`:'<div class="nc-action" style="opacity:.5">📍 No location yet</div>'}<div class="nc-action remove" onclick="removeConnection('${c.id}','${otherName}')">🗑 Remove</div></div>`;
     }
-    list.innerHTML += `
-      <div class="network-contact" id="nc-${c.id}">
-        <div class="nc-avatar">${initial}</div>
-        <div style="flex:1;min-width:0">
-          <div class="nc-name">${otherName}</div>
-          <div class="nc-id-small">${otherID}</div>
-          ${statusHTML}
-        </div>
-        ${actionHTML}
-      </div>`;
+    list.innerHTML+=`<div class="network-contact" id="nc-${c.id}"><div class="nc-avatar">${initial}</div><div style="flex:1;min-width:0"><div class="nc-name">${otherName}</div><div class="nc-id-small">${otherID}</div>${statusHTML}</div>${actionHTML}</div>`;
   });
-  updateMapPins(connections.filter(c=>c.status==='approved' && c.lat && c.lng), myID);
+  updateMapPins(connections.filter(c=>c.status==='approved'&&c.lat&&c.lng),myID);
 }
 
-function formatTimeAgo(isoString) {
-  const diff = Math.floor((Date.now() - new Date(isoString)) / 1000);
-  if (diff < 60)    return 'just now';
-  if (diff < 3600)  return Math.floor(diff/60)+'m ago';
-  if (diff < 86400) return Math.floor(diff/3600)+'h ago';
-  return Math.floor(diff/86400)+'d ago';
+function formatTimeAgo(iso){
+  const diff=Math.floor((Date.now()-new Date(iso))/1000);
+  if(diff<60)return 'just now';if(diff<3600)return Math.floor(diff/60)+'m ago';
+  if(diff<86400)return Math.floor(diff/3600)+'h ago';return Math.floor(diff/86400)+'d ago';
 }
 
-async function approveRequest(connId) {
-  try {
-    await sbFetch(`guard_connections?id=eq.${connId}`, 'PATCH', {status:'approved'});
-    showToast('✅ Connection approved!');
-    updateLocalConn(connId, 'approved');
-    loadGuardContacts();
-  } catch(e) { showToast('❌ Error approving'); }
+async function approveRequest(connId){
+  try{await sbFetch(`guard_connections?id=eq.${connId}`,'PATCH',{status:'approved'});updateLocalConn(connId,'approved');loadGuardContacts();showToast('✅ Connection approved!');}
+  catch(e){showToast('❌ Error approving');}
+}
+async function declineRequest(connId){
+  try{await sbFetch(`guard_connections?id=eq.${connId}`,'DELETE');removeLocalConn(connId);loadGuardContacts();showToast('Request declined — they can send again anytime');}
+  catch(e){showToast('❌ Error');}
+}
+async function cancelRequest(connId){
+  try{await sbFetch(`guard_connections?id=eq.${connId}`,'DELETE');removeLocalConn(connId);loadGuardContacts();}
+  catch(e){showToast('❌ Error');}
+}
+async function removeConnection(connId,name){
+  if(!confirm(`Remove ${name} from your GuardNetwork? They will no longer receive your SOS alerts or see your location.`))return;
+  try{await sbFetch(`guard_connections?id=eq.${connId}`,'DELETE');removeLocalConn(connId);loadGuardContacts();showToast(`✅ ${name} removed from GuardNetwork`);}
+  catch(e){showToast('❌ Error removing');}
+}
+function updateLocalConn(id,status){const c=JSON.parse(localStorage.getItem('guardConnections')||'[]');const i=c.findIndex(x=>x.id===id);if(i!==-1){c[i].status=status;localStorage.setItem('guardConnections',JSON.stringify(c));}}
+function removeLocalConn(id){localStorage.setItem('guardConnections',JSON.stringify(JSON.parse(localStorage.getItem('guardConnections')||'[]').filter(c=>c.id!==id)));}
+
+async function sendGuardAlert(location,testMode=false){
+  const myID=localStorage.getItem('guardID'),myName=localStorage.getItem('guardName');if(!myID)return;
+  const prefix=testMode?'[TEST] ':'';
+  try{
+    await sbFetch('guard_users?guard_id=eq.'+myID,'PATCH',{last_alert:JSON.stringify({from_id:myID,from_name:myName,location,message:`${prefix}🚨 EMERGENCY! ${myName} needs help NOW. Location: ${location}`,timestamp:new Date().toISOString(),type:'sos'}),last_seen:new Date().toISOString()});
+  }catch(e){}
 }
 
-async function declineRequest(connId) {
-  try {
-    await sbFetch(`guard_connections?id=eq.${connId}`, 'DELETE');
-    removeLocalConn(connId);
-    loadGuardContacts();
-  } catch(e) { showToast('❌ Error declining'); }
+async function updateNetworkLocation(locationStr){
+  const myID=localStorage.getItem('guardID');if(!myID)return;
+  if(locationStr==='false_alarm'){try{await sbFetch('guard_users?guard_id=eq.'+myID,'PATCH',{last_alert:JSON.stringify({type:'false_alarm',timestamp:new Date().toISOString()})});}catch(e){}return;}
+  const match=typeof locationStr==='string'?locationStr.match(/q=([-\d.]+),([-\d.]+)/):null;if(!match)return;
+  const lat=parseFloat(match[1]),lng=parseFloat(match[2]);
+  try{await sbFetch(`guard_users?guard_id=eq.${myID}`,'PATCH',{lat,lng,last_seen:new Date().toISOString()});}catch(e){}
 }
 
-async function cancelRequest(connId) {
-  try {
-    await sbFetch(`guard_connections?id=eq.${connId}`, 'DELETE');
-    removeLocalConn(connId);
-    loadGuardContacts();
-  } catch(e) { showToast('❌ Error cancelling'); }
+function refreshNetwork(){
+  if(!navigator.onLine){showToast('📶 No internet connection');return;}
+  showToast('🔄 Refreshing...');loadGuardContacts();autoSaveLocation();
 }
 
-function updateLocalConn(id, status) {
-  const conns = JSON.parse(localStorage.getItem('guardConnections')||'[]');
-  const idx   = conns.findIndex(c=>c.id===id);
-  if (idx!==-1) { conns[idx].status=status; localStorage.setItem('guardConnections', JSON.stringify(conns)); }
-}
-
-function removeLocalConn(id) {
-  const conns = JSON.parse(localStorage.getItem('guardConnections')||'[]').filter(c=>c.id!==id);
-  localStorage.setItem('guardConnections', JSON.stringify(conns));
-}
-
-async function sendGuardAlert(location) {
-  const myID   = localStorage.getItem('guardID');
-  const myName = localStorage.getItem('guardName');
-  if (!myID) return;
-  try {
-    const connections = JSON.parse(localStorage.getItem('guardConnections')||'[]');
-    const approved    = connections.filter(c=>c.status==='approved');
-    const alertData   = {
-      from_id:   myID,
-      from_name: myName,
-      location,
-      message:   `🚨 EMERGENCY! ${myName} needs help NOW. Location: ${location}`,
-      timestamp: new Date().toISOString(),
-      type:      'sos',
-    };
-    await sbFetch('guard_users?guard_id=eq.'+myID, 'PATCH', {
-      last_alert: JSON.stringify(alertData),
-      last_seen:  new Date().toISOString(),
-    });
-  } catch(e) {}
-}
-
-async function updateNetworkLocation(locationStr) {
-  const myID = localStorage.getItem('guardID');
-  if (!myID) return;
-  const match = typeof locationStr === 'string' ? locationStr.match(/q=([-\d.]+),([-\d.]+)/) : null;
-  if (!match) return;
-  const lat = parseFloat(match[1]);
-  const lng = parseFloat(match[2]);
-  try {
-    await sbFetch(`guard_users?guard_id=eq.${myID}`, 'PATCH', {
-      lat, lng, last_seen: new Date().toISOString()
-    });
-    // Also update connections where we show location
-    const conns = JSON.parse(localStorage.getItem('guardConnections')||'[]');
-    conns.forEach(c => {
-      if (c.from_id === myID) { c.lat=lat; c.lng=lng; }
-    });
-    localStorage.setItem('guardConnections', JSON.stringify(conns));
-  } catch(e) {}
-}
-
-function refreshNetwork() {
-  if (!navigator.onLine) { showToast('📶 No internet connection'); return; }
-  showToast('🔄 Refreshing...');
-  loadGuardContacts();
-  autoSaveLocation();
-}
-
-function updateMapPins(approved, myID) {
-  const mapIcon  = document.getElementById('mapIcon');
-  const mapLabel = document.getElementById('mapLabel');
-  const pinsDiv  = document.getElementById('mapPins');
-  if (!pinsDiv) return;
-  pinsDiv.innerHTML = '';
-  if (!approved.length) {
-    if (mapIcon)  mapIcon.style.display  = 'block';
-    if (mapLabel) mapLabel.style.display = 'block';
-    return;
-  }
-  if (mapIcon)  mapIcon.style.display  = 'none';
-  if (mapLabel) mapLabel.textContent   = `${approved.length} contact${approved.length>1?'s':''} visible`;
-  const mapEl = document.querySelector('.map-placeholder');
-  if (!mapEl) return;
-  const w = mapEl.offsetWidth, h = mapEl.offsetHeight;
-  const lats=approved.map(c=>c.lat), lngs=approved.map(c=>c.lng);
-  const minLat=Math.min(...lats), maxLat=Math.max(...lats);
-  const minLng=Math.min(...lngs), maxLng=Math.max(...lngs);
-  const latR=maxLat-minLat||0.01, lngR=maxLng-minLng||0.01;
+function updateMapPins(approved,myID){
+  const mapIcon=document.getElementById('mapIcon'),mapLabel=document.getElementById('mapLabel'),pinsDiv=document.getElementById('mapPins');
+  if(!pinsDiv)return;pinsDiv.innerHTML='';
+  if(!approved.length){if(mapIcon)mapIcon.style.display='block';if(mapLabel)mapLabel.style.display='block';return;}
+  if(mapIcon)mapIcon.style.display='none';if(mapLabel)mapLabel.textContent=`${approved.length} contact${approved.length>1?'s':''} visible`;
+  const mapEl=document.querySelector('.map-placeholder');if(!mapEl)return;
+  const w=mapEl.offsetWidth,h=mapEl.offsetHeight;
+  const lats=approved.map(c=>c.lat),lngs=approved.map(c=>c.lng);
+  const minLat=Math.min(...lats),maxLat=Math.max(...lats),minLng=Math.min(...lngs),maxLng=Math.max(...lngs);
+  const latR=maxLat-minLat||0.01,lngR=maxLng-minLng||0.01;
   const colors=['#cc44ff','#00e676','#ff9100','#2196F3','#ff1744'];
-  approved.forEach((c,i) => {
-    const x = ((c.lng-minLng)/lngR)*(w*0.7)+w*0.15;
-    const y = ((maxLat-c.lat)/latR)*(h*0.7)+h*0.15;
-    const name = c.from_id===myID ? (c.to_name||c.to_id) : c.from_name;
+  approved.forEach((c,i)=>{
+    const x=((c.lng-minLng)/lngR)*(w*0.7)+w*0.15,y=((maxLat-c.lat)/latR)*(h*0.7)+h*0.15;
+    const name=c.from_id===myID?(c.to_name||c.to_id):c.from_name;
     const initial=(name||'U').charAt(0).toUpperCase();
-    const color=colors[i%colors.length];
-    const pin=document.createElement('div');
-    pin.className='map-pin';
-    pin.style.cssText=`left:${x}px;top:${y}px`;
-    pin.innerHTML=`<div class="pin-label">${initial} ${(name||'').slice(0,6)}</div><div class="pin-dot" style="background:${color}"></div>`;
+    const pin=document.createElement('div');pin.className='map-pin';pin.style.cssText=`left:${x}px;top:${y}px`;
+    pin.innerHTML=`<div class="pin-label">${initial} ${(name||'').slice(0,6)}</div><div class="pin-dot" style="background:${colors[i%5]};box-shadow:0 0 8px ${colors[i%5]}"></div>`;
     pinsDiv.appendChild(pin);
   });
 }
-
 </script>
 <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('UnrugGuard offline ready'))
-        .catch(e => console.warn('SW:', e));
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',async()=>{
+      try{swRegistration=await navigator.serviceWorker.register('/sw.js');console.log('SW ready');await subscribeToPush();}
+      catch(e){console.warn('SW:',e);}
     });
   }
 </script>
