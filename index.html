@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#05071a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="description" content="UnrugGuard — Free emergency safety app. Alert your contacts instantly. Powered by Unrugpad.">
+<meta name="description" content="UnrugGuard — Free global emergency safety app. Alert your contacts instantly. Powered by Unrugpad.">
 <title>UnrugGuard — Powered by Unrugpad</title>
 <link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -254,16 +254,35 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
 .phase-title{font-size:13px;font-weight:700;color:var(--pink)}
 .phase-desc{font-size:11px;color:var(--muted);margin-top:1px}
 
+
+/* PWA Banner */
+.pwa-banner{background:linear-gradient(135deg,rgba(119,34,204,.2),rgba(224,96,255,.1));border-bottom:1px solid rgba(180,80,255,.3);padding:10px 14px;display:flex;align-items:center;gap:10px;animation:fadeUp .4s ease}
+.pwa-banner.hidden{display:none}
+.pwa-banner-text{flex:1;font-size:12px;color:var(--lavender);line-height:1.4}
+.pwa-banner-text strong{color:var(--white);display:block;font-size:13px}
+.pwa-install-btn{background:linear-gradient(135deg,var(--purple),var(--pink));border:none;border-radius:20px;padding:7px 14px;color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:11px;letter-spacing:1px;cursor:pointer;white-space:nowrap}
+.pwa-dismiss{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0 4px;line-height:1}
+
+/* Saved contact styles */
+.contact-card.saved{border-color:rgba(0,230,118,.2);background:rgba(0,230,118,.03)}
+.contact-saved-info{flex:1;min-width:0}
+.contact-saved-name{font-family:'Exo 2',sans-serif;font-weight:700;font-size:15px;color:var(--white)}
+.contact-saved-phone{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--lavender);margin-top:2px}
+.contact-wa-badge{display:inline-block;margin-top:4px;font-size:10px;color:#25D366;background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.3);border-radius:10px;padding:2px 8px}
+.contact-edit-btn{background:rgba(119,34,204,.15);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--lavender);cursor:pointer;font-size:14px;transition:.3s;flex-shrink:0}
+.contact-edit-btn:hover{border-color:var(--purple2);color:var(--white)}
+
+/* Network extras */
+.nc-id-small{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);margin-top:1px;margin-bottom:2px}
+
 </style>
 </head>
 <body>
 
-<!-- ══ SOS OVERLAY ══ -->
+<!-- SOS OVERLAY -->
 <div class="sos-overlay" id="sosOverlay">
   <div class="sos-overlay-rings">
-    <div class="ring r1"></div>
-    <div class="ring r2"></div>
-    <div class="ring r3"></div>
+    <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
   </div>
   <div class="overlay-icon">🚨</div>
   <div class="overlay-title">SOS SENT!</div>
@@ -271,7 +290,7 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
   <button class="overlay-close" onclick="closeSOS()">I AM SAFE NOW</button>
 </div>
 
-<!-- ══ FAKE CALL OVERLAY ══ -->
+<!-- FAKE CALL OVERLAY -->
 <div class="fakecall-overlay" id="fakeCallOverlay">
   <div class="fc-top">
     <div class="fc-caller" id="fcCallerName">Mum</div>
@@ -284,7 +303,18 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
   </div>
 </div>
 
-<!-- ══ TICKER ══ -->
+<!-- PWA INSTALL BANNER -->
+<div class="pwa-banner hidden" id="pwaBanner">
+  <span style="font-size:22px">📲</span>
+  <div class="pwa-banner-text">
+    <strong>Install UnrugGuard on your phone</strong>
+    Tap Install for the best experience — works offline too
+  </div>
+  <button class="pwa-install-btn" onclick="installPWA()">Install</button>
+  <button class="pwa-dismiss" onclick="dismissPWA()">✕</button>
+</div>
+
+<!-- TOKEN TICKER -->
 <div class="ticker-bar">
   <div class="ticker-track" id="tickerTrack">
     <a class="ticker-item" href="https://dexscreener.com/solana/JuLhhMjaWyWKCWEPetMV5hucpCmR212MzrRLWWZEgem" target="_blank">
@@ -306,7 +336,7 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
   </div>
 </div>
 
-<!-- ══ HEADER ══ -->
+<!-- HEADER -->
 <header class="app-header">
   <div class="logo-mark">
     <div class="glow-ring"></div>
@@ -350,7 +380,7 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
   </div>
 </header>
 
-<!-- ══ NAV ══ -->
+<!-- NAV -->
 <nav class="nav-tabs">
   <div class="nav-tab active" onclick="showScreen('home',this)">🏠<span>Home</span></div>
   <div class="nav-tab" onclick="showScreen('contacts',this)">👥<span>Contacts</span></div>
@@ -359,12 +389,9 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
   <div class="nav-tab" onclick="showScreen('network',this)">🛡️<span>Network</span></div>
 </nav>
 
-<!-- ══════════ SCREENS ══════════ -->
-
 <!-- HOME -->
 <div class="screen active" id="screen-home">
   <div class="battery-warning hidden" id="batteryWarn">🔋 Battery low! Charge before entering a risky area.</div>
-
   <div class="sos-wrapper">
     <button class="sos-btn" id="sosBtn" onclick="fireSOS()">
       <span class="sos-label">SOS</span>
@@ -375,7 +402,6 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
       <span id="triggerText">Shake to Send active</span>
     </div>
   </div>
-
   <div class="divider"></div>
   <div class="section-title" id="emergencyTitle">🇳🇬 Nigeria Emergency Numbers</div>
   <div class="emergency-grid" id="emergencyGrid"></div>
@@ -385,7 +411,7 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
 <div class="screen" id="screen-contacts">
   <div class="info-box">
     <strong>Your Name / Username</strong>
-    <input class="app-input" type="text" placeholder="e.g. Kalu or GuardKalu (max 12 chars)" id="userName" maxlength="12" oninput="saveUserName()">
+    <input class="app-input" type="text" placeholder="e.g. Kalu or GuardKalu (max 12 chars)" id="userName" maxlength="12" oninput="saveUserName()" style="margin-top:6px">
   </div>
   <div class="info-box">
     <strong>Custom SOS Message</strong>
@@ -393,14 +419,14 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
     <div style="font-size:10px;color:var(--muted);margin-top:4px">Use [GPS] and [Your name] as placeholders</div>
   </div>
   <div class="info-box">
-    <strong>🔑 Safe Word</strong> — Say this secretly on a call to signal danger
+    <strong>🔑 Safe Word</strong> — Say this on a call to secretly signal danger
     <input class="app-input" style="margin-top:8px" type="text" placeholder="e.g. Pineapple" id="safeWord" oninput="saveSafeWord()">
     <div class="safe-word-display" id="safeWordDisplay">—</div>
   </div>
-
   <div class="section-title">Emergency Contacts (Up to 5)</div>
   <div class="info-box" style="margin-bottom:14px">
-    <strong>📱 Import from phone contacts</strong>
+    <strong>📱 Import from phone contacts</strong><br>
+    <small style="color:var(--muted)">Tap to open your phone contacts and select</small>
     <button class="btn-outline" style="margin-top:8px;padding:10px" onclick="importContacts()">📲 Open Phone Contacts</button>
   </div>
   <div id="contactsList"></div>
@@ -413,58 +439,32 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
   <div class="trigger-options">
     <div class="trigger-option selected" id="trig-shake" onclick="selectTrigger('shake')">
       <span class="trigger-option-icon">📳</span>
-      <div>
-        <div class="trigger-option-title">Shake to Send</div>
-        <div class="trigger-option-desc">Shake phone 3× in pocket — completely invisible</div>
-      </div>
+      <div><div class="trigger-option-title">Shake to Send</div><div class="trigger-option-desc">Shake phone 3× in pocket — completely invisible</div></div>
       <div class="trigger-radio"></div>
     </div>
     <div class="trigger-option" id="trig-silent" onclick="selectTrigger('silent')">
       <span class="trigger-option-icon">🔕</span>
-      <div>
-        <div class="trigger-option-title">Silent SOS</div>
-        <div class="trigger-option-desc">Press volume button 3× — no screen change</div>
-      </div>
+      <div><div class="trigger-option-title">Silent SOS</div><div class="trigger-option-desc">Press volume button 3× — no screen change</div></div>
       <div class="trigger-radio"></div>
     </div>
     <div class="trigger-option" id="trig-fakecall" onclick="selectTrigger('fakecall')">
       <span class="trigger-option-icon">📞</span>
-      <div>
-        <div class="trigger-option-title">Fake Call Button</div>
-        <div class="trigger-option-desc">Shows incoming call screen while SOS fires silently</div>
-      </div>
+      <div><div class="trigger-option-title">Fake Call Button</div><div class="trigger-option-desc">Shows incoming call screen while SOS fires silently</div></div>
       <div class="trigger-radio"></div>
     </div>
   </div>
-
   <div id="fakeCallSection" style="display:none;margin-top:14px">
     <div class="info-box">
       <strong>Fake Caller Name:</strong>
       <input class="app-input" style="margin-top:8px" type="text" placeholder="e.g. Mum" id="fakeCallerName" oninput="saveFakeCaller()">
     </div>
   </div>
-
   <div class="divider"></div>
   <div class="section-title">About</div>
   <div class="settings-card">
-    <div class="settings-row">
-      <div class="settings-row-left">
-        <div class="settings-icon">ℹ️</div>
-        <div><div class="settings-row-title">UnrugGuard v2.0</div><div class="settings-row-sub">Global emergency safety app</div></div>
-      </div>
-    </div>
-    <div class="settings-row">
-      <div class="settings-row-left">
-        <div class="settings-icon">🌍</div>
-        <div><div class="settings-row-title">Available Worldwide</div><div class="settings-row-sub">Auto-detects your country & emergency numbers</div></div>
-      </div>
-    </div>
-    <div class="settings-row">
-      <div class="settings-row-left">
-        <div class="settings-icon">🛡️</div>
-        <div><div class="settings-row-title">100% Free — Always</div><div class="settings-row-sub">No subscription. No hidden fees. Ever.</div></div>
-      </div>
-    </div>
+    <div class="settings-row"><div class="settings-row-left"><div class="settings-icon">ℹ️</div><div><div class="settings-row-title">UnrugGuard v2.0</div><div class="settings-row-sub">Global emergency safety app</div></div></div></div>
+    <div class="settings-row"><div class="settings-row-left"><div class="settings-icon">🌍</div><div><div class="settings-row-title">Available Worldwide</div><div class="settings-row-sub">Auto-detects your country & emergency numbers</div></div></div></div>
+    <div class="settings-row"><div class="settings-row-left"><div class="settings-icon">🛡️</div><div><div class="settings-row-title">100% Free — Always</div><div class="settings-row-sub">No subscription. No hidden fees. Ever.</div></div></div></div>
   </div>
 </div>
 
@@ -473,42 +473,67 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
   <div class="guide-hero">
     <div class="guide-hero-icon">📖</div>
     <div class="guide-hero-title">How To Use UnrugGuard</div>
-    <div class="guide-hero-sub">Read this before you need it. Knowing how to use this app can save your life.</div>
+    <div class="guide-hero-sub">Read this before you need it. Knowing how to use this app could save your life.</div>
   </div>
 
   <div class="guide-step">
-    <div class="guide-step-header"><div class="guide-step-num">1</div><span class="guide-step-icon">👥</span><div class="guide-step-title">Set Up Your Contacts First</div></div>
-    <div class="guide-step-body">Go to the <strong>Contacts tab</strong> and add up to <strong>5 people</strong> you trust. Import directly from your phone contacts — no typing needed. Add your name and an optional custom SOS message. Include your blood type or medical condition if important.<span class="tip">💡 Add people who will ACT fast — not just people you know.</span></div>
+    <div class="guide-step-header"><div class="guide-step-num">1</div><span class="guide-step-icon">📲</span><div class="guide-step-title">Install on Your Phone</div></div>
+    <div class="guide-step-body">Open UnrugGuard in <strong>Chrome</strong> on your Android phone. Tap the <strong>Install</strong> banner at the top or tap the browser menu (3 dots) → <strong>Add to Home Screen</strong>. UnrugGuard will appear on your home screen like a real app and works offline.<span class="tip">💡 Installing gives you the best experience — faster, full screen, and works without internet after first load.</span></div>
   </div>
 
   <div class="guide-step">
-    <div class="guide-step-header"><div class="guide-step-num">2</div><span class="guide-step-icon">⚙️</span><div class="guide-step-title">Choose Your Trigger Method</div></div>
-    <div class="guide-step-body">Go to <strong>Settings</strong> and choose your trigger. <strong>Shake to Send</strong> — shake phone 3× in pocket, completely invisible, best for armed robbery. <strong>Silent SOS</strong> — press volume button 3×, no screen change. <strong>Fake Call</strong> — shows incoming call screen while SOS fires silently.<span class="warning">⚠️ Open UnrugGuard BEFORE entering a risky area. The app must be open for triggers to work.</span></div>
+    <div class="guide-step-header"><div class="guide-step-num">2</div><span class="guide-step-icon">👤</span><div class="guide-step-title">Set Up Your Profile</div></div>
+    <div class="guide-step-body">Go to <strong>Contacts tab</strong> and enter your name or username. This name appears in every SOS message your contacts receive. You can also write a <strong>custom SOS message</strong> — include your blood type or medical condition if it is important.<span class="tip">💡 Keep your name short and clear. In an emergency your contacts need to know immediately who is sending the alert.</span></div>
   </div>
 
   <div class="guide-step">
-    <div class="guide-step-header"><div class="guide-step-num">3</div><span class="guide-step-icon">🔴</span><div class="guide-step-title">How the SOS Button Works</div></div>
-    <div class="guide-step-body">When SOS fires: 1) App gets your GPS location instantly. 2) Builds a Google Maps link. 3) Sends SMS to ALL contacts at once with your location and name. Works with <strong>zero data</strong> on any network worldwide.<span class="tip">💡 If GPS fails the message still sends — always better to send than not send.</span></div>
+    <div class="guide-step-header"><div class="guide-step-num">3</div><span class="guide-step-icon">👥</span><div class="guide-step-title">Add Emergency Contacts</div></div>
+    <div class="guide-step-body">Add up to <strong>5 trusted people</strong>. Tap <strong>Open Phone Contacts</strong> to import directly — no typing needed. Or enter name and phone number manually with country code e.g. +234XXXXXXXXXX. Toggle WhatsApp on for contacts who use it. Once saved each contact shows their name clearly with an <strong>edit ✏️ button</strong> to change anytime.<span class="warning">⚠️ Add people who will ACT fast — not just people you know. Someone who is awake at night. Someone who can call for help immediately.</span></div>
   </div>
 
   <div class="guide-step">
-    <div class="guide-step-header"><div class="guide-step-num">4</div><span class="guide-step-icon">🔑</span><div class="guide-step-title">The Safe Word</div></div>
-    <div class="guide-step-body">Set a secret word — e.g. <strong>"Pineapple"</strong>. If you are in danger but cannot press SOS, call a contact and say your safe word naturally in conversation. They know you are in danger without the attacker realising.<span class="tip">💡 Tell your contacts the safe word BEFORE an emergency happens.</span></div>
+    <div class="guide-step-header"><div class="guide-step-num">4</div><span class="guide-step-icon">🔑</span><div class="guide-step-title">Set Your Safe Word</div></div>
+    <div class="guide-step-body">Choose a secret word — e.g. <strong>Pineapple</strong>. If you are in danger but cannot press SOS, call a trusted contact and say your safe word naturally in the conversation. They will know you are in danger without the attacker realising.<span class="tip">💡 Tell ALL your emergency contacts your safe word before an emergency happens. Agree on it together.</span></div>
   </div>
 
   <div class="guide-step">
-    <div class="guide-step-header"><div class="guide-step-num">5</div><span class="guide-step-icon">🌍</span><div class="guide-step-title">Emergency Numbers — Your Country</div></div>
-    <div class="guide-step-body">UnrugGuard <strong>automatically detects your country</strong> and shows the correct local emergency numbers on the Home screen. Tap any number to call instantly with zero data. Works worldwide.</div>
+    <div class="guide-step-header"><div class="guide-step-num">5</div><span class="guide-step-icon">⚙️</span><div class="guide-step-title">Choose Your Trigger Method</div></div>
+    <div class="guide-step-body">Go to <strong>Settings</strong> and pick your trigger. Change it based on your situation:<br><br>
+    <strong>📳 Shake to Send</strong> — Shake phone 3 times in your pocket. Nothing shows on screen. Best for armed robbery or kidnapping.<br><br>
+    <strong>🔕 Silent SOS</strong> — Press volume button 3 times. No screen change. Best for being followed or watched.<br><br>
+    <strong>📞 Fake Call</strong> — SOS fires silently then shows a fake incoming call. Best for lower threat situations.<span class="warning">⚠️ The app must be OPEN for triggers to work. Open UnrugGuard before entering any risky area.</span></div>
   </div>
 
   <div class="guide-step">
-    <div class="guide-step-header"><div class="guide-step-num">6</div><span class="guide-step-icon">🛡️</span><div class="guide-step-title">GuardNetwork — Live Location Sharing</div></div>
-    <div class="guide-step-body">Go to the <strong>Network tab</strong> and create your GuardNetwork ID — e.g. <strong>UG-KALU-7742</strong>. Share your ID with trusted contacts. When they add your ID and you approve, you can see each other's live location on a map inside the app. Requires internet.<span class="tip">💡 GuardNetwork works independently from SOS. SOS always works even without internet.</span></div>
+    <div class="guide-step-header"><div class="guide-step-num">6</div><span class="guide-step-icon">🔴</span><div class="guide-step-title">How SOS Works</div></div>
+    <div class="guide-step-body">When SOS fires: 1) Gets your GPS location instantly. 2) Builds a Google Maps link. 3) Sends SMS to all phone number contacts at once. 4) Sends instant in-app alert to all GuardNetwork trusted contacts. 5) Their phones receive a loud alarm automatically — no extra taps needed.<br><br>SMS works with <strong>zero data</strong> on any network worldwide. If GPS fails the message still sends without a location link.<span class="tip">💡 Your last known location is always saved every time you open the app — even if GPS fails during emergency.</span></div>
   </div>
 
   <div class="guide-step">
-    <div class="guide-step-header"><div class="guide-step-num">7</div><span class="guide-step-icon">🔋</span><div class="guide-step-title">Before Entering a Risky Area</div></div>
-    <div class="guide-step-body">✅ Open UnrugGuard<br>✅ Check contacts are saved<br>✅ Check trigger method is set<br>✅ Charge phone above 20%<br>✅ Tell one contact where you are going<br>✅ Know your safe word<span class="warning">⚠️ This app cannot work if your phone is off or dead. Always charge before travelling.</span></div>
+    <div class="guide-step-header"><div class="guide-step-num">7</div><span class="guide-step-icon">🛡️</span><div class="guide-step-title">GuardNetwork — App to App</div></div>
+    <div class="guide-step-body">Go to the <strong>Network tab</strong> and create your <strong>GuardNetwork ID</strong> — e.g. UG-KALU-7742. Share this ID with trusted people. They enter your ID in their app and send you an invite. You must <strong>approve the invite</strong> before they can see anything.<br><br>Once connected:<br>• You can see each other's live location on a map<br>• When you press SOS their phone rings automatically<br>• They see your exact location immediately<br>• You can see their <strong>last known location</strong> even if their phone is off<span class="tip">💡 GuardNetwork only works between people who BOTH have UnrugGuard installed and have approved each other.</span></div>
+  </div>
+
+  <div class="guide-step">
+    <div class="guide-step-header"><div class="guide-step-num">8</div><span class="guide-step-icon">📍</span><div class="guide-step-title">Last Known Location</div></div>
+    <div class="guide-step-body">Every time someone opens UnrugGuard their location is saved automatically. If someone goes missing — open their profile in GuardNetwork and tap <strong>Last Location</strong>. You will see exactly where they were and when. This works even if their phone is now off, taken, or destroyed.<span class="warning">⚠️ This requires both people to be connected on GuardNetwork with approved invites.</span></div>
+  </div>
+
+  <div class="guide-step">
+    <div class="guide-step-header"><div class="guide-step-num">9</div><span class="guide-step-icon">🌍</span><div class="guide-step-title">Emergency Numbers — Your Country</div></div>
+    <div class="guide-step-body">UnrugGuard <strong>automatically detects your country</strong> and shows the correct local emergency numbers on the Home screen. Tap any number to call instantly — works with zero data. Supported countries include Nigeria, Ghana, Kenya, South Africa, UK, USA, India, Germany, France and more.</div>
+  </div>
+
+  <div class="guide-step">
+    <div class="guide-step-header"><div class="guide-step-num">10</div><span class="guide-step-icon">🔋</span><div class="guide-step-title">Before Entering a Risky Area</div></div>
+    <div class="guide-step-body">
+    ✅ Open UnrugGuard<br>
+    ✅ Check contacts are saved<br>
+    ✅ Check trigger method is correct<br>
+    ✅ Charge phone above 20%<br>
+    ✅ Tell one contact where you are going<br>
+    ✅ Know your safe word<br>
+    ✅ Keep GPS on while travelling<span class="warning">⚠️ UnrugGuard cannot work if your phone is off or battery is dead. Always charge before travelling.</span></div>
   </div>
 </div>
 
@@ -518,7 +543,7 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
     <div class="guide-hero" style="margin-bottom:20px">
       <div class="guide-hero-icon">🛡️</div>
       <div class="guide-hero-title">Create Your GuardNetwork ID</div>
-      <div class="guide-hero-sub">Enter your name or username to generate your unique ID. Share it with trusted contacts to connect.</div>
+      <div class="guide-hero-sub">Enter your name or username to generate your unique ID. Share it with trusted contacts to connect and share live locations.</div>
     </div>
     <div class="info-box">
       <strong>Your Name or Username</strong><br>
@@ -529,7 +554,6 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
   </div>
 
   <div id="networkDashboard" style="display:none">
-    <!-- Profile card -->
     <div class="gn-profile-card">
       <div class="gn-avatar" id="gnAvatarDisplay">K</div>
       <div>
@@ -538,29 +562,22 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
       </div>
       <div class="gn-share-btn" onclick="shareGuardID()">📤 Share ID</div>
     </div>
-
-    <!-- Add contact -->
     <div class="info-box" style="margin-bottom:14px">
-      <strong>Add to GuardNetwork</strong><br>
-      <small style="color:var(--muted)">Enter a friend's UnrugGuard ID to connect</small>
+      <strong>Add Trusted Contact</strong><br>
+      <small style="color:var(--muted)">Enter their UnrugGuard ID — they must approve your invite</small>
       <div style="display:flex;gap:8px;margin-top:8px">
-        <input class="app-input" type="text" placeholder="UG-ROSE-4431" id="addGuardId" style="flex:1" oninput="this.value=this.value.toUpperCase()">
-        <button class="btn-primary" style="width:auto;padding:10px 16px;font-size:12px" onclick="sendGuardRequest()">Add</button>
+        <input class="app-input" type="text" placeholder="UG-ROSE-4431" id="addGuardId" style="flex:1;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+        <button class="btn-primary" style="width:auto;padding:10px 16px;font-size:12px" onclick="sendGuardRequest()">Invite</button>
       </div>
     </div>
-
-    <!-- Map -->
     <div class="map-placeholder">
       <div class="map-grid"></div>
       <div id="mapPins"></div>
       <div class="map-icon" id="mapIcon">🗺️</div>
-      <div class="map-label" id="mapLabel">Waiting for contacts to share location...</div>
+      <div class="map-label" id="mapLabel">Approve connections to see locations here</div>
     </div>
-
-    <!-- Contacts list -->
     <div class="section-title">Your GuardNetwork</div>
     <div id="guardContactsList"></div>
-
     <button class="btn-outline" onclick="refreshNetwork()">🔄 Refresh Locations</button>
   </div>
 </div>
@@ -595,17 +612,13 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
   <div class="footer-brand">UNRUGPAD</div>
 </footer>
 
-<!-- Hidden contact picker -->
 <input type="file" id="contactFilePicker" accept=".vcf" style="display:none" onchange="parseVCF(event)">
-
-
-
 
 <script>
 // Global Emergency Numbers Database
 const EMERGENCY_NUMBERS = {
   NG: { name:'Nigeria', flag:'🇳🇬', numbers:[
-    {icon:'🚨',name:'National',num:'112',note:'Police · Fire · Ambulance'},
+    {icon:'🚨',name:'National',num:'112',note:'Police · Fire · Ambulance · Free'},
     {icon:'🚔',name:'Police',num:'122',note:'Nigeria Police Force'},
     {icon:'🏙️',name:'Lagos',num:'767',note:'LASEMA · Lagos only'},
     {icon:'🚗',name:'Road Safety',num:'122',note:'FRSC · Accidents'},
@@ -613,12 +626,12 @@ const EMERGENCY_NUMBERS = {
   US: { name:'United States', flag:'🇺🇸', numbers:[
     {icon:'🚨',name:'Emergency',num:'911',note:'Police · Fire · Ambulance'},
     {icon:'🧠',name:'Crisis Line',num:'988',note:'Mental health · Suicide'},
-    {icon:'☠️',name:'Poison Control',num:'1-800-222-1222',note:'Poison emergency'},
-    {icon:'🏥',name:'Non-Emergency',num:'311',note:'Non-urgent police'},
+    {icon:'☠️',name:'Poison',num:'1-800-222-1222',note:'Poison emergency'},
+    {icon:'🚔',name:'Non-Emergency',num:'311',note:'Non-urgent police'},
   ]},
   GB: { name:'United Kingdom', flag:'🇬🇧', numbers:[
     {icon:'🚨',name:'Emergency',num:'999',note:'Police · Fire · Ambulance'},
-    {icon:'🌍',name:'Int\'l Emergency',num:'112',note:'Works on any phone'},
+    {icon:'🌍',name:'Int\'l',num:'112',note:'Works on any phone'},
     {icon:'🚔',name:'Non-Emergency',num:'101',note:'Police non-urgent'},
     {icon:'🏥',name:'NHS',num:'111',note:'Medical advice'},
   ]},
@@ -661,8 +674,8 @@ const EMERGENCY_NUMBERS = {
   DE: { name:'Germany', flag:'🇩🇪', numbers:[
     {icon:'🚨',name:'Emergency',num:'112',note:'Fire · Ambulance · EU wide'},
     {icon:'🚔',name:'Police',num:'110',note:'German Police'},
-    {icon:'🧠',name:'Crisis',num:'0800-111-0111',note:'Telefonseelsorge'},
-    {icon:'🚑',name:'Poison',num:'030-19240',note:'Berlin poison control'},
+    {icon:'🧠',name:'Crisis',num:'0800-111-0111',note:'Crisis helpline'},
+    {icon:'🚑',name:'Poison',num:'030-19240',note:'Poison control'},
   ]},
   FR: { name:'France', flag:'🇫🇷', numbers:[
     {icon:'🚨',name:'All Emergency',num:'112',note:'EU emergency number'},
@@ -676,33 +689,40 @@ const EMERGENCY_NUMBERS = {
     {icon:'🚑',name:'Ambulance',num:'994',note:'Emergency medical'},
     {icon:'🚒',name:'Fire',num:'993',note:'Fire brigade'},
   ]},
+  ZM: { name:'Zambia', flag:'🇿🇲', numbers:[
+    {icon:'🚨',name:'National',num:'112',note:'All emergencies'},
+    {icon:'🚔',name:'Police',num:'991',note:'Zambia Police'},
+    {icon:'🚑',name:'Ambulance',num:'993',note:'Emergency medical'},
+    {icon:'🚒',name:'Fire',num:'992',note:'Fire brigade'},
+  ]},
+  RW: { name:'Rwanda', flag:'🇷🇼', numbers:[
+    {icon:'🚨',name:'National',num:'112',note:'All emergencies'},
+    {icon:'🚔',name:'Police',num:'113',note:'Rwanda National Police'},
+    {icon:'🚑',name:'Ambulance',num:'912',note:'Emergency medical'},
+    {icon:'🚒',name:'Fire',num:'111',note:'Fire brigade'},
+  ]},
   DEFAULT: { name:'Global', flag:'🌍', numbers:[
-    {icon:'🚨',name:'Int\'l Emergency',num:'112',note:'Works in 200+ countries'},
-    {icon:'📞',name:'Local Emergency',num:'911 / 999',note:'US, UK, Canada, Australia'},
+    {icon:'🚨',name:'Int\'l Emergency',num:'112',note:'Works in 200+ countries · Free'},
+    {icon:'📞',name:'Local Emergency',num:'911 / 999',note:'US · UK · Canada · Australia'},
     {icon:'🚔',name:'Local Police',num:'Check locally',note:'Varies by country'},
     {icon:'🚑',name:'Local Ambulance',num:'Check locally',note:'Varies by country'},
   ]},
 };
 
-// Detect country from browser/SIM
 async function detectCountry() {
-  // Try timezone first (works offline)
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const tzMap = {
     'Africa/Lagos':'NG','Africa/Accra':'GH','Africa/Nairobi':'KE',
-    'Africa/Johannesburg':'ZA','Africa/Harare':'ZW',
-    'America/New_York':'US','America/Los_Angeles':'US','America/Chicago':'US',
-    'America/Toronto':'CA','America/Vancouver':'CA',
+    'Africa/Johannesburg':'ZA','Africa/Harare':'ZW','Africa/Lusaka':'ZM',
+    'Africa/Kigali':'RW','America/New_York':'US','America/Los_Angeles':'US',
+    'America/Chicago':'US','America/Toronto':'CA','America/Vancouver':'CA',
     'Europe/London':'GB','Europe/Paris':'FR','Europe/Berlin':'DE',
     'Australia/Sydney':'AU','Australia/Melbourne':'AU',
     'Asia/Kolkata':'IN','Asia/Calcutta':'IN',
   };
   for (const [zone, code] of Object.entries(tzMap)) {
-    if (tz.startsWith(zone.split('/')[0]) && tz === zone) return code;
-    if (tz.includes(zone.split('/')[1])) return code;
+    if (tz === zone) return code;
   }
-
-  // Try IP geolocation if online
   if (navigator.onLine) {
     try {
       const r = await fetch('https://ipapi.co/json/');
@@ -718,42 +738,28 @@ async function loadEmergencyNumbers() {
   const data = EMERGENCY_NUMBERS[code] || EMERGENCY_NUMBERS['DEFAULT'];
   localStorage.setItem('countryCode', code);
   localStorage.setItem('countryName', data.name);
-
-  // Update country label
   const lbl = document.getElementById('countryLabel');
   if (lbl) lbl.textContent = data.flag + ' ' + data.name;
-
-  // Update title
   const title = document.getElementById('emergencyTitle');
   if (title) title.textContent = data.flag + ' ' + data.name + ' Emergency Numbers';
-
-  // Build grid
   const grid = document.getElementById('emergencyGrid');
   if (!grid) return;
   grid.innerHTML = '';
   data.numbers.forEach(n => {
-    grid.innerHTML += `
-      <a class="emergency-card" href="tel:${n.num}">
-        <span class="ec-icon">${n.icon}</span>
-        <span class="ec-name">${n.name}</span>
-        <span class="ec-num">${n.num}</span>
-        <span class="ec-note">${n.note}</span>
-      </a>`;
+    grid.innerHTML += `<a class="emergency-card" href="tel:${n.num}">
+      <span class="ec-icon">${n.icon}</span>
+      <span class="ec-name">${n.name}</span>
+      <span class="ec-num">${n.num}</span>
+      <span class="ec-note">${n.note}</span>
+    </a>`;
   });
 }
 
 // ══════════════════════════════════
-//  UNRUGGUARD — MAIN APP LOGIC
+//  UNRUGGUARD v2.0 — MAIN APP LOGIC
 // ══════════════════════════════════
 
-// ── SCREEN NAVIGATION ──
-function showScreen(name, tab) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('screen-' + name).classList.add('active');
-  tab.classList.add('active');
-  window.scrollTo(0, 0);
-}
+let deferredInstallPrompt = null;
 
 // ── INIT ──
 window.addEventListener('DOMContentLoaded', () => {
@@ -767,10 +773,69 @@ window.addEventListener('DOMContentLoaded', () => {
   buildContacts();
   initShake();
   initNetwork();
+  initPWABanner();
+  autoSaveLocation();
 });
 
 window.addEventListener('online',  updateStatus);
 window.addEventListener('offline', updateStatus);
+
+// ── PWA INSTALL BANNER ──
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  const banner = document.getElementById('pwaBanner');
+  if (banner) banner.classList.remove('hidden');
+});
+
+window.addEventListener('appinstalled', () => {
+  const banner = document.getElementById('pwaBanner');
+  if (banner) banner.classList.add('hidden');
+  deferredInstallPrompt = null;
+  localStorage.setItem('pwaInstalled', 'true');
+});
+
+function initPWABanner() {
+  if (localStorage.getItem('pwaInstalled') === 'true') {
+    const banner = document.getElementById('pwaBanner');
+    if (banner) banner.classList.add('hidden');
+  }
+  if (window.matchMedia('(display-mode: standalone)').matches) {
+    const banner = document.getElementById('pwaBanner');
+    if (banner) banner.classList.add('hidden');
+  }
+}
+
+function installPWA() {
+  if (deferredInstallPrompt) {
+    deferredInstallPrompt.prompt();
+    deferredInstallPrompt.userChoice.then(result => {
+      if (result.outcome === 'accepted') {
+        localStorage.setItem('pwaInstalled', 'true');
+        const banner = document.getElementById('pwaBanner');
+        if (banner) banner.classList.add('hidden');
+      }
+      deferredInstallPrompt = null;
+    });
+  } else {
+    showToast('📲 Tap browser menu → Add to Home Screen');
+  }
+}
+
+function dismissPWA() {
+  const banner = document.getElementById('pwaBanner');
+  if (banner) banner.classList.add('hidden');
+  localStorage.setItem('pwaDismissed', 'true');
+}
+
+// ── SCREEN NAVIGATION ──
+function showScreen(name, tab) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  tab.classList.add('active');
+  window.scrollTo(0, 0);
+}
 
 // ── STATUS ──
 function updateStatus() {
@@ -808,7 +873,6 @@ async function fetchPrices() {
       fetch('https://api.dexscreener.com/latest/dex/tokens/0x591DF09AF60366298FE31C4590a9230585D34FBd')
     ]);
     const [d1, d2] = await Promise.all([r1.json(), r2.json()]);
-
     function set(pIds, cIds, pair) {
       if (!pair) return;
       const price  = parseFloat(pair.priceUsd);
@@ -819,7 +883,6 @@ async function fetchPrices() {
       pIds.forEach(id => { const el=document.getElementById(id); if(el) el.textContent=pStr; });
       cIds.forEach(id => { const el=document.getElementById(id); if(el) { el.textContent=cStr; el.className=cls; } });
     }
-
     const upad = d1.pairs?.find(p=>p.chainId==='solana') || d1.pairs?.[0];
     const bnc  = d2.pairs?.find(p=>p.chainId==='bsc')    || d2.pairs?.[0];
     set(['p1','p3'],['c1','c3'], upad);
@@ -827,65 +890,141 @@ async function fetchPrices() {
   } catch(e) {}
 }
 
+// ── AUTO SAVE LOCATION ──
+function autoSaveLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      const loc = {
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude,
+        time: new Date().toLocaleTimeString(),
+        date: new Date().toLocaleDateString(),
+        link: `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`
+      };
+      localStorage.setItem('lastLocation', JSON.stringify(loc));
+      if (navigator.onLine) updateNetworkLocation(loc.link);
+    }, () => {}, { timeout: 8000, enableHighAccuracy: true });
+  }
+}
+
 // ── CONTACTS ──
 const NUM_CONTACTS = 5;
 
 function buildContacts() {
   const list  = document.getElementById('contactsList');
+  if (!list) return;
   const saved = JSON.parse(localStorage.getItem('contacts') || '[]');
   list.innerHTML = '';
   for (let i = 0; i < NUM_CONTACTS; i++) {
     const c = saved[i] || {};
-    list.innerHTML += `
-    <div class="contact-card">
-      <div class="contact-header">
-        <div class="contact-num-badge">${i+1}</div>
-        <div class="contact-label">Contact ${i+1}</div>
-      </div>
-      <div class="input-group">
-        <label class="input-label">Full Name</label>
-        <input class="app-input" type="text" placeholder="e.g. Mum" id="cname${i}" value="${c.name||''}">
-      </div>
-      <div class="input-group">
-        <label class="input-label">Phone Number (with country code)</label>
-        <input class="app-input" type="tel" placeholder="+234XXXXXXXXXX" id="cphone${i}" value="${c.phone||''}">
-      </div>
-      <div class="toggle-row">
-        <span class="toggle-label">💬 WhatsApp available</span>
-        <label class="toggle">
-          <input type="checkbox" id="cwa${i}" ${c.whatsapp?'checked':''}>
-          <span class="toggle-slider"></span>
-        </label>
-      </div>
-    </div>`;
+    if (c.name && c.phone) {
+      // Saved state
+      list.innerHTML += `
+      <div class="contact-card saved" id="contact-card-${i}">
+        <div class="contact-header">
+          <div class="contact-num-badge">${i+1}</div>
+          <div class="contact-saved-info">
+            <div class="contact-saved-name">${c.name}</div>
+            <div class="contact-saved-phone">${c.phone}</div>
+            ${c.whatsapp ? '<div class="contact-wa-badge">💬 WhatsApp</div>' : ''}
+          </div>
+          <button class="contact-edit-btn" onclick="editContact(${i})" title="Edit contact">✏️</button>
+        </div>
+      </div>`;
+    } else {
+      // Empty state
+      list.innerHTML += `
+      <div class="contact-card" id="contact-card-${i}">
+        <div class="contact-header">
+          <div class="contact-num-badge">${i+1}</div>
+          <div class="contact-label">Contact ${i+1}</div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Full Name</label>
+          <input class="app-input" type="text" placeholder="e.g. Mum" id="cname${i}" value="${c.name||''}">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Phone Number (with country code)</label>
+          <input class="app-input" type="tel" placeholder="+234XXXXXXXXXX" id="cphone${i}" value="${c.phone||''}">
+        </div>
+        <div class="toggle-row">
+          <span class="toggle-label">💬 WhatsApp available</span>
+          <label class="toggle">
+            <input type="checkbox" id="cwa${i}" ${c.whatsapp?'checked':''}>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>`;
+    }
   }
+}
+
+function editContact(i) {
+  const saved = JSON.parse(localStorage.getItem('contacts') || '[]');
+  const c = saved[i] || {};
+  const card = document.getElementById('contact-card-'+i);
+  if (!card) return;
+  card.classList.remove('saved');
+  card.innerHTML = `
+    <div class="contact-header">
+      <div class="contact-num-badge">${i+1}</div>
+      <div class="contact-label">Contact ${i+1}</div>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Full Name</label>
+      <input class="app-input" type="text" placeholder="e.g. Mum" id="cname${i}" value="${c.name||''}">
+    </div>
+    <div class="input-group">
+      <label class="input-label">Phone Number (with country code)</label>
+      <input class="app-input" type="tel" placeholder="+234XXXXXXXXXX" id="cphone${i}" value="${c.phone||''}">
+    </div>
+    <div class="toggle-row">
+      <span class="toggle-label">💬 WhatsApp available</span>
+      <label class="toggle">
+        <input type="checkbox" id="cwa${i}" ${c.whatsapp?'checked':''}>
+        <span class="toggle-slider"></span>
+      </label>
+    </div>`;
 }
 
 function saveContacts() {
   const contacts = [];
+  const saved = JSON.parse(localStorage.getItem('contacts') || '[]');
   for (let i = 0; i < NUM_CONTACTS; i++) {
-    contacts.push({
-      name:     document.getElementById('cname'+i)?.value  || '',
-      phone:    document.getElementById('cphone'+i)?.value || '',
-      whatsapp: document.getElementById('cwa'+i)?.checked  || false,
-    });
+    const nameEl  = document.getElementById('cname'+i);
+    const phoneEl = document.getElementById('cphone'+i);
+    const waEl    = document.getElementById('cwa'+i);
+    if (nameEl && phoneEl) {
+      contacts.push({
+        name:     nameEl.value  || saved[i]?.name  || '',
+        phone:    phoneEl.value || saved[i]?.phone || '',
+        whatsapp: waEl ? waEl.checked : (saved[i]?.whatsapp || false),
+      });
+    } else {
+      contacts.push(saved[i] || {name:'', phone:'', whatsapp:false});
+    }
   }
   localStorage.setItem('contacts', JSON.stringify(contacts));
-  showToast('✅ Contacts saved!');
+  buildContacts();
+  showToast('✅ Contacts saved successfully!');
 }
 
 // ── IMPORT CONTACTS FROM PHONE ──
 function importContacts() {
-  // Try native contact picker first (Chrome Android)
   if ('contacts' in navigator && 'select' in navigator.contacts) {
-    navigator.contacts.select(['name','tel'], {multiple:false})
+    navigator.contacts.select(['name','tel'], {multiple:true})
       .then(results => {
         if (!results || !results.length) return;
-        const contact = results[0];
-        const name    = contact.name?.[0] || '';
-        const phone   = contact.tel?.[0]  || '';
-        fillNextEmptyContact(name, phone);
-        showToast('✅ Contact imported!');
+        let filled = 0;
+        results.forEach(contact => {
+          const name  = contact.name?.[0]  || '';
+          const phone = contact.tel?.[0]   || '';
+          if (name && phone) {
+            if (fillNextEmptyContact(name, phone)) filled++;
+          }
+        });
+        if (filled) showToast(`✅ ${filled} contact${filled>1?'s':''} imported!`);
+        else showToast('⚠️ All contact slots are filled');
       })
       .catch(() => fallbackVCF());
   } else {
@@ -894,56 +1033,52 @@ function importContacts() {
 }
 
 function fallbackVCF() {
-  showToast('💡 Select a .vcf file or enter manually below');
+  showToast('💡 Tip: Save contact as .vcf file and select it');
   document.getElementById('contactFilePicker').click();
 }
 
 function parseVCF(event) {
-  const file   = event.target.files[0];
+  const file = event.target.files[0];
   if (!file) return;
   const reader = new FileReader();
   reader.onload = e => {
     const text  = e.target.result;
     const names = text.match(/FN:(.+)/g)?.map(l=>l.replace('FN:','').trim()) || [];
-    const tels  = text.match(/TEL[^:]*:(.+)/g)?.map(l=>l.split(':')[1].trim()) || [];
+    const tels  = text.match(/TEL[^:]*:(.+)/g)?.map(l=>l.split(':').pop().trim().replace(/\s/g,'')) || [];
     if (names[0] && tels[0]) {
       fillNextEmptyContact(names[0], tels[0]);
-      showToast('✅ Contact imported from VCF!');
+      showToast('✅ Contact imported!');
     }
   };
   reader.readAsText(file);
 }
 
 function fillNextEmptyContact(name, phone) {
+  const saved = JSON.parse(localStorage.getItem('contacts') || '[]');
   for (let i = 0; i < NUM_CONTACTS; i++) {
-    const nameEl  = document.getElementById('cname'+i);
-    const phoneEl = document.getElementById('cphone'+i);
-    if (nameEl && !nameEl.value) {
-      nameEl.value  = name;
-      phoneEl.value = phone;
-      // Switch to contacts tab
+    const nameEl = document.getElementById('cname'+i);
+    if (nameEl && !nameEl.value && !(saved[i]?.name)) {
+      nameEl.value = name;
+      const phoneEl = document.getElementById('cphone'+i);
+      if (phoneEl) phoneEl.value = phone;
       showScreen('contacts', document.querySelectorAll('.nav-tab')[1]);
-      return;
+      return true;
     }
   }
-  showToast('⚠️ All 5 contact slots are filled');
+  return false;
 }
 
 // ── RESTORE FORM VALUES ──
 function restoreFormValues() {
-  const un = localStorage.getItem('userName');
-  const cm = localStorage.getItem('customMsg');
-  const sw = localStorage.getItem('safeWord');
-  const fc = localStorage.getItem('fakeCaller');
-  if (un) { const el=document.getElementById('userName');      if(el) el.value=un; }
-  if (cm) { const el=document.getElementById('customMsg');     if(el) el.value=cm; }
-  if (sw) {
-    const el=document.getElementById('safeWord');
-    const disp=document.getElementById('safeWordDisplay');
-    if(el) el.value=sw;
-    if(disp) disp.textContent=sw;
-  }
-  if (fc) { const el=document.getElementById('fakeCallerName'); if(el) el.value=fc; }
+  const fields = {userName:'userName', customMsg:'customMsg', safeWord:'safeWord', fakeCaller:'fakeCallerName'};
+  Object.entries(fields).forEach(([key, id]) => {
+    const val = localStorage.getItem(key);
+    const el  = document.getElementById(id);
+    if (val && el) el.value = val;
+  });
+  const sw   = localStorage.getItem('safeWord');
+  const disp = document.getElementById('safeWordDisplay');
+  if (sw && disp) disp.textContent = sw;
 }
 
 function saveUserName()   { localStorage.setItem('userName',   document.getElementById('userName')?.value   || ''); }
@@ -978,20 +1113,14 @@ function loadTrigger() {
 }
 
 // ── SHAKE TO SEND ──
-let shakeCount    = 0;
-let lastShakeTime = 0;
-let lastX=0, lastY=0, lastZ=0;
+let shakeCount=0, lastShakeTime=0, lastX=0, lastY=0, lastZ=0;
 
 function initShake() {
   if (!window.DeviceMotionEvent) return;
-
-  const requestPermission = DeviceMotionEvent.requestPermission;
-  if (typeof requestPermission === 'function') {
-    // iOS 13+
-    document.getElementById('sosBtn').addEventListener('click', () => {
-      requestPermission().then(state => {
-        if (state === 'granted') listenShake();
-      });
+  const req = DeviceMotionEvent.requestPermission;
+  if (typeof req === 'function') {
+    document.getElementById('sosBtn')?.addEventListener('click', () => {
+      req().then(state => { if (state==='granted') listenShake(); });
     }, {once:true});
   } else {
     listenShake();
@@ -1000,86 +1129,85 @@ function initShake() {
 
 function listenShake() {
   window.addEventListener('devicemotion', e => {
-    const trigger = localStorage.getItem('trigger') || 'shake';
-    if (trigger !== 'shake') return;
-
+    if ((localStorage.getItem('trigger')||'shake') !== 'shake') return;
     const acc = e.accelerationIncludingGravity;
     if (!acc) return;
-    const dx  = Math.abs(acc.x - lastX);
-    const dy  = Math.abs(acc.y - lastY);
-    const dz  = Math.abs(acc.z - lastZ);
+    const dx=Math.abs(acc.x-lastX), dy=Math.abs(acc.y-lastY), dz=Math.abs(acc.z-lastZ);
     lastX=acc.x; lastY=acc.y; lastZ=acc.z;
-
     if (dx+dy+dz > 25) {
       const now = Date.now();
-      if (now - lastShakeTime < 1500) {
-        shakeCount++;
-      } else {
-        shakeCount = 1;
-      }
+      shakeCount = (now-lastShakeTime < 1500) ? shakeCount+1 : 1;
       lastShakeTime = now;
-      if (shakeCount >= 3) {
-        shakeCount = 0;
-        fireSOS();
-      }
+      if (shakeCount >= 3) { shakeCount=0; fireSOS(); }
     }
   });
 }
 
 // ── SOS FIRE ──
 function fireSOS() {
-  const contacts = JSON.parse(localStorage.getItem('contacts') || '[]').filter(c => c.phone);
-  if (!contacts.length) {
-    showToast('⚠️ Add at least one contact first!');
+  const contacts = JSON.parse(localStorage.getItem('contacts')||'[]').filter(c=>c.phone);
+  const guardID  = localStorage.getItem('guardID');
+
+  if (!contacts.length && !guardID) {
+    showToast('⚠️ Add at least one emergency contact first!');
     showScreen('contacts', document.querySelectorAll('.nav-tab')[1]);
     return;
   }
 
   const trigger = localStorage.getItem('trigger') || 'shake';
 
-  if (trigger === 'fakecall') {
-    // Fire SMS silently first, then show fake call
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        pos => { sendAlerts(contacts, `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`); showFakeCall(); },
-        ()  => { sendAlerts(contacts, 'Location unavailable'); showFakeCall(); },
-        {timeout:5000}
-      );
-    } else {
-      sendAlerts(contacts, 'Location unavailable');
-      showFakeCall();
-    }
-    return;
-  }
-
-  // Normal SOS
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
-      pos => { sendAlerts(contacts, `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`); showSOSOverlay(); },
-      ()  => { sendAlerts(contacts, 'Location unavailable'); showSOSOverlay(); },
-      {timeout:5000}
+      pos => {
+        const loc = `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
+        localStorage.setItem('lastLocation', JSON.stringify({
+          lat: pos.coords.latitude, lng: pos.coords.longitude,
+          link: loc, time: new Date().toLocaleTimeString(), date: new Date().toLocaleDateString()
+        }));
+        processAlert(contacts, loc, trigger);
+      },
+      () => {
+        const last = JSON.parse(localStorage.getItem('lastLocation')||'{}');
+        processAlert(contacts, last.link || 'Location unavailable', trigger);
+      },
+      {timeout:5000, enableHighAccuracy:true}
     );
   } else {
-    sendAlerts(contacts, 'Location unavailable');
+    processAlert(contacts, 'Location unavailable', trigger);
+  }
+}
+
+function processAlert(contacts, location, trigger) {
+  // Send SMS to phone number contacts
+  if (contacts.length) sendSMSAlerts(contacts, location);
+
+  // Send in-app alert to GuardNetwork trusted contacts
+  if (navigator.onLine) sendGuardAlert(location);
+
+  // Update my location in network
+  if (navigator.onLine) updateNetworkLocation(location);
+
+  if (trigger === 'fakecall') {
+    showFakeCall();
+  } else {
     showSOSOverlay();
   }
 }
 
-function sendAlerts(contacts, location) {
+function sendSMSAlerts(contacts, location) {
   const name      = localStorage.getItem('userName') || 'Me';
   const customMsg = localStorage.getItem('customMsg') || '';
-  let msg = customMsg
+  const msg = customMsg
     ? customMsg.replace('[GPS]', location).replace('[Your name]', name)
     : `EMERGENCY! I need help. My location: ${location} — ${name}`;
 
-  contacts.forEach(c => {
+  contacts.forEach((c, i) => {
     if (!c.phone) return;
-    const smsLink = `sms:${c.phone}?body=${encodeURIComponent(msg)}`;
-    window.open(smsLink, '_blank');
+    setTimeout(() => {
+      const smsLink = `sms:${c.phone}?body=${encodeURIComponent(msg)}`;
+      window.open(smsLink, '_blank');
+    }, i * 300);
   });
-
-  // Also update GuardNetwork location if online
-  if (navigator.onLine) updateNetworkLocation(location);
 }
 
 // ── SOS OVERLAY ──
@@ -1094,13 +1222,13 @@ function closeSOS() {
 
 // ── FAKE CALL ──
 function showFakeCall() {
-  const name   = localStorage.getItem('fakeCaller') || 'Mum';
+  const name = localStorage.getItem('fakeCaller') || 'Mum';
   const fcName = document.getElementById('fcCallerName');
   const fcAva  = document.getElementById('fcAvatar');
   if (fcName) fcName.textContent = name;
   if (fcAva)  fcAva.textContent  = name.charAt(0).toUpperCase();
   document.getElementById('fakeCallOverlay').classList.add('active');
-  if ('vibrate' in navigator) navigator.vibrate([1000,500,1000,500,1000,500,1000]);
+  if ('vibrate' in navigator) navigator.vibrate([1000,500,1000,500,1000]);
 }
 
 function endFakeCall() {
@@ -1117,9 +1245,7 @@ function copyWallet() {
     btn.textContent = '✅ Copied!';
     btn.classList.add('copied');
     setTimeout(() => { btn.textContent='📋 Copy Wallet Address'; btn.classList.remove('copied'); }, 2500);
-  }).catch(() => {
-    prompt('Copy this wallet address:', addr);
-  });
+  }).catch(() => { prompt('Copy this wallet address:', addr); });
 }
 
 // ── TOAST ──
@@ -1129,29 +1255,18 @@ function showToast(msg) {
   const t = document.createElement('div');
   t.id = 'toast';
   t.textContent = msg;
-  t.style.cssText = `
-    position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
-    background:rgba(13,17,51,0.97);border:1px solid rgba(180,80,255,0.3);
-    color:#f0eeff;padding:10px 20px;border-radius:30px;font-family:'Rajdhani',sans-serif;
-    font-size:13px;letter-spacing:1px;z-index:9999;white-space:nowrap;
-    box-shadow:0 4px 20px rgba(0,0,0,0.4);animation:fadeUp .3s ease;
-  `;
+  t.style.cssText = `position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(13,17,51,0.97);border:1px solid rgba(180,80,255,0.3);color:#f0eeff;padding:10px 20px;border-radius:30px;font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:1px;z-index:9999;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4);animation:fadeUp .3s ease;`;
   document.body.appendChild(t);
-  setTimeout(() => t.remove(), 2500);
+  setTimeout(() => t.remove(), 2800);
 }
 
 // ══════════════════════════════════
-//  UNRUGGUARD — GUARD NETWORK
-//  Phase 2: Live location sharing
-//  Backend: Supabase (free tier)
+//  UNRUGGUARD — GUARD NETWORK v2.0
 // ══════════════════════════════════
 
-// ── SUPABASE CONFIG ──
-// Replace these with your actual Supabase project values after setup
 const SUPABASE_URL = 'https://hremkmaztfgozsizxprp.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_lJtfuayvPv_x2wSmSPI8fw_MFlDvOtT';
 
-// ── HELPERS ──
 async function sbFetch(endpoint, method='GET', body=null) {
   const opts = {
     method,
@@ -1165,17 +1280,16 @@ async function sbFetch(endpoint, method='GET', body=null) {
   if (body) opts.body = JSON.stringify(body);
   const r = await fetch(SUPABASE_URL + '/rest/v1/' + endpoint, opts);
   if (!r.ok) throw new Error(await r.text());
-  return r.json();
+  const text = await r.text();
+  return text ? JSON.parse(text) : [];
 }
 
-// ── ID GENERATION ──
 function generateGuardID(username) {
-  const clean  = username.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 12);
+  const clean  = username.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,12);
   const suffix = Math.floor(1000 + Math.random() * 9000);
   return `UG-${clean}-${suffix}`;
 }
 
-// ── INIT NETWORK ──
 function initNetwork() {
   const savedID = localStorage.getItem('guardID');
   if (savedID) {
@@ -1198,7 +1312,6 @@ function showNetworkDashboard() {
   const dash  = document.getElementById('networkDashboard');
   if (setup) setup.style.display = 'none';
   if (dash)  dash.style.display  = 'block';
-
   const id   = localStorage.getItem('guardID')   || '';
   const name = localStorage.getItem('guardName') || '';
   const idEl   = document.getElementById('gnIdDisplay');
@@ -1209,321 +1322,263 @@ function showNetworkDashboard() {
   if (avaEl)  avaEl.textContent  = name.charAt(0).toUpperCase();
 }
 
-// ── CREATE GUARD ID ──
 async function createGuardID() {
   const input = document.getElementById('gnUsername');
-  if (!input || !input.value.trim()) {
-    showToast('⚠️ Enter your name or username first'); return;
-  }
-  const username = input.value.trim().toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 12);
+  if (!input?.value.trim()) { showToast('⚠️ Enter your name or username first'); return; }
+  const username = input.value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,12);
   if (!username) { showToast('⚠️ Letters and numbers only'); return; }
-
   const guardID = generateGuardID(username);
   localStorage.setItem('guardID',   guardID);
   localStorage.setItem('guardName', username);
-
-  // Register in Supabase if online
-  if (navigator.onLine && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+  if (navigator.onLine) {
     try {
       await sbFetch('guard_users', 'POST', {
-        guard_id:   guardID,
-        username:   username,
+        guard_id: guardID, username,
         created_at: new Date().toISOString(),
         last_seen:  new Date().toISOString(),
-        lat:        null,
-        lng:        null,
+        lat: null, lng: null,
       });
-    } catch(e) {
-      // Saved locally anyway — will sync when online
-      console.warn('Supabase offline, saved locally:', e.message);
-    }
+    } catch(e) { console.warn('Supabase:', e.message); }
   }
-
   showNetworkDashboard();
-  showToast('✅ Your GuardNetwork ID: ' + guardID);
+  showToast('✅ Your ID: ' + guardID);
 }
 
-// ── SHARE GUARD ID ──
 function shareGuardID() {
   const id   = localStorage.getItem('guardID')   || '';
   const name = localStorage.getItem('guardName') || '';
-  const text = `My UnrugGuard ID is: ${id}\nAdd me on GuardNetwork to share live locations.\nDownload UnrugGuard — Powered by Unrugpad`;
-
+  const text = `My UnrugGuard ID is: ${id}\nAdd me on GuardNetwork — we can share live locations and I can alert you in an emergency.\nDownload UnrugGuard free: https://unrug-guard.vercel.app\nPowered by Unrugpad 🛡️`;
   if (navigator.share) {
-    navigator.share({ title: 'My UnrugGuard ID', text }).catch(() => {
-      navigator.clipboard?.writeText(id);
-      showToast('📋 ID copied: ' + id);
-    });
+    navigator.share({title:'My UnrugGuard ID', text}).catch(() => copyToClipboard(id));
   } else {
-    navigator.clipboard?.writeText(id).then(() => showToast('📋 ID copied: ' + id));
+    copyToClipboard(id);
+    showToast('📋 ID copied: ' + id);
   }
 }
 
-// ── SEND GUARD REQUEST ──
+function copyToClipboard(text) {
+  navigator.clipboard?.writeText(text).catch(() => {});
+}
+
 async function sendGuardRequest() {
   const input    = document.getElementById('addGuardId');
   const targetID = input?.value?.trim().toUpperCase();
   const myID     = localStorage.getItem('guardID');
   const myName   = localStorage.getItem('guardName');
-
   if (!targetID || !targetID.startsWith('UG-')) {
-    showToast('⚠️ Enter a valid UnrugGuard ID (e.g. UG-ROSE-4431)'); return;
+    showToast('⚠️ Enter a valid ID — e.g. UG-ROSE-4431'); return;
   }
-  if (targetID === myID) {
-    showToast('⚠️ You cannot add yourself'); return;
-  }
-
-  // Save request locally
-  const requests = JSON.parse(localStorage.getItem('guardRequests') || '[]');
-  if (requests.find(r => r.to === targetID)) {
-    showToast('⚠️ Request already sent to ' + targetID); return;
-  }
-  requests.push({ to: targetID, from: myID, fromName: myName, status: 'pending', ts: Date.now() });
-  localStorage.setItem('guardRequests', JSON.stringify(requests));
-
-  // Push to Supabase if online
-  if (navigator.onLine && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
-    try {
-      await sbFetch('guard_connections', 'POST', {
-        from_id:    myID,
-        from_name:  myName,
-        to_id:      targetID,
-        status:     'pending',
-        created_at: new Date().toISOString(),
-      });
-      showToast('✅ Request sent to ' + targetID);
-    } catch(e) {
-      showToast('📶 Saved — will sync when online');
-    }
-  } else {
-    showToast('📶 Saved locally — will sync when online');
-  }
-
-  if (input) input.value = '';
-  loadGuardContacts();
+  if (targetID === myID) { showToast('⚠️ You cannot add yourself'); return; }
+  if (!navigator.onLine) { showToast('📶 No internet — check connection'); return; }
+  try {
+    const existing = await sbFetch(`guard_connections?from_id=eq.${myID}&to_id=eq.${targetID}&select=id`);
+    if (existing.length) { showToast('⚠️ Request already sent'); return; }
+    await sbFetch('guard_connections', 'POST', {
+      from_id: myID, from_name: myName,
+      to_id: targetID, to_name: '',
+      status: 'pending', created_at: new Date().toISOString(),
+    });
+    showToast('✅ Invite sent to ' + targetID);
+    if (input) input.value = '';
+    loadGuardContacts();
+  } catch(e) { showToast('❌ Error: ' + e.message); }
 }
 
-// ── LOAD GUARD CONTACTS ──
 async function loadGuardContacts() {
   const myID = localStorage.getItem('guardID');
   if (!myID) return;
-
   const list = document.getElementById('guardContactsList');
   if (!list) return;
-
-  // Load from local storage first (offline support)
-  const localConnections = JSON.parse(localStorage.getItem('guardConnections') || '[]');
-  const localRequests    = JSON.parse(localStorage.getItem('guardRequests')    || '[]');
-
-  // Fetch from Supabase if online
-  if (navigator.onLine && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
-    try {
-      // Connections where I am from or to
-      const sent     = await sbFetch(`guard_connections?from_id=eq.${myID}&select=*`);
-      const received = await sbFetch(`guard_connections?to_id=eq.${myID}&select=*`);
-
-      // Save to local
-      localStorage.setItem('guardConnections', JSON.stringify([...sent, ...received]));
-      renderGuardContacts([...sent, ...received], myID, list);
-      checkIncomingRequests(received, myID);
-    } catch(e) {
-      renderGuardContacts(localConnections, myID, list);
-    }
-  } else {
-    renderGuardContacts(localConnections, myID, list);
+  if (!navigator.onLine) {
+    const local = JSON.parse(localStorage.getItem('guardConnections')||'[]');
+    renderGuardContacts(local, myID, list);
+    return;
+  }
+  try {
+    const [sent, received] = await Promise.all([
+      sbFetch(`guard_connections?from_id=eq.${myID}&select=*`),
+      sbFetch(`guard_connections?to_id=eq.${myID}&select=*`),
+    ]);
+    const all = [...sent, ...received];
+    localStorage.setItem('guardConnections', JSON.stringify(all));
+    renderGuardContacts(all, myID, list);
+    const incoming = received.filter(c=>c.status==='pending');
+    if (incoming.length) showToast(`📩 ${incoming.length} new invite${incoming.length>1?'s':''}!`);
+  } catch(e) {
+    const local = JSON.parse(localStorage.getItem('guardConnections')||'[]');
+    renderGuardContacts(local, myID, list);
   }
 }
 
 function renderGuardContacts(connections, myID, list) {
   if (!connections.length) {
-    list.innerHTML = `
-      <div class="info-box" style="text-align:center">
-        <strong>No connections yet</strong><br>
-        Share your GuardNetwork ID with trusted contacts to connect.
-      </div>`;
+    list.innerHTML = `<div class="info-box" style="text-align:center"><strong>No connections yet</strong><br>Share your ID with trusted contacts to connect.</div>`;
+    updateMapPins([], myID);
     return;
   }
   list.innerHTML = '';
   connections.forEach(c => {
-    const isFrom   = c.from_id === myID;
-    const otherID  = isFrom ? c.to_id   : c.from_id;
-    const otherName= isFrom ? (c.to_name || otherID) : c.from_name;
-    const status   = c.status;
-    const initial  = (otherName || 'U').charAt(0).toUpperCase();
-
-    let statusHTML = '';
-    let actionHTML = '';
-
-    if (status === 'pending' && isFrom) {
+    const isFrom    = c.from_id === myID;
+    const otherID   = isFrom ? c.to_id   : c.from_id;
+    const otherName = isFrom ? (c.to_name||otherID) : (c.from_name||c.from_id);
+    const status    = c.status;
+    const initial   = (otherName||'U').charAt(0).toUpperCase();
+    let statusHTML='', actionHTML='';
+    if (status==='pending' && isFrom) {
       statusHTML = '<div class="nc-status pending">⏳ Awaiting Approval</div>';
-      actionHTML = `<div class="nc-action" onclick="cancelGuardRequest('${c.id}')">Cancel</div>`;
-    } else if (status === 'pending' && !isFrom) {
+      actionHTML = `<div class="nc-action" onclick="cancelRequest('${c.id}')">Cancel</div>`;
+    } else if (status==='pending' && !isFrom) {
       statusHTML = '<div class="nc-status incoming">📩 Wants to connect</div>';
-      actionHTML = `
-        <div class="nc-action approve" onclick="approveGuardRequest('${c.id}','${otherID}')">Approve</div>
-        <div class="nc-action decline" style="margin-top:4px" onclick="declineGuardRequest('${c.id}')">Decline</div>`;
-    } else if (status === 'approved') {
-      const loc    = c.lat && c.lng ? `https://maps.google.com/?q=${c.lat},${c.lng}` : null;
-      statusHTML = '<div class="nc-status approved">✓ Connected</div>';
-      actionHTML = loc
-        ? `<a class="nc-action" href="${loc}" target="_blank">📍 View</a>`
-        : `<div class="nc-action" onclick="pingContact('${otherID}')">📍 Ping</div>`;
+      actionHTML = `<div style="display:flex;flex-direction:column;gap:4px">
+        <div class="nc-action approve" onclick="approveRequest('${c.id}')">✓ Approve</div>
+        <div class="nc-action decline" onclick="declineRequest('${c.id}')">✕ Decline</div>
+      </div>`;
+    } else if (status==='approved') {
+      const lastLoc = c.lat && c.lng ? `https://maps.google.com/?q=${c.lat},${c.lng}` : null;
+      const timeAgo = c.last_seen ? formatTimeAgo(c.last_seen) : '';
+      statusHTML = `<div class="nc-status approved">✓ Connected${timeAgo ? ' · '+timeAgo : ''}</div>`;
+      actionHTML = lastLoc
+        ? `<a class="nc-action" href="${lastLoc}" target="_blank">📍 Last Location</a>`
+        : `<div class="nc-action" style="opacity:0.5">📍 No location yet</div>`;
     }
-
     list.innerHTML += `
       <div class="network-contact" id="nc-${c.id}">
         <div class="nc-avatar">${initial}</div>
-        <div>
+        <div style="flex:1;min-width:0">
           <div class="nc-name">${otherName}</div>
+          <div class="nc-id-small">${otherID}</div>
           ${statusHTML}
         </div>
-        <div style="display:flex;flex-direction:column;gap:4px;margin-left:auto">${actionHTML}</div>
+        ${actionHTML}
       </div>`;
   });
-
   updateMapPins(connections.filter(c=>c.status==='approved' && c.lat && c.lng), myID);
 }
 
-// ── APPROVE / DECLINE / CANCEL ──
-async function approveGuardRequest(connId, fromID) {
-  if (navigator.onLine && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
-    try {
-      await sbFetch(`guard_connections?id=eq.${connId}`, 'PATCH', { status: 'approved' });
-      showToast('✅ Connection approved!');
-    } catch(e) { showToast('📶 Will sync when online'); }
-  }
-  // Update locally
-  updateLocalConnection(connId, 'approved');
-  loadGuardContacts();
+function formatTimeAgo(isoString) {
+  const diff = Math.floor((Date.now() - new Date(isoString)) / 1000);
+  if (diff < 60)    return 'just now';
+  if (diff < 3600)  return Math.floor(diff/60)+'m ago';
+  if (diff < 86400) return Math.floor(diff/3600)+'h ago';
+  return Math.floor(diff/86400)+'d ago';
 }
 
-async function declineGuardRequest(connId) {
-  if (navigator.onLine && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
-    try {
-      await sbFetch(`guard_connections?id=eq.${connId}`, 'DELETE');
-    } catch(e) {}
-  }
-  removeLocalConnection(connId);
-  loadGuardContacts();
+async function approveRequest(connId) {
+  try {
+    await sbFetch(`guard_connections?id=eq.${connId}`, 'PATCH', {status:'approved'});
+    showToast('✅ Connection approved!');
+    updateLocalConn(connId, 'approved');
+    loadGuardContacts();
+  } catch(e) { showToast('❌ Error approving'); }
 }
 
-async function cancelGuardRequest(connId) {
-  if (navigator.onLine && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
-    try {
-      await sbFetch(`guard_connections?id=eq.${connId}`, 'DELETE');
-    } catch(e) {}
-  }
-  removeLocalConnection(connId);
-  loadGuardContacts();
+async function declineRequest(connId) {
+  try {
+    await sbFetch(`guard_connections?id=eq.${connId}`, 'DELETE');
+    removeLocalConn(connId);
+    loadGuardContacts();
+  } catch(e) { showToast('❌ Error declining'); }
 }
 
-function updateLocalConnection(id, status) {
-  const conns = JSON.parse(localStorage.getItem('guardConnections') || '[]');
-  const idx   = conns.findIndex(c => c.id === id);
-  if (idx !== -1) { conns[idx].status = status; localStorage.setItem('guardConnections', JSON.stringify(conns)); }
+async function cancelRequest(connId) {
+  try {
+    await sbFetch(`guard_connections?id=eq.${connId}`, 'DELETE');
+    removeLocalConn(connId);
+    loadGuardContacts();
+  } catch(e) { showToast('❌ Error cancelling'); }
 }
 
-function removeLocalConnection(id) {
-  const conns = JSON.parse(localStorage.getItem('guardConnections') || '[]').filter(c => c.id !== id);
+function updateLocalConn(id, status) {
+  const conns = JSON.parse(localStorage.getItem('guardConnections')||'[]');
+  const idx   = conns.findIndex(c=>c.id===id);
+  if (idx!==-1) { conns[idx].status=status; localStorage.setItem('guardConnections', JSON.stringify(conns)); }
+}
+
+function removeLocalConn(id) {
+  const conns = JSON.parse(localStorage.getItem('guardConnections')||'[]').filter(c=>c.id!==id);
   localStorage.setItem('guardConnections', JSON.stringify(conns));
 }
 
-// ── UPDATE MY LOCATION IN NETWORK ──
-async function updateNetworkLocation(locationStr) {
-  const myID = localStorage.getItem('guardID');
-  if (!myID || !navigator.onLine || SUPABASE_URL === 'YOUR_SUPABASE_URL') return;
-
-  // Parse lat/lng from Google Maps link
-  const match = locationStr.match(/q=([-\d.]+),([-\d.]+)/);
-  if (!match) return;
-  const lat = parseFloat(match[1]);
-  const lng = parseFloat(match[2]);
-
+async function sendGuardAlert(location) {
+  const myID   = localStorage.getItem('guardID');
+  const myName = localStorage.getItem('guardName');
+  if (!myID) return;
   try {
-    await sbFetch(`guard_users?guard_id=eq.${myID}`, 'PATCH', {
-      lat, lng,
-      last_seen: new Date().toISOString(),
+    const connections = JSON.parse(localStorage.getItem('guardConnections')||'[]');
+    const approved    = connections.filter(c=>c.status==='approved');
+    const alertData   = {
+      from_id:   myID,
+      from_name: myName,
+      location,
+      message:   `🚨 EMERGENCY! ${myName} needs help NOW. Location: ${location}`,
+      timestamp: new Date().toISOString(),
+      type:      'sos',
+    };
+    await sbFetch('guard_users?guard_id=eq.'+myID, 'PATCH', {
+      last_alert: JSON.stringify(alertData),
+      last_seen:  new Date().toISOString(),
     });
   } catch(e) {}
 }
 
-// ── REFRESH NETWORK ──
+async function updateNetworkLocation(locationStr) {
+  const myID = localStorage.getItem('guardID');
+  if (!myID) return;
+  const match = typeof locationStr === 'string' ? locationStr.match(/q=([-\d.]+),([-\d.]+)/) : null;
+  if (!match) return;
+  const lat = parseFloat(match[1]);
+  const lng = parseFloat(match[2]);
+  try {
+    await sbFetch(`guard_users?guard_id=eq.${myID}`, 'PATCH', {
+      lat, lng, last_seen: new Date().toISOString()
+    });
+    // Also update connections where we show location
+    const conns = JSON.parse(localStorage.getItem('guardConnections')||'[]');
+    conns.forEach(c => {
+      if (c.from_id === myID) { c.lat=lat; c.lng=lng; }
+    });
+    localStorage.setItem('guardConnections', JSON.stringify(conns));
+  } catch(e) {}
+}
+
 function refreshNetwork() {
   if (!navigator.onLine) { showToast('📶 No internet connection'); return; }
   showToast('🔄 Refreshing...');
   loadGuardContacts();
-
-  // Also update my location
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(pos => {
-      updateNetworkLocation(`https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`);
-    });
-  }
+  autoSaveLocation();
 }
 
-// ── PING CONTACT ──
-function pingContact(contactID) {
-  const myID   = localStorage.getItem('guardID');
-  const myName = localStorage.getItem('guardName');
-  showToast(`📍 Pinging ${contactID}...`);
-  // In full version: push notification via Supabase realtime
-  // For now show toast
-  setTimeout(() => showToast('📶 Ping sent — they will see it next time they open the app'), 1000);
-}
-
-// ── CHECK INCOMING REQUESTS ──
-function checkIncomingRequests(received, myID) {
-  const incoming = received.filter(c => c.status === 'pending');
-  if (incoming.length > 0) {
-    showToast(`📩 ${incoming.length} new connection request${incoming.length>1?'s':''}!`);
-  }
-}
-
-// ── MAP PINS ──
-function updateMapPins(approvedConnections, myID) {
+function updateMapPins(approved, myID) {
   const mapIcon  = document.getElementById('mapIcon');
   const mapLabel = document.getElementById('mapLabel');
   const pinsDiv  = document.getElementById('mapPins');
   if (!pinsDiv) return;
-
   pinsDiv.innerHTML = '';
-  if (!approvedConnections.length) {
+  if (!approved.length) {
     if (mapIcon)  mapIcon.style.display  = 'block';
-    if (mapLabel) mapLabel.textContent   = 'Waiting for contacts to share location...';
+    if (mapLabel) mapLabel.style.display = 'block';
     return;
   }
-
   if (mapIcon)  mapIcon.style.display  = 'none';
-  if (mapLabel) mapLabel.textContent   = `${approvedConnections.length} contact${approvedConnections.length>1?'s':''} on map`;
-
-  // Simple relative positioning for map pins
-  const mapEl   = document.querySelector('.map-placeholder');
+  if (mapLabel) mapLabel.textContent   = `${approved.length} contact${approved.length>1?'s':''} visible`;
+  const mapEl = document.querySelector('.map-placeholder');
   if (!mapEl) return;
-  const w = mapEl.offsetWidth;
-  const h = mapEl.offsetHeight;
-
-  // Find bounds
-  const lats = approvedConnections.map(c=>c.lat);
-  const lngs = approvedConnections.map(c=>c.lng);
+  const w = mapEl.offsetWidth, h = mapEl.offsetHeight;
+  const lats=approved.map(c=>c.lat), lngs=approved.map(c=>c.lng);
   const minLat=Math.min(...lats), maxLat=Math.max(...lats);
   const minLng=Math.min(...lngs), maxLng=Math.max(...lngs);
-  const latRange=maxLat-minLat || 0.01;
-  const lngRange=maxLng-minLng || 0.01;
-
-  approvedConnections.forEach(c => {
-    const x = ((c.lng - minLng) / lngRange) * (w*0.7) + w*0.15;
-    const y = ((maxLat - c.lat) / latRange) * (h*0.7) + h*0.15;
+  const latR=maxLat-minLat||0.01, lngR=maxLng-minLng||0.01;
+  const colors=['#cc44ff','#00e676','#ff9100','#2196F3','#ff1744'];
+  approved.forEach((c,i) => {
+    const x = ((c.lng-minLng)/lngR)*(w*0.7)+w*0.15;
+    const y = ((maxLat-c.lat)/latR)*(h*0.7)+h*0.15;
     const name = c.from_id===myID ? (c.to_name||c.to_id) : c.from_name;
-    const initial = (name||'U').charAt(0).toUpperCase();
-    const colors  = ['#cc44ff','#00e676','#ff9100','#2196F3','#ff1744'];
-    const color   = colors[approvedConnections.indexOf(c) % colors.length];
-
-    const pin = document.createElement('div');
-    pin.className = 'map-pin';
-    pin.style.cssText = `left:${x}px;top:${y}px`;
-    pin.innerHTML = `
-      <div class="pin-label">${initial} ${name?.slice(0,6)||''}</div>
-      <div class="pin-dot" style="background:${color}"></div>`;
+    const initial=(name||'U').charAt(0).toUpperCase();
+    const color=colors[i%colors.length];
+    const pin=document.createElement('div');
+    pin.className='map-pin';
+    pin.style.cssText=`left:${x}px;top:${y}px`;
+    pin.innerHTML=`<div class="pin-label">${initial} ${(name||'').slice(0,6)}</div><div class="pin-dot" style="background:${color}"></div>`;
     pinsDiv.appendChild(pin);
   });
 }
