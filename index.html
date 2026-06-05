@@ -594,9 +594,15 @@ window.addEventListener('DOMContentLoaded',()=>{
   // Check for GuardNetwork alerts on load and every 30 seconds
   setTimeout(checkForGuardAlerts, 2000);
   setInterval(checkForGuardAlerts, 30000);
+  // Flush any pending offline alerts on load
+  setTimeout(flushPendingAlerts, 3000);
 });
 
-window.addEventListener('online',updateStatus);
+window.addEventListener('online',()=>{
+  updateStatus();
+  // Push any queued offline SOS or false alarm
+  setTimeout(flushPendingAlerts, 1000);
+});
 window.addEventListener('offline',updateStatus);
 
 // PWA
@@ -1060,16 +1066,22 @@ function sendSMSAlerts(contacts,location,testMode){
 function showSOSOverlay(hasPhone=0,hasGuard=0){
   const overlay=document.getElementById('sosOverlay');
   const subEl=overlay.querySelector('.overlay-sub');
+  const isOnline=navigator.onLine;
   if(subEl){
+    let msg='';
     if(hasPhone&&hasGuard){
-      subEl.textContent='SMS and WhatsApp sent to your contacts. GuardNetwork alerted with your GPS location.';
+      msg='SMS and WhatsApp sent to your contacts. GuardNetwork alerted with your GPS location.';
     } else if(hasPhone&&!hasGuard){
-      subEl.textContent='SMS and WhatsApp sent to all your emergency contacts with your GPS location.';
+      msg='SMS and WhatsApp sent to all your emergency contacts with your GPS location.';
     } else if(!hasPhone&&hasGuard){
-      subEl.textContent='Your GuardNetwork trusted contacts have been alerted with your GPS location.';
+      msg='Your GuardNetwork trusted contacts have been alerted with your GPS location.';
     } else {
-      subEl.textContent='Alert sent with your GPS location.';
+      msg='Alert sent with your GPS location.';
     }
+    if(!isOnline&&hasGuard){
+      msg+=' ⚠️ You are offline — GuardNetwork alert will be delivered automatically when you reconnect.';
+    }
+    subEl.textContent=msg;
   }
   overlay.classList.add('active');
   if('vibrate' in navigator)navigator.vibrate([500,200,500,200,500]);
@@ -1080,16 +1092,45 @@ function closeSOS(){
 function sendFalseAlarm(){
   const name=localStorage.getItem('userName')||'Me';
   const msg=`UPDATE: ${name} is safe. The previous SOS alert was a false alarm. Sorry for the concern.`;
+
+  // Send SMS to phone contacts
   const contacts=JSON.parse(localStorage.getItem('contacts')||'[]').filter(c=>c.phone);
   contacts.forEach((c,i)=>{
     if(!c.phone)return;
-    setTimeout(()=>{
-      window.open(`sms:${c.phone}?body=${encodeURIComponent(msg)}`,'_blank');
-    },i*300);
+    setTimeout(()=>{window.open(`sms:${c.phone}?body=${encodeURIComponent(msg)}`,'_blank');},i*300);
   });
-  if(navigator.onLine)updateNetworkLocation('false_alarm');
+
+  // Update GuardNetwork with false alarm
+  const falseAlarmData={
+    type:'false_alarm',
+    from_name: name,
+    message: `✅ ${name} is safe. Previous SOS alert was a false alarm.`,
+    timestamp: new Date().toISOString(),
+  };
+
+  if(navigator.onLine){
+    // Push false alarm to Supabase immediately
+    pushGuardFalseAlarm(falseAlarmData);
+  } else {
+    // Queue for when back online — this cancels any queued SOS
+    localStorage.setItem('pendingFalseAlarm', JSON.stringify(falseAlarmData));
+    // Remove any pending SOS since false alarm cancels it
+    localStorage.removeItem('pendingSOS');
+  }
+
   closeSOS();
-  showToast('✅ False alarm message sent to all contacts');
+  showToast('✅ False alarm sent to all contacts and GuardNetwork');
+}
+
+async function pushGuardFalseAlarm(data){
+  const myID=localStorage.getItem('guardID');
+  if(!myID)return;
+  try{
+    await sbFetch(`guard_users?guard_id=eq.${myID}`,'PATCH',{
+      last_alert: JSON.stringify(data),
+      last_seen: new Date().toISOString()
+    });
+  }catch(e){}
 }
 
 // Fake Call
@@ -1286,11 +1327,61 @@ function updateLocalConn(id,status){const c=JSON.parse(localStorage.getItem('gua
 function removeLocalConn(id){localStorage.setItem('guardConnections',JSON.stringify(JSON.parse(localStorage.getItem('guardConnections')||'[]').filter(c=>c.id!==id)));}
 
 async function sendGuardAlert(location,testMode=false){
-  const myID=localStorage.getItem('guardID'),myName=localStorage.getItem('guardName');if(!myID)return;
+  const myID=localStorage.getItem('guardID'),myName=localStorage.getItem('guardName');
+  if(!myID)return;
   const prefix=testMode?'[TEST] ':'';
-  try{
-    await sbFetch('guard_users?guard_id=eq.'+myID,'PATCH',{last_alert:JSON.stringify({from_id:myID,from_name:myName,location,message:`${prefix}🚨 EMERGENCY! ${myName} needs help NOW. Location: ${location}`,timestamp:new Date().toISOString(),type:'sos'}),last_seen:new Date().toISOString()});
-  }catch(e){}
+  const alertData={
+    from_id:myID,
+    from_name:myName,
+    location,
+    message:`${prefix}🚨 EMERGENCY! ${myName} needs help NOW. Location: ${location}`,
+    timestamp:new Date().toISOString(),
+    type:'sos'
+  };
+
+  if(navigator.onLine){
+    try{
+      await sbFetch('guard_users?guard_id=eq.'+myID,'PATCH',{
+        last_alert:JSON.stringify(alertData),
+        last_seen:new Date().toISOString()
+      });
+    }catch(e){
+      // Failed to push — queue it
+      localStorage.setItem('pendingSOS', JSON.stringify(alertData));
+    }
+  } else {
+    // Offline — queue the SOS for when back online
+    localStorage.setItem('pendingSOS', JSON.stringify(alertData));
+  }
+}
+
+// Push any queued SOS or false alarm when back online
+async function flushPendingAlerts(){
+  const myID=localStorage.getItem('guardID');
+  if(!myID||!navigator.onLine)return;
+
+  const pendingFalseAlarm=localStorage.getItem('pendingFalseAlarm');
+  const pendingSOS=localStorage.getItem('pendingSOS');
+
+  if(pendingFalseAlarm){
+    // False alarm cancels SOS — push false alarm only
+    try{
+      await pushGuardFalseAlarm(JSON.parse(pendingFalseAlarm));
+      localStorage.removeItem('pendingFalseAlarm');
+      localStorage.removeItem('pendingSOS');
+    }catch(e){}
+  } else if(pendingSOS){
+    // No false alarm — push the SOS
+    try{
+      const data=JSON.parse(pendingSOS);
+      await sbFetch('guard_users?guard_id=eq.'+myID,'PATCH',{
+        last_alert:JSON.stringify(data),
+        last_seen:new Date().toISOString()
+      });
+      localStorage.removeItem('pendingSOS');
+      showToast('📡 Offline SOS alert delivered to GuardNetwork');
+    }catch(e){}
+  }
 }
 
 async function updateNetworkLocation(locationStr){
@@ -1329,16 +1420,34 @@ async function checkForGuardAlerts(){
       if(!u.last_alert)return;
       let alert;
       try{alert=JSON.parse(u.last_alert);}catch(e){return;}
-      if(!alert||alert.type!=='sos')return;
+      if(!alert)return;
+
+      // If false alarm — dismiss any active alert for this user
+      if(alert.type==='false_alarm'){
+        const overlay=document.getElementById('guardAlertOverlay');
+        const nameEl=document.getElementById('guardAlertName');
+        if(overlay&&overlay.style.display==='flex'&&nameEl&&nameEl.textContent.includes(u.username||u.guard_id)){
+          dismissGuardAlert();
+          showToast(`✅ ${u.username||u.guard_id} is safe — false alarm`);
+        }
+        return;
+      }
+
+      // Only process SOS alerts
+      if(alert.type!=='sos')return;
+
       // Check if alert is recent (within last 10 minutes)
       const alertTime=new Date(alert.timestamp).getTime();
       const ageMinutes=(Date.now()-alertTime)/60000;
       if(ageMinutes>10)return;
+
       // Check if we already showed this alert
       const shownKey=`shownAlert_${u.guard_id}_${alert.timestamp}`;
       if(localStorage.getItem(shownKey))return;
+
       // Mark as shown
       localStorage.setItem(shownKey,'true');
+
       // Show the alert
       showGuardAlert(u.username||u.guard_id, alert.location, alert.timestamp);
     });
