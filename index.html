@@ -1086,8 +1086,25 @@ async function loadGuardContacts(){
   const list=document.getElementById('guardContactsList');if(!list)return;
   if(!navigator.onLine){renderGuardContacts(JSON.parse(localStorage.getItem('guardConnections')||'[]'),myID,list);return;}
   try{
-    const[sent,received]=await Promise.all([sbFetch(`guard_connections?from_id=eq.${myID}&select=*`),sbFetch(`guard_connections?to_id=eq.${myID}&select=*`)]);
+    const[sent,received]=await Promise.all([
+      sbFetch(`guard_connections?from_id=eq.${myID}&select=*`),
+      sbFetch(`guard_connections?to_id=eq.${myID}&select=*`)
+    ]);
     const all=[...sent,...received];
+    // Fetch real-time locations from guard_users for approved connections
+    const otherIDs=all.filter(c=>c.status==='approved').map(c=>c.from_id===myID?c.to_id:c.from_id);
+    if(otherIDs.length){
+      try{
+        const locations=await sbFetch(`guard_users?guard_id=in.(${otherIDs.join(',')})&select=guard_id,lat,lng,last_seen`);
+        all.forEach(c=>{
+          if(c.status==='approved'){
+            const otherID=c.from_id===myID?c.to_id:c.from_id;
+            const locData=locations.find(l=>l.guard_id===otherID);
+            if(locData){c.lat=locData.lat;c.lng=locData.lng;c.last_seen=locData.last_seen;}
+          }
+        });
+      }catch(e){}
+    }
     localStorage.setItem('guardConnections',JSON.stringify(all));
     renderGuardContacts(all,myID,list);
     const incoming=received.filter(c=>c.status==='pending');
