@@ -191,7 +191,7 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
 .nc-action.approve{background:rgba(0,230,118,.1);border-color:var(--green);color:var(--green)}
 .nc-action.decline{background:rgba(255,23,68,.08);border-color:var(--red);color:var(--red)}
 .nc-action.remove{background:rgba(255,23,68,.08);border-color:rgba(255,23,68,.3);color:var(--red)}
-.map-pin{position:absolute;z-index:2;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;transform:translate(-50%,-100%)}
+.map-pin{position:absolute;z-index:2;display:flex;flex-direction:column;align-items:center;gap:0;cursor:pointer;transform:translate(-50%,-50%)}
 .pin-dot{width:12px;height:12px;border-radius:50%;border:2px solid #fff}
 .pin-label{font-size:9px;font-family:'Share Tech Mono',monospace;color:var(--lavender);background:rgba(13,17,51,.9);padding:1px 5px;border-radius:4px;white-space:nowrap}
 .btn-primary{width:100%;padding:14px;border:none;border-radius:13px;background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:14px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:opacity .2s,transform .15s;box-shadow:0 4px 18px rgba(119,34,204,.35)}
@@ -883,31 +883,57 @@ function listenShake(){
 
 // SOS
 function fireSOS(silent=false){
+  // Get phone contacts
   const contacts=JSON.parse(localStorage.getItem('contacts')||'[]').filter(c=>c.phone&&c.phone.trim());
+  // Get approved GuardNetwork connections
   const guardConns=JSON.parse(localStorage.getItem('guardConnections')||'[]').filter(c=>c.status==='approved');
   const guardID=localStorage.getItem('guardID');
 
-  // No contacts AND no GuardNetwork — block and warn
-  if(!contacts.length&&(!guardID||!guardConns.length)){
-    showNoContactsWarning();return;
+  // CASE 1: No phone contacts AND no GuardNetwork at all → block, show warning
+  if(!contacts.length && !guardID){
+    showNoContactsWarning('none');return;
   }
 
+  // CASE 2: Has GuardNetwork ID but no approved connections yet → warn but allow if has phone contacts
+  if(!contacts.length && guardID && !guardConns.length){
+    showNoContactsWarning('guardonly');return;
+  }
+
+  // CASE 3: Has something — proceed
   const trigger=localStorage.getItem('trigger')||'shake';
   if(!silent){showCountdown();return;}
   executeSOSWithLocation();
 }
 
-function showNoContactsWarning(){
+function showNoContactsWarning(type='none'){
   const existing=document.getElementById('noContactsModal');if(existing)existing.remove();
   const modal=document.createElement('div');
   modal.id='noContactsModal';
   modal.style.cssText='position:fixed;inset:0;background:rgba(5,7,26,0.97);z-index:9998;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:30px;';
+
+  let title, message, buttons;
+
+  if(type==='none'){
+    // No contacts at all — no phone numbers, no GuardNetwork
+    title='No Emergency Contacts';
+    message='You have not added any emergency contacts yet. Add phone numbers or set up a GuardNetwork before using SOS.';
+    buttons=`
+      <button onclick="document.getElementById('noContactsModal').remove();showScreen('contacts',document.querySelectorAll('.nav-tab')[1])" style="width:100%;max-width:300px;padding:14px;border:none;border-radius:13px;background:linear-gradient(135deg,#7722cc,#e060ff);color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">➕ Add Phone Contacts</button>
+      <button onclick="document.getElementById('noContactsModal').remove();showScreen('network',document.querySelectorAll('.nav-tab')[4])" style="width:100%;max-width:300px;padding:14px;border:1.5px solid rgba(180,80,255,0.3);border-radius:13px;background:rgba(119,34,204,0.15);color:#b388ff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">🛡️ Set Up GuardNetwork</button>`;
+  } else if(type==='guardonly'){
+    // Has GuardNetwork ID but no approved connections yet
+    title='No Approved Connections';
+    message='You have a GuardNetwork ID but no approved connections yet. Add phone contacts to send SMS alerts, or wait for someone to approve your GuardNetwork invite.';
+    buttons=`
+      <button onclick="document.getElementById('noContactsModal').remove();showScreen('contacts',document.querySelectorAll('.nav-tab')[1])" style="width:100%;max-width:300px;padding:14px;border:none;border-radius:13px;background:linear-gradient(135deg,#7722cc,#e060ff);color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">➕ Add Phone Contacts</button>
+      <button onclick="document.getElementById('noContactsModal').remove();showScreen('network',document.querySelectorAll('.nav-tab')[4])" style="width:100%;max-width:300px;padding:14px;border:1.5px solid rgba(180,80,255,0.3);border-radius:13px;background:rgba(119,34,204,0.15);color:#b388ff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">🛡️ Check GuardNetwork</button>`;
+  }
+
   modal.innerHTML=`<div style="font-size:60px">⚠️</div>
-    <div style="font-family:'Exo 2',sans-serif;font-weight:900;font-size:22px;color:#ff9100;text-align:center;letter-spacing:1px;">No Emergency Contacts</div>
-    <div style="font-size:14px;color:rgba(240,238,255,0.7);text-align:center;line-height:1.7;max-width:300px;">Add at least one emergency contact or create a GuardNetwork to send SOS alerts.</div>
-    <button onclick="document.getElementById('noContactsModal').remove();showScreen('contacts',document.querySelectorAll('.nav-tab')[1])" style="width:100%;max-width:300px;padding:14px;border:none;border-radius:13px;background:linear-gradient(135deg,#7722cc,#e060ff);color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">➕ Add Phone Contacts</button>
-    <button onclick="document.getElementById('noContactsModal').remove();showScreen('network',document.querySelectorAll('.nav-tab')[4])" style="width:100%;max-width:300px;padding:14px;border:none;border-radius:13px;background:rgba(119,34,204,0.2);border:1.5px solid rgba(180,80,255,0.3);color:#b388ff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">🛡️ Set Up GuardNetwork</button>
-    <button onclick="document.getElementById('noContactsModal').remove()" style="padding:10px 30px;border:1.5px solid rgba(180,80,255,0.2);border-radius:30px;background:transparent;color:rgba(240,238,255,0.4);font-family:'Rajdhani',sans-serif;font-size:13px;cursor:pointer;">Cancel</button>`;
+    <div style="font-family:'Exo 2',sans-serif;font-weight:900;font-size:20px;color:#ff9100;text-align:center;letter-spacing:1px;">${title}</div>
+    <div style="font-size:13px;color:rgba(240,238,255,0.7);text-align:center;line-height:1.7;max-width:300px;">${message}</div>
+    ${buttons}
+    <button onclick="document.getElementById('noContactsModal').remove()" style="padding:10px 30px;border:1.5px solid rgba(180,80,255,0.15);border-radius:30px;background:transparent;color:rgba(240,238,255,0.35);font-family:'Rajdhani',sans-serif;font-size:13px;cursor:pointer;">Cancel</button>`;
   document.body.appendChild(modal);
   if('vibrate' in navigator)navigator.vibrate([200,100,200]);
 }
@@ -938,9 +964,11 @@ function cancelCountdown(){
 }
 
 function executeSOSWithLocation(){
-  const contacts=JSON.parse(localStorage.getItem('contacts')||'[]').filter(c=>c.phone);
+  const contacts=JSON.parse(localStorage.getItem('contacts')||'[]').filter(c=>c.phone&&c.phone.trim());
+  const guardConns=JSON.parse(localStorage.getItem('guardConnections')||'[]').filter(c=>c.status==='approved');
   const guardID=localStorage.getItem('guardID');
-  if(!contacts.length&&!guardID){showToast('⚠️ Add emergency contacts first!');showScreen('contacts',document.querySelectorAll('.nav-tab')[1]);return;}
+  // Safety check — should not reach here without contacts but just in case
+  if(!contacts.length&&!guardConns.length){showNoContactsWarning('none');return;}
   
   if(navigator.geolocation){
     navigator.geolocation.getCurrentPosition(
@@ -961,12 +989,28 @@ function executeSOSWithLocation(){
 function processAlert(contacts,location){
   const trigger=localStorage.getItem('trigger')||'shake';
   const testMode=localStorage.getItem('testMode')==='true';
-  
-  if(contacts.length)sendSMSAlerts(contacts,location,testMode);
-  if(navigator.onLine){sendGuardAlert(location,testMode);updateNetworkLocation(location);}
-  
+  const guardConns=JSON.parse(localStorage.getItem('guardConnections')||'[]').filter(c=>c.status==='approved');
+
+  let alertSent=false;
+
+  // Send SMS/WhatsApp only if phone contacts exist
+  if(contacts.length){
+    sendSMSAlerts(contacts,location,testMode);
+    alertSent=true;
+  }
+
+  // Send GuardNetwork alert only if approved connections exist
+  if(guardConns.length&&navigator.onLine){
+    sendGuardAlert(location,testMode);
+    alertSent=true;
+  }
+
+  // Always update my location in network if online
+  if(navigator.onLine)updateNetworkLocation(location);
+
+  // Show SOS overlay — with correct message
   if(trigger==='fakecall'){showFakeCall();}
-  else{showSOSOverlay();}
+  else{showSOSOverlay(contacts.length,guardConns.length);}
 }
 
 function sendSMSAlerts(contacts,location,testMode){
@@ -990,8 +1034,21 @@ function sendSMSAlerts(contacts,location,testMode){
 }
 
 // SOS Overlay
-function showSOSOverlay(){
-  document.getElementById('sosOverlay').classList.add('active');
+function showSOSOverlay(hasPhone=0,hasGuard=0){
+  const overlay=document.getElementById('sosOverlay');
+  const subEl=overlay.querySelector('.overlay-sub');
+  if(subEl){
+    if(hasPhone&&hasGuard){
+      subEl.textContent='SMS and WhatsApp sent to your contacts. GuardNetwork alerted with your GPS location.';
+    } else if(hasPhone&&!hasGuard){
+      subEl.textContent='SMS and WhatsApp sent to all your emergency contacts with your GPS location.';
+    } else if(!hasPhone&&hasGuard){
+      subEl.textContent='Your GuardNetwork trusted contacts have been alerted with your GPS location.';
+    } else {
+      subEl.textContent='Alert sent with your GPS location.';
+    }
+  }
+  overlay.classList.add('active');
   if('vibrate' in navigator)navigator.vibrate([500,200,500,200,500]);
 }
 function closeSOS(){
@@ -1262,7 +1319,7 @@ function updateMapPins(approved,myID){
     pin.href=mapsLink;
     pin.target='_blank';
     pin.style.cssText=`left:${x}px;top:${y}px;cursor:pointer;`;
-    pin.innerHTML=`<div class="pin-label">${initial} ${(name||'').slice(0,7)}</div><div class="pin-dot" style="background:${color};box-shadow:0 0 10px ${color};width:14px;height:14px;border:2px solid #fff;border-radius:50%"></div>`;
+    pin.innerHTML=`<div class="pin-dot" style="background:${color};box-shadow:0 0 10px ${color};width:14px;height:14px;border:2px solid #fff;border-radius:50%;margin:0 auto"></div><div class="pin-label" style="margin-top:3px;background:rgba(5,7,26,0.85);border:1px solid ${color};padding:2px 6px;border-radius:6px;font-size:9px;color:#fff;white-space:nowrap">${initial} ${(name||'').slice(0,7)}</div>`;
     pinsDiv.appendChild(pin);
   });
 
@@ -1275,7 +1332,7 @@ function updateMapPins(approved,myID){
     myPin.href=`https://maps.google.com/?q=${myLoc.lat},${myLoc.lng}`;
     myPin.target='_blank';
     myPin.style.cssText=`left:${x}px;top:${y}px;cursor:pointer;`;
-    myPin.innerHTML=`<div class="pin-label" style="color:#e060ff">You</div><div class="pin-dot" style="background:#e060ff;box-shadow:0 0 12px #e060ff;width:16px;height:16px;border:2px solid #fff;border-radius:50%"></div>`;
+    myPin.innerHTML=`<div class="pin-dot" style="background:#e060ff;box-shadow:0 0 12px #e060ff;width:16px;height:16px;border:2px solid #fff;border-radius:50%;margin:0 auto"></div><div class="pin-label" style="margin-top:3px;background:rgba(5,7,26,0.85);border:1px solid #e060ff;padding:2px 6px;border-radius:6px;font-size:9px;color:#e060ff;white-space:nowrap">You</div>`;
     pinsDiv.appendChild(myPin);
   }
 }
