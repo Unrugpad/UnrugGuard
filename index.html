@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#05071a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="UnrugGuard — Free emergency safety app. Alert your contacts instantly. Powered by Unrugpad.">
+<title>UnrugGuard — Powered by Unrugpad</title>
+<link rel="manifest" href="manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+<!-- ══ SOS OVERLAY ══ -->
+<div class="sos-overlay" id="sosOverlay">
+  <div class="sos-overlay-rings">
+    <div class="ring r1"></div>
+    <div class="ring r2"></div>
+    <div class="ring r3"></div>
+  </div>
+  <div class="overlay-icon">🚨</div>
+  <div class="overlay-title">SOS SENT!</div>
+  <div class="overlay-sub">All your emergency contacts have been alerted with your GPS location.</div>
+  <button class="overlay-close" onclick="closeSOS()">I AM SAFE NOW</button>
+</div>
+
+<!-- ══ FAKE CALL OVERLAY ══ -->
+<div class="fakecall-overlay" id="fakeCallOverlay">
+  <div class="fc-top">
+    <div class="fc-caller" id="fcCallerName">Mum</div>
+    <div class="fc-status">Incoming Call...</div>
+  </div>
+  <div class="fc-avatar" id="fcAvatar">M</div>
+  <div class="fc-bottom">
+    <button class="fc-decline" onclick="endFakeCall()">✕</button>
+    <button class="fc-accept" onclick="endFakeCall()">✓</button>
+  </div>
+</div>
+
+<!-- ══ TICKER ══ -->
+<div class="ticker-bar">
+  <div class="ticker-track" id="tickerTrack">
+    <a class="ticker-item" href="https://dexscreener.com/solana/JuLhhMjaWyWKCWEPetMV5hucpCmR212MzrRLWWZEgem" target="_blank">
+      <span class="ticker-dot sol"></span><span class="ticker-name">UPAD</span>
+      <span class="ticker-price" id="p1">—</span><span class="ticker-change" id="c1">SOL</span>
+    </a>
+    <a class="ticker-item" href="https://dexscreener.com/bsc/0x591DF09AF60366298FE31C4590a9230585D34FBd" target="_blank">
+      <span class="ticker-dot bsc"></span><span class="ticker-name">BNC</span>
+      <span class="ticker-price" id="p2">—</span><span class="ticker-change" id="c2">BSC</span>
+    </a>
+    <a class="ticker-item" href="https://dexscreener.com/solana/JuLhhMjaWyWKCWEPetMV5hucpCmR212MzrRLWWZEgem" target="_blank">
+      <span class="ticker-dot sol"></span><span class="ticker-name">UPAD</span>
+      <span class="ticker-price" id="p3">—</span><span class="ticker-change" id="c3">SOL</span>
+    </a>
+    <a class="ticker-item" href="https://dexscreener.com/bsc/0x591DF09AF60366298FE31C4590a9230585D34FBd" target="_blank">
+      <span class="ticker-dot bsc"></span><span class="ticker-name">BNC</span>
+      <span class="ticker-price" id="p4">—</span><span class="ticker-change" id="c4">BSC</span>
+    </a>
+  </div>
+</div>
+
+<!-- ══ HEADER ══ -->
+<header class="app-header">
+  <div class="logo-mark">
+    <div class="glow-ring"></div>
+    <svg class="hex-svg" viewBox="0 0 140 140" fill="none">
+      <defs>
+        <linearGradient id="hg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#1a0535"/><stop offset="50%" stop-color="#3d1070"/><stop offset="100%" stop-color="#1a0535"/>
+        </linearGradient>
+        <linearGradient id="hs" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ff80ff"/><stop offset="50%" stop-color="#cc44ff"/><stop offset="100%" stop-color="#7722cc"/>
+        </linearGradient>
+      </defs>
+      <polygon points="70,8 126,39 126,101 70,132 14,101 14,39" fill="url(#hg)" stroke="url(#hs)" stroke-width="3"/>
+      <polygon points="70,22 112,46 112,94 70,118 28,94 28,46" fill="rgba(13,2,37,0.7)" stroke="#7722cc" stroke-width="1" opacity="0.6"/>
+      <circle cx="70" cy="8" r="3.5" fill="#ff80ff" opacity="0.9"/>
+      <circle cx="126" cy="39" r="3.5" fill="#cc44ff" opacity="0.9"/>
+      <circle cx="126" cy="101" r="3.5" fill="#cc44ff" opacity="0.9"/>
+      <circle cx="70" cy="132" r="3.5" fill="#ff80ff" opacity="0.9"/>
+      <circle cx="14" cy="101" r="3.5" fill="#cc44ff" opacity="0.9"/>
+      <circle cx="14" cy="39" r="3.5" fill="#cc44ff" opacity="0.9"/>
+    </svg>
+    <svg class="shield-inner" viewBox="0 0 62 72" fill="none">
+      <defs>
+        <linearGradient id="sg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ff99ff"/><stop offset="50%" stop-color="#cc44ff"/><stop offset="100%" stop-color="#8822ee"/>
+        </linearGradient>
+      </defs>
+      <path d="M31 2L4 13V35C4 51 31 70 31 70C31 70 58 51 58 35V13L31 2Z" fill="url(#sg)"/>
+      <path d="M31 9L10 18V35C10 48 31 63 31 63C31 63 52 48 52 35V18L31 9Z" fill="rgba(13,2,37,0.85)"/>
+      <path d="M20 36L27 43L42 28" stroke="#ff99ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="orbit-wrap"><div class="orbit-dot"></div></div>
+  </div>
+  <div class="app-name">UnrugGuard</div>
+  <div class="powered-by">POWERED BY <span>UNRUGPAD</span></div>
+  <div class="status-row">
+    <div class="status-dot" id="statusDot"></div>
+    <div class="status-label" id="statusLabel">Online</div>
+    <div class="status-sep">·</div>
+    <div class="status-label" id="countryLabel">🌍 Detecting...</div>
+  </div>
+</header>
+
+<!-- ══ NAV ══ -->
+<nav class="nav-tabs">
+  <div class="nav-tab active" onclick="showScreen('home',this)">🏠<span>Home</span></div>
+  <div class="nav-tab" onclick="showScreen('contacts',this)">👥<span>Contacts</span></div>
+  <div class="nav-tab" onclick="showScreen('settings',this)">⚙️<span>Settings</span></div>
+  <div class="nav-tab" onclick="showScreen('guide',this)">📖<span>Guide</span></div>
+  <div class="nav-tab" onclick="showScreen('network',this)">🛡️<span>Network</span></div>
+</nav>
+
+<!-- ══════════ SCREENS ══════════ -->
+
+<!-- HOME -->
+<div class="screen active" id="screen-home">
+  <div class="battery-warning hidden" id="batteryWarn">🔋 Battery low! Charge before entering a risky area.</div>
+
+  <div class="sos-wrapper">
+    <button class="sos-btn" id="sosBtn" onclick="fireSOS()">
+      <span class="sos-label">SOS</span>
+      <span class="sos-sub">TAP TO ALERT</span>
+    </button>
+    <div class="trigger-badge">
+      <span id="triggerIcon">📳</span>
+      <span id="triggerText">Shake to Send active</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="section-title" id="emergencyTitle">🇳🇬 Nigeria Emergency Numbers</div>
+  <div class="emergency-grid" id="emergencyGrid"></div>
+</div>
+
+<!-- CONTACTS -->
+<div class="screen" id="screen-contacts">
+  <div class="info-box">
+    <strong>Your Name / Username</strong>
+    <input class="app-input" type="text" placeholder="e.g. Kalu or GuardKalu (max 12 chars)" id="userName" maxlength="12" oninput="saveUserName()">
+  </div>
+  <div class="info-box">
+    <strong>Custom SOS Message</strong>
+    <textarea class="app-input" style="resize:none;height:70px;margin-top:6px" placeholder="EMERGENCY! I need help. My location: [GPS]. — [Your name]" id="customMsg" oninput="saveMsg()"></textarea>
+    <div style="font-size:10px;color:var(--muted);margin-top:4px">Use [GPS] and [Your name] as placeholders</div>
+  </div>
+  <div class="info-box">
+    <strong>🔑 Safe Word</strong> — Say this secretly on a call to signal danger
+    <input class="app-input" style="margin-top:8px" type="text" placeholder="e.g. Pineapple" id="safeWord" oninput="saveSafeWord()">
+    <div class="safe-word-display" id="safeWordDisplay">—</div>
+  </div>
+
+  <div class="section-title">Emergency Contacts (Up to 5)</div>
+  <div class="info-box" style="margin-bottom:14px">
+    <strong>📱 Import from phone contacts</strong>
+    <button class="btn-outline" style="margin-top:8px;padding:10px" onclick="importContacts()">📲 Open Phone Contacts</button>
+  </div>
+  <div id="contactsList"></div>
+  <button class="btn-primary" onclick="saveContacts()">💾 Save All Contacts</button>
+</div>
+
+<!-- SETTINGS -->
+<div class="screen" id="screen-settings">
+  <div class="section-title">Trigger Method</div>
+  <div class="trigger-options">
+    <div class="trigger-option selected" id="trig-shake" onclick="selectTrigger('shake')">
+      <span class="trigger-option-icon">📳</span>
+      <div>
+        <div class="trigger-option-title">Shake to Send</div>
+        <div class="trigger-option-desc">Shake phone 3× in pocket — completely invisible</div>
+      </div>
+      <div class="trigger-radio"></div>
+    </div>
+    <div class="trigger-option" id="trig-silent" onclick="selectTrigger('silent')">
+      <span class="trigger-option-icon">🔕</span>
+      <div>
+        <div class="trigger-option-title">Silent SOS</div>
+        <div class="trigger-option-desc">Press volume button 3× — no screen change</div>
+      </div>
+      <div class="trigger-radio"></div>
+    </div>
+    <div class="trigger-option" id="trig-fakecall" onclick="selectTrigger('fakecall')">
+      <span class="trigger-option-icon">📞</span>
+      <div>
+        <div class="trigger-option-title">Fake Call Button</div>
+        <div class="trigger-option-desc">Shows incoming call screen while SOS fires silently</div>
+      </div>
+      <div class="trigger-radio"></div>
+    </div>
+  </div>
+
+  <div id="fakeCallSection" style="display:none;margin-top:14px">
+    <div class="info-box">
+      <strong>Fake Caller Name:</strong>
+      <input class="app-input" style="margin-top:8px" type="text" placeholder="e.g. Mum" id="fakeCallerName" oninput="saveFakeCaller()">
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="section-title">About</div>
+  <div class="settings-card">
+    <div class="settings-row">
+      <div class="settings-row-left">
+        <div class="settings-icon">ℹ️</div>
+        <div><div class="settings-row-title">UnrugGuard v2.0</div><div class="settings-row-sub">Global emergency safety app</div></div>
+      </div>
+    </div>
+    <div class="settings-row">
+      <div class="settings-row-left">
+        <div class="settings-icon">🌍</div>
+        <div><div class="settings-row-title">Available Worldwide</div><div class="settings-row-sub">Auto-detects your country & emergency numbers</div></div>
+      </div>
+    </div>
+    <div class="settings-row">
+      <div class="settings-row-left">
+        <div class="settings-icon">🛡️</div>
+        <div><div class="settings-row-title">100% Free — Always</div><div class="settings-row-sub">No subscription. No hidden fees. Ever.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GUIDE -->
+<div class="screen" id="screen-guide">
+  <div class="guide-hero">
+    <div class="guide-hero-icon">📖</div>
+    <div class="guide-hero-title">How To Use UnrugGuard</div>
+    <div class="guide-hero-sub">Read this before you need it. Knowing how to use this app can save your life.</div>
+  </div>
+
+  <div class="guide-step">
+    <div class="guide-step-header"><div class="guide-step-num">1</div><span class="guide-step-icon">👥</span><div class="guide-step-title">Set Up Your Contacts First</div></div>
+    <div class="guide-step-body">Go to the <strong>Contacts tab</strong> and add up to <strong>5 people</strong> you trust. Import directly from your phone contacts — no typing needed. Add your name and an optional custom SOS message. Include your blood type or medical condition if important.<span class="tip">💡 Add people who will ACT fast — not just people you know.</span></div>
+  </div>
+
+  <div class="guide-step">
+    <div class="guide-step-header"><div class="guide-step-num">2</div><span class="guide-step-icon">⚙️</span><div class="guide-step-title">Choose Your Trigger Method</div></div>
+    <div class="guide-step-body">Go to <strong>Settings</strong> and choose your trigger. <strong>Shake to Send</strong> — shake phone 3× in pocket, completely invisible, best for armed robbery. <strong>Silent SOS</strong> — press volume button 3×, no screen change. <strong>Fake Call</strong> — shows incoming call screen while SOS fires silently.<span class="warning">⚠️ Open UnrugGuard BEFORE entering a risky area. The app must be open for triggers to work.</span></div>
+  </div>
+
+  <div class="guide-step">
+    <div class="guide-step-header"><div class="guide-step-num">3</div><span class="guide-step-icon">🔴</span><div class="guide-step-title">How the SOS Button Works</div></div>
+    <div class="guide-step-body">When SOS fires: 1) App gets your GPS location instantly. 2) Builds a Google Maps link. 3) Sends SMS to ALL contacts at once with your location and name. Works with <strong>zero data</strong> on any network worldwide.<span class="tip">💡 If GPS fails the message still sends — always better to send than not send.</span></div>
+  </div>
+
+  <div class="guide-step">
+    <div class="guide-step-header"><div class="guide-step-num">4</div><span class="guide-step-icon">🔑</span><div class="guide-step-title">The Safe Word</div></div>
+    <div class="guide-step-body">Set a secret word — e.g. <strong>"Pineapple"</strong>. If you are in danger but cannot press SOS, call a contact and say your safe word naturally in conversation. They know you are in danger without the attacker realising.<span class="tip">💡 Tell your contacts the safe word BEFORE an emergency happens.</span></div>
+  </div>
+
+  <div class="guide-step">
+    <div class="guide-step-header"><div class="guide-step-num">5</div><span class="guide-step-icon">🌍</span><div class="guide-step-title">Emergency Numbers — Your Country</div></div>
+    <div class="guide-step-body">UnrugGuard <strong>automatically detects your country</strong> and shows the correct local emergency numbers on the Home screen. Tap any number to call instantly with zero data. Works worldwide.</div>
+  </div>
+
+  <div class="guide-step">
+    <div class="guide-step-header"><div class="guide-step-num">6</div><span class="guide-step-icon">🛡️</span><div class="guide-step-title">GuardNetwork — Live Location Sharing</div></div>
+    <div class="guide-step-body">Go to the <strong>Network tab</strong> and create your GuardNetwork ID — e.g. <strong>UG-KALU-7742</strong>. Share your ID with trusted contacts. When they add your ID and you approve, you can see each other's live location on a map inside the app. Requires internet.<span class="tip">💡 GuardNetwork works independently from SOS. SOS always works even without internet.</span></div>
+  </div>
+
+  <div class="guide-step">
+    <div class="guide-step-header"><div class="guide-step-num">7</div><span class="guide-step-icon">🔋</span><div class="guide-step-title">Before Entering a Risky Area</div></div>
+    <div class="guide-step-body">✅ Open UnrugGuard<br>✅ Check contacts are saved<br>✅ Check trigger method is set<br>✅ Charge phone above 20%<br>✅ Tell one contact where you are going<br>✅ Know your safe word<span class="warning">⚠️ This app cannot work if your phone is off or dead. Always charge before travelling.</span></div>
+  </div>
+</div>
+
+<!-- GUARD NETWORK -->
+<div class="screen" id="screen-network">
+  <div id="networkSetup" style="display:none">
+    <div class="guide-hero" style="margin-bottom:20px">
+      <div class="guide-hero-icon">🛡️</div>
+      <div class="guide-hero-title">Create Your GuardNetwork ID</div>
+      <div class="guide-hero-sub">Enter your name or username to generate your unique ID. Share it with trusted contacts to connect.</div>
+    </div>
+    <div class="info-box">
+      <strong>Your Name or Username</strong><br>
+      <small style="color:var(--muted)">Max 12 characters. Letters and numbers only.</small>
+      <input class="app-input" style="margin-top:8px" type="text" id="gnUsername" maxlength="12" placeholder="e.g. KALU or GUARDKALU" oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
+    </div>
+    <button class="btn-primary" onclick="createGuardID()">🛡️ Generate My GuardNetwork ID</button>
+  </div>
+
+  <div id="networkDashboard" style="display:none">
+    <!-- Profile card -->
+    <div class="gn-profile-card">
+      <div class="gn-avatar" id="gnAvatarDisplay">K</div>
+      <div>
+        <div class="gn-name" id="gnNameDisplay">KALU</div>
+        <div class="gn-id" id="gnIdDisplay">UG-KALU-7742</div>
+      </div>
+      <div class="gn-share-btn" onclick="shareGuardID()">📤 Share ID</div>
+    </div>
+
+    <!-- Add contact -->
+    <div class="info-box" style="margin-bottom:14px">
+      <strong>Add to GuardNetwork</strong><br>
+      <small style="color:var(--muted)">Enter a friend's UnrugGuard ID to connect</small>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <input class="app-input" type="text" placeholder="UG-ROSE-4431" id="addGuardId" style="flex:1" oninput="this.value=this.value.toUpperCase()">
+        <button class="btn-primary" style="width:auto;padding:10px 16px;font-size:12px" onclick="sendGuardRequest()">Add</button>
+      </div>
+    </div>
+
+    <!-- Map -->
+    <div class="map-placeholder">
+      <div class="map-grid"></div>
+      <div id="mapPins"></div>
+      <div class="map-icon" id="mapIcon">🗺️</div>
+      <div class="map-label" id="mapLabel">Waiting for contacts to share location...</div>
+    </div>
+
+    <!-- Contacts list -->
+    <div class="section-title">Your GuardNetwork</div>
+    <div id="guardContactsList"></div>
+
+    <button class="btn-outline" onclick="refreshNetwork()">🔄 Refresh Locations</button>
+  </div>
+</div>
+
+<!-- COMMUNITY -->
+<div class="community-section">
+  <div class="community-card">
+    <div class="community-title">Join the Unrugpad Community</div>
+    <p class="community-text">Get access to our <strong>Digital Academy</strong>, a <strong>Global E-Commerce Marketplace</strong> with factory prices, and a premium <strong>Signal Group</strong>. We also have a Utility Token, <strong>Unrugpad (UPAD)</strong>, and an Ecosystem Token, <strong>Bullnance (BNC)</strong>. Join now to stay updated.</p>
+    <div class="community-btns">
+      <a class="btn-whatsapp" href="https://whatsapp.com/channel/0029VbCIn4GFsn0bZgzNXG2v" target="_blank">💬 WhatsApp Channel</a>
+      <a class="btn-telegram" href="https://t.me/unrugpadofficial" target="_blank">✈️ Telegram Channel</a>
+    </div>
+  </div>
+</div>
+
+<!-- DONATION -->
+<div class="donation-section">
+  <div class="donation-card">
+    <div class="donation-icon">🙏</div>
+    <div class="donation-title">Support UnrugGuard</div>
+    <p class="donation-text">This app was built to protect lives worldwide. It will always be free. If it kept you safe, a small donation keeps development going.</p>
+    <div class="wallet-label">EVM Wallet Address</div>
+    <a class="wallet-address" href="https://etherscan.io/address/0x1b423817bab7058c295c9209453929d605c65f9f" target="_blank">0x1b423817bab7058c295c9209453929d605c65f9f</a>
+    <div class="wallet-network">✦ EVM Compatible — ETH · BNB · Polygon · and more</div>
+    <button class="btn-copy" id="copyBtn" onclick="copyWallet()">📋 Copy Wallet Address</button>
+  </div>
+</div>
+
+<footer class="app-footer">
+  <div class="footer-powered">POWERED BY</div>
+  <div class="footer-brand">UNRUGPAD</div>
+</footer>
+
+<!-- Hidden contact picker -->
+<input type="file" id="contactFilePicker" accept=".vcf" style="display:none" onchange="parseVCF(event)">
+
+<script src="js/emergency-numbers.js"></script>
+<script src="js/app.js"></script>
+<script src="js/network.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(() => console.log('UnrugGuard offline ready'))
+        .catch(e => console.warn('SW:', e));
+    });
+  }
+</script>
+</body>
+</html>
