@@ -35,12 +35,7 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
 .ticker-price{color:var(--white)}
 .ticker-change.up{color:var(--green)}
 .ticker-change.down{color:var(--red)}
-.pwa-banner{background:linear-gradient(135deg,rgba(119,34,204,.2),rgba(224,96,255,.1));border-bottom:1px solid rgba(180,80,255,.3);padding:10px 14px;display:flex;align-items:center;gap:10px}
-.pwa-banner.hidden{display:none}
-.pwa-banner-text{flex:1;font-size:12px;color:var(--lavender);line-height:1.4}
-.pwa-banner-text strong{color:var(--white);display:block;font-size:13px}
-.pwa-install-btn{background:linear-gradient(135deg,var(--purple),var(--pink));border:none;border-radius:20px;padding:7px 14px;color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:11px;letter-spacing:1px;cursor:pointer;white-space:nowrap}
-.pwa-dismiss{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0 4px}
+
 .app-header{text-align:center;padding:24px 20px 16px}
 .logo-mark{position:relative;width:90px;height:90px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center}
 .glow-ring{position:absolute;width:90px;height:90px;border-radius:50%;animation:pulseGlow 3s ease-in-out infinite}
@@ -269,16 +264,7 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
 @keyframes guardRing{0%{transform:translate(-50%,-50%) scale(.5);opacity:.8}100%{transform:translate(-50%,-50%) scale(1.5);opacity:0}}
 </style>
 
-<!-- PWA BANNER -->
-<div class="pwa-banner hidden" id="pwaBanner">
-  <span style="font-size:22px">📲</span>
-  <div class="pwa-banner-text">
-    <strong>Install UnrugGuard on your phone</strong>
-    Tap Install for the best experience — works offline too
-  </div>
-  <button class="pwa-install-btn" onclick="installPWA()">Install</button>
-  <button class="pwa-dismiss" onclick="dismissPWA()">✕</button>
-</div>
+
 
 <!-- TICKER -->
 <div class="ticker-bar">
@@ -572,7 +558,7 @@ async function loadEmergencyNumbers(){
 <script>
 // VAPID public key for push notifications
 const VAPID_PUBLIC_KEY = 'BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U';
-let deferredInstallPrompt=null;
+
 let countdownTimer=null;
 let swRegistration=null;
 
@@ -608,33 +594,15 @@ window.addEventListener('offline',updateStatus);
 // PWA
 window.addEventListener('beforeinstallprompt',e=>{
   e.preventDefault();deferredInstallPrompt=e;
-  const b=document.getElementById('pwaBanner');
-  if(b&&localStorage.getItem('pwaDismissed')!=='true')b.classList.remove('hidden');
+  
 });
 window.addEventListener('appinstalled',()=>{
-  const b=document.getElementById('pwaBanner');if(b)b.classList.add('hidden');
+  
   deferredInstallPrompt=null;localStorage.setItem('pwaInstalled','true');
   showToast('✅ UnrugGuard installed on your home screen!');
 });
-function initPWA(){
-  if(localStorage.getItem('pwaInstalled')==='true'||window.matchMedia('(display-mode: standalone)').matches){
-    const b=document.getElementById('pwaBanner');if(b)b.classList.add('hidden');return;
-  }
-  // Show banner after 3 seconds even if prompt not fired
-  setTimeout(()=>{
-    const b=document.getElementById('pwaBanner');
-    if(b&&localStorage.getItem('pwaDismissed')!=='true')b.classList.remove('hidden');
-  },3000);
-}
-function installPWA(){
-  if(deferredInstallPrompt){
-    deferredInstallPrompt.prompt();
-    deferredInstallPrompt.userChoice.then(r=>{
-      if(r.outcome==='accepted'){localStorage.setItem('pwaInstalled','true');const b=document.getElementById('pwaBanner');if(b)b.classList.add('hidden');showToast('✅ UnrugGuard installed!');}
-      deferredInstallPrompt=null;
-    });
-  } else { showInstallGuide(); }
-}
+function initPWA(){}
+
 
 function showInstallGuide(){
   const existing=document.getElementById('installModal');if(existing)existing.remove();
@@ -652,10 +620,7 @@ function showInstallGuide(){
     <button onclick="document.getElementById('installModal').remove()" style="width:100%;max-width:300px;padding:14px;border:none;border-radius:13px;background:linear-gradient(135deg,#7722cc,#e060ff);color:#fff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;cursor:pointer;">Got It ✓</button>`;
   document.body.appendChild(modal);
 }
-function dismissPWA(){
-  const b=document.getElementById('pwaBanner');if(b)b.classList.add('hidden');
-  localStorage.setItem('pwaDismissed','true');
-}
+
 
 // Service Worker + Push
 async function initServiceWorker(){
