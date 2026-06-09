@@ -334,7 +334,7 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
   <div class="info-box"><strong>Custom SOS Message</strong><textarea class="app-input" style="resize:none;height:70px;margin-top:6px" placeholder="EMERGENCY! I need help. My location: [GPS]. — [Your name]" id="customMsg" oninput="saveMsg()"></textarea><div style="font-size:10px;color:var(--muted);margin-top:4px">Use [GPS] and [Your name] as placeholders</div></div>
   <div class="info-box"><strong>🔑 Safe Word</strong> — Say this on a call to secretly signal danger<input class="app-input" style="margin-top:8px" type="text" placeholder="e.g. Pineapple" id="safeWord" oninput="saveSafeWord()"><div class="safe-word-display" id="safeWordDisplay">—</div></div>
   <div class="section-title">Emergency Contacts (Up to 5)</div>
-  <div class="info-box" style="margin-bottom:14px"><strong>📱 Import from phone contacts</strong><br><small style="color:var(--muted)">Tap to open your phone contacts and select</small><button class="btn-outline" style="margin-top:8px;padding:10px" onclick="importContacts()">📲 Open Phone Contacts</button></div>
+  
   <div id="contactsList"></div>
   <button class="btn-primary" onclick="saveContacts()">💾 Save All Contacts</button>
 </div>
@@ -397,7 +397,7 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
 
   <div class="guide-step">
     <div class="guide-step-header"><div class="guide-step-num">3</div><span class="guide-step-icon">👥</span><div class="guide-step-title">Add Emergency Contacts (Up to 5)</div></div>
-    <div class="guide-step-body">Add up to <strong>5 trusted people</strong>. Tap <strong>Open Phone Contacts</strong> to import directly — no typing. Or enter manually with country code e.g. +234XXXXXXXXXX. Toggle WhatsApp on for contacts who use it.<br><br>Saved contacts show their name and number clearly with an <strong>✏️ edit button</strong>. Tap it anytime to change.<span class="warning">⚠️ Add people who will ACT fast — someone awake at night, someone who can call for help immediately.</span></div>
+    <div class="guide-step-body">Add up to <strong>5 trusted people</strong>. Enter manually with country code e.g. +234XXXXXXXXXX. Toggle WhatsApp on for contacts who use it.<br><br>Saved contacts show their name and number clearly with an <strong>✏️ edit button</strong>. Tap it anytime to change.<span class="warning">⚠️ Add people who will ACT fast — someone awake at night, someone who can call for help immediately.</span></div>
   </div>
 
   <div class="guide-step">
@@ -519,7 +519,6 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
   <div class="footer-brand">UNRUGPAD</div>
 </footer>
 
-<input type="file" id="contactFilePicker" accept=".vcf" style="display:none" onchange="parseVCF(event)">
 
 <script>
 const EMERGENCY_NUMBERS = {
