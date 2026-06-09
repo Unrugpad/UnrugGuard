@@ -332,7 +332,8 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
 <div class="screen" id="screen-contacts">
   <div class="info-box"><strong>Your Name / Username</strong><input class="app-input" type="text" placeholder="e.g. Kalu (max 12 chars)" id="userName" maxlength="12" oninput="saveUserName()" style="margin-top:6px"></div>
   <div class="info-box"><strong>Custom SOS Message</strong><textarea class="app-input" style="resize:none;height:70px;margin-top:6px" placeholder="EMERGENCY! I need help. My location: [GPS]. — [Your name]" id="customMsg" oninput="saveMsg()"></textarea><div style="font-size:10px;color:var(--muted);margin-top:4px">Use [GPS] and [Your name] as placeholders</div></div>
-  <div class="info-box"><strong>🔑 Safe Word</strong> — Say this on a call to secretly signal danger<input class="app-input" style="margin-top:8px" type="text" placeholder="e.g. Pineapple" id="safeWord" oninput="saveSafeWord()"><div class="safe-word-display" id="safeWordDisplay">—</div></div>
+  <div class="info-box"><strong>🔑 Safe Word</strong> — Say this on a call to secretly signal danger<input class="app-input" style="margin-top:8px" type="text" placeholder="e.g. Pineapple" id="safeWord" oninput="saveSafeWord()"><div class="safe-word-display" id="safeWordDisplay" style="color:var(--muted);font-style:italic;font-size:12px">Your safe word will appear here</div></div>
+  <button class="btn-primary" style="margin-bottom:20px" onclick="saveProfile()">💾 Save Profile</button>
   <div class="section-title">Emergency Contacts (Up to 5)</div>
   
   <div id="contactsList"></div>
@@ -758,6 +759,31 @@ function editContact(i){
     <div class="input-group"><label class="input-label">Phone Number (with country code)</label><input class="app-input" type="tel" placeholder="+234XXXXXXXXXX" id="cphone${i}" value="${c.phone||''}"></div>
     <div class="toggle-row"><span class="toggle-label">💬 WhatsApp available</span><label class="toggle"><input type="checkbox" id="cwa${i}" ${c.whatsapp?'checked':''}><span class="toggle-slider"></span></label></div>`;
 }
+function saveProfile(){
+  const name = document.getElementById('userName')?.value || '';
+  const msg  = document.getElementById('customMsg')?.value || '';
+  const sw   = document.getElementById('safeWord')?.value || '';
+  if(!name.trim()){showToast('⚠️ Please enter your name first');return;}
+  localStorage.setItem('userName', name);
+  localStorage.setItem('customMsg', msg);
+  localStorage.setItem('safeWord', sw);
+  const disp = document.getElementById('safeWordDisplay');
+  if(disp){
+    if(sw){
+      disp.textContent = sw;
+      disp.style.color = 'var(--lavender)';
+      disp.style.fontStyle = 'normal';
+      disp.style.fontSize = '14px';
+    } else {
+      disp.textContent = 'Your safe word will appear here';
+      disp.style.color = 'var(--muted)';
+      disp.style.fontStyle = 'italic';
+      disp.style.fontSize = '12px';
+    }
+  }
+  showToast('✅ Profile saved successfully!');
+}
+
 function saveContacts(){
   const contacts=[];
   const saved=JSON.parse(localStorage.getItem('contacts')||'[]');
