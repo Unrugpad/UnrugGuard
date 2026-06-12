@@ -499,6 +499,7 @@ body{background:var(--navy);color:var(--white);font-family:'Rajdhani',sans-serif
       <a class="btn-whatsapp" href="https://whatsapp.com/channel/0029VbCIn4GFsn0bZgzNXG2v" target="_blank">💬 WhatsApp Channel</a>
       <a class="btn-telegram" href="https://t.me/unrugpadofficial" target="_blank">✈️ Telegram Channel</a>
     </div>
+    <button onclick="shareUnrugGuard()" style="width:100%;margin-top:12px;padding:14px;border:1.5px solid rgba(180,80,255,0.3);border-radius:13px;background:rgba(119,34,204,0.1);color:#b388ff;font-family:'Exo 2',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">📤 Share UnrugGuard</button>
   </div>
 </div>
 
@@ -582,6 +583,8 @@ window.addEventListener('DOMContentLoaded',()=>{
   setInterval(checkForGuardAlerts, 30000);
   // Flush any pending offline alerts on load
   setTimeout(flushPendingAlerts, 3000);
+  // Check if we should show location update reminder
+  setTimeout(checkLocationReminder, 5000);
 });
 
 window.addEventListener('online',()=>{
@@ -1138,6 +1141,18 @@ function endFakeCall(){
 }
 
 // Copy wallet
+function shareUnrugGuard(){
+  const text=`🛡️ UnrugGuard — Free Emergency Safety App\n\nProtect yourself and your loved ones. One tap sends your GPS location to all your emergency contacts instantly.\n\nFeatures:\n• One Tap SOS with GPS location\n• GuardNetwork — live location sharing\n• Works worldwide\n• 100% Free — Always\n\nDownload free: https://apkpure.com/p/com.unrugpad.unrugguard\n\nPowered by Unrugpad`;
+  if(navigator.share){
+    navigator.share({title:'UnrugGuard — Free Emergency Safety App',text}).catch(()=>{
+      navigator.clipboard?.writeText(text);
+      showToast('📋 Link copied — share with friends!');
+    });
+  } else {
+    navigator.clipboard?.writeText(text).then(()=>showToast('📋 Copied — share with friends!'));
+  }
+}
+
 function copyWallet(){
   const addr='0x1b423817bab7058c295c9209453929d605c65f9f';
   navigator.clipboard?.writeText(addr).then(()=>{
@@ -1148,6 +1163,30 @@ function copyWallet(){
 }
 
 // Toast
+function checkLocationReminder(){
+  const guardID = localStorage.getItem('guardID');
+  if(!guardID) return;
+  const lastReminder = localStorage.getItem('lastLocationReminder');
+  const now = Date.now();
+  // Show reminder once every 24 hours
+  if(lastReminder && (now - parseInt(lastReminder)) < 86400000) return;
+  localStorage.setItem('lastLocationReminder', now.toString());
+  // Auto save location silently
+  autoSaveLocation();
+  // Show notification if permission granted
+  if(Notification.permission === 'granted'){
+    try{
+      const reg = navigator.serviceWorker?.controller;
+      if(reg){
+        new Notification('UnrugGuard 🛡️', {
+          body: 'Your location has been updated for your GuardNetwork contacts.',
+          icon: '/icons/icon-192.png',
+        });
+      }
+    }catch(e){}
+  }
+}
+
 function showToast(msg){
   const existing=document.getElementById('toast');if(existing)existing.remove();
   const t=document.createElement('div');t.id='toast';t.textContent=msg;
@@ -1208,7 +1247,7 @@ async function createGuardID(){
 
 function shareGuardID(){
   const id=localStorage.getItem('guardID')||'',name=localStorage.getItem('guardName')||'';
-  const text=`My UnrugGuard ID is: ${id}\nAdd me on GuardNetwork — we can share live locations and alert each other in emergencies.\nDownload UnrugGuard free: https://unrug-guard.vercel.app\nPowered by Unrugpad 🛡️`;
+  const text=`My UnrugGuard ID is: ${id}\nAdd me on GuardNetwork — we can share live locations and alert each other in emergencies.\nDownload UnrugGuard free: https://apkpure.com/p/com.unrugpad.unrugguard\nPowered by Unrugpad 🛡️`;
   if(navigator.share){navigator.share({title:'My UnrugGuard ID',text}).catch(()=>{navigator.clipboard?.writeText(id);showToast('📋 ID copied: '+id);});}
   else{navigator.clipboard?.writeText(id).then(()=>showToast('📋 ID copied: '+id));}
 }
